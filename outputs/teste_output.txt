@@ -1,0 +1,285 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+#include<math.h>
+
+
+int main(){
+bool x;
+int y;
+int z;
+int m = 3;
+int d = 4;
+int e = 5;
+float k;
+k = 0.9;
+float w;
+float v = 3.14;
+float v1x;
+v1x = 3.14;
+bool a, b, c;
+a = true;
+b = a;
+c = b;
+c = true;
+a == c;
+(a == c);
+2 == 3;
+(2 == 3);
+v == 3.14;
+(3.14 == v);
+3.14 == v;
+y == v;
+y = 10;
+z = 20;
+z += y;
+z -= y;
+z++;
+++z;
+y--;
+--y;
+printf("TESTE: EXPRESSÕES \n");
+1 + 1;
+y + z + w;
+w = z + y + k;
+printf("O valor de z = %d, y = %d, k = %f e w = %f. \n", z, y, k, w);
+w = pow(z + y - k * m / d, e);
+printf("Exp: w = z + y - k * m / d ^ e. O valor de z = %d, y = %d, k = %f, m = %d, d = %d, e = %d e w = %f. \n", z, y, k, m, d, e, w);
+w = pow((z + y - k * m / d), e);
+printf("Exp: w = (z + y - k * m / d) ^ e. O valor de z = %d, y = %d, k = %f, m = %d, d = %d, e = %d e w = %f. \n", z, y, k, m, d, e, w);
+printf("\n");
+printf("TESTE: == \n");
+if (b == c) {
+printf("Os valores são: b = %d e c = %d. O resultado é: true. \n", b, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+if (a == c) {
+printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+else {
+printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
+}
+if (v == v1x) {
+printf("O valor de v é: %f. \n", v);
+}
+else {
+printf("O valor de k = %f e v = %f. \n", k, v);
+}
+if (y == 8) {
+printf("O valor de y é: %d. \n", y);
+}
+else {
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+printf("\n");
+printf("TESTE: != \n");
+if (a != c) {
+printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+else {
+printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
+}
+if (v != v1x) {
+printf("O valor de v é: %f. \n", v);
+}
+else {
+printf("O valor de k = %f e v = %f. \n", k, v);
+}
+if (y != 8) {
+printf("O valor de y é: %d. \n", y);
+}
+else {
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+printf("\n");
+printf("TESTE: < \n");
+if (a < c) {
+printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+else {
+printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
+}
+if (v < v1x) {
+printf("O valor de v é: %f. \n", v);
+}
+else {
+printf("O valor de k = %f e v = %f. \n", k, v);
+}
+if (y < 8) {
+printf("O valor de y é: %d. \n", y);
+}
+else {
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+printf("\n");
+printf("TESTE: > \n");
+if (a > c) {
+printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+else {
+printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
+}
+if (v > v1x) {
+printf("O valor de v é: %f. \n", v);
+}
+else {
+printf("O valor de k = %f e v = %f. \n", k, v);
+}
+if (y > 8) {
+printf("O valor de y é: %d. \n", y);
+}
+else {
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+printf("\n");
+printf("TESTE: <= \n");
+if (a <= c) {
+printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+else {
+printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
+}
+if (v <= v1x) {
+printf("O valor de v é: %f. \n", v);
+}
+else {
+printf("O valor de k = %f e v = %f. \n", k, v);
+}
+if (y <= 8) {
+printf("O valor de y é: %d. \n", y);
+}
+else {
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+printf("\n");
+printf("TESTE: >= \n");
+if (a >= c) {
+printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+else {
+printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
+}
+if (v >= v1x) {
+printf("O valor de v é: %f. \n", v);
+}
+else {
+printf("O valor de k = %f e v = %f. \n", k, v);
+}
+if (y >= 8) {
+printf("O valor de y é: %d. \n", y);
+}
+else {
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+printf("\n");
+printf("TESTE: and \n");
+if (a && c) {
+printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+else {
+printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
+}
+if (v && 0) {
+printf("O valor de v é: %f. \n", v);
+}
+else {
+printf("O valor de k = %f e v = %f. \n", k, v);
+}
+if (y && 8) {
+printf("O valor de y é: %d. \n", y);
+}
+else {
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+printf("\n");
+printf("TESTE: or \n");
+if (a || c) {
+printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+else {
+printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
+}
+if (v || 0) {
+printf("O valor de v é: %f. \n", v);
+}
+else {
+printf("O valor de k = %f e v = %f. \n", k, v);
+}
+if (y || 8) {
+printf("O valor de y é: %d. \n", y);
+}
+else {
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+printf("\n");
+printf("TESTE: not x or y \n");
+if (!a || c) {
+printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+else {
+printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
+}
+if (!v || 0) {
+printf("O valor de v é: %f. \n", v);
+}
+else {
+printf("O valor de k = %f e v = %f. \n", k, v);
+}
+if (!y || 8) {
+printf("O valor de y é: %d. \n", y);
+}
+else {
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+printf("\n");
+printf("TESTE: not (x or y) \n");
+if (!(a || c)) {
+printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+else {
+printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
+}
+if (!(v || 0)) {
+printf("O valor de v é: %f. \n", v);
+}
+else {
+printf("O valor de k = %f e v = %f. \n", k, v);
+}
+if (!(y || 8)) {
+printf("O valor de y é: %d. \n", y);
+}
+else {
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+printf("\n");
+printf("TESTE: xor \n");
+if (a ^ c) {
+printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+else {
+printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
+}
+if (a ^ false) {
+printf("O valor de v é: %f. \n", v);
+}
+else {
+printf("O valor de k = %f e v = %f. \n", k, v);
+}
+if (y ^ 8) {
+printf("O valor de y é: %d. \n", y);
+}
+else {
+printf("O valor de z = %d e y = %d. \n", z, y);
+}
+}

@@ -1,0 +1,19 @@
+
+bool def f(bool a, bool b, bool c)
+   if (a) then
+      iF (b) theN
+         return true;
+      else
+         return c;
+      end_if  
+   end_if
+   return false;
+end_def
+
+main
+   If (f(true, false, true)) Then
+      print("f é verdadeiro");
+   else
+      print("f é falso");
+   end_if
+end_main
