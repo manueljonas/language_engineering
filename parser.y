@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "./lib/record.h"
+#include "./lib/matrix.h"
 
 int yylex(void);
 int yyerror(char *s);
@@ -33,7 +34,7 @@ int labelCounterWhile = 1; // Contador global para os rótulos goto while
 %token <sValue> INCREMENT DECREMENT INCREMENT_ASSIGN DECREMENT_ASSIGN
 %token <sValue> PLUS MINUS MULT DIVISION EXPOENT 
 
-%type <rec> subprogs subprog args_op args arg ids main cmds cmd 
+%type <rec> subprogs subprog args_op args arg ids main cmds cmd dms dm mtr_row mtr_rows
 %type <rec> cond return write exp term factor call exps_op exps iteration
 
 %left PLUS MINUS
@@ -208,7 +209,87 @@ cmd : cond                      {$$ = $1;}
          $$ = createRecord(s, "");
          free(s);
       }
-    ;          
+    | TYPE ID dms ';' {
+      //int a[2];
+      char *s = cat($1, " ", $2, $3->code, ";", "");
+      free($1);
+      free($2);
+      freeRecord($3);
+      $$ = createRecord(s, "");
+      free(s);
+    }
+    | ID dms ASSIGN exp ';' { 
+      char *s = cat($1, $2->code, " = ", $4->code, ";", "");
+      free($1);
+      freeRecord($2);
+      freeRecord($4);
+      $$ = createRecord(s, "");
+      free(s);
+    }
+    | TYPE ID dms ASSIGN '(' mtr_rows ')' ';' { 
+      char *s = cat($1, " ", $2, " ", "", "");
+      char *s1 = cat(s, $3->code, " = {", $6->code, "};", "");
+      free($1);
+      free($2);
+      freeRecord($3);
+      freeRecord($6);
+      $$ = createRecord(s1, "");
+      free(s);
+      free(s1);
+    }
+    ;     
+
+dms: dm
+    | dms dm {
+      char *s = cat($1->code, $2->code, "", "", "", "");
+      freeRecord($1);
+      freeRecord($2);
+      $$ = createRecord(s, "");
+      free(s);
+    } 
+    ;
+
+dm: '[' ']' { 
+      char *s = cat("[", "]", "", "", "", "");
+      $$ = createRecord(s, "");
+      free(s);
+     }
+     | '[' term ']' {
+      char *s = cat("[", $2->code, "]", "", "", "");
+      freeRecord($2);
+      $$ = createRecord(s, "");
+      free(s);
+     }
+    ; 
+
+mtr_rows: {
+           $$ = createRecord("{}", "");
+        }
+        | mtr_row {
+            char *s = cat($1->code, "", "", "", "", "");
+            freeRecord($1);
+            $$ = createRecord(s, "");
+            free(s);
+         }
+         | mtr_row ',' mtr_rows  {
+          char *s = cat($1->code, "," , $3->code, "", "", "");
+          freeRecord($1);
+          freeRecord($3);
+          $$ = createRecord(s, "");
+          free(s);
+         }
+         ;
+
+mtr_row: '{' '}' {
+          $$ = createRecord("{}", "");
+        }
+        | '{' exps '}' {
+          char *s = cat("{", $2->code, "}", "", "", "");
+          freeRecord($2);
+          $$ = createRecord(s, "");
+          free(s);
+        }
+        ;
 
 cond : IF exp THEN cmds END_IF
       {
