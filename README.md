@@ -1,9 +1,9 @@
 # language_engineering
 Desenvolvimento de Linguagem de Programação
 
-'Para compilar:'
+## Para compilar:
 make clean
 make
 
-'Para executar teste:'
+## Para executar teste:
 ./compiler ./inputs/teste.txt ./outputs/teste_output.txt
