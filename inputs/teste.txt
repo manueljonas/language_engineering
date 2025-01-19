@@ -325,4 +325,19 @@ main
 	end_while
 	print("O valor de z é: %d. \n", z);
 
+  //testes matrizes
+  int matrix1[1];
+  int matrix2[1][2];
+  double matrix3[1][2][3];
+  float matrix4[1][2][4];
+  1,2,3,4;
+  int matriz5[10][10];
+  matriz5[2][5] = 10;
+  int matriz6[3][3] = ();
+  int matriz7[3][3] = ({});
+  int matriz8[3][3] = ({}, {});
+  int matriz9[3][3] = ({}, {}, {});
+  int matriz10[3][3] = ({}, {}, {}, {});
+
+  int matriz11[3][3] = ({1,2,3}, {4,5,6}, {7,8,9}, {10,11,12});
 end_main
