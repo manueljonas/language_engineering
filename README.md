@@ -2,8 +2,7 @@
 Desenvolvimento de Linguagem de Programação
 
 ## Para compilar:
-make clean
-make
+Comando: make clean, e depois o Comando: make
 
 ## Para executar teste:
 ./compiler ./inputs/teste.txt ./outputs/teste_output.txt
