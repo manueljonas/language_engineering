@@ -11,6 +11,7 @@ extern char * yytext;
 extern FILE * yyin, * yyout;
 
 char * cat(char *, char *, char *, char *, char *, char *);
+int labelCounter = 0; // Contador global para os rótulos
 
 %}
 
@@ -20,13 +21,13 @@ char * cat(char *, char *, char *, char *, char *, char *);
  };
 
 %token FUNCTION END_FUNCTION 
-%token IF THEN ELSE END_IF ASSIGN
+%token IF THEN ELSE END_IF WHILE END_WHILE FOR ASSIGN
 %token MAIN END_MAIN 
 %token PRINT RETURN
 %token EQUALS DIFF LESS GREATER LESSEQUALS GREATEREQUALS
 %token AND OR XOR NOT
 %token <sValue> TYPE STRING_LIT BOOL_LIT ID
-%token <sValue> INT FLOAT
+%token <sValue> INT FLOAT DOUBLE
 %token <sValue> INCREMENT DECREMENT INCREMENT_ASSIGN DECREMENT_ASSIGN
 %token <sValue> PLUS MINUS MULT DIVISION EXPOENT 
 
@@ -35,7 +36,11 @@ char * cat(char *, char *, char *, char *, char *, char *);
 
 %left PLUS MINUS
 %left MULT DIVISION
+%left AND
+%left OR XOR
+%left EQUALS DIFF LESS GREATER LESSEQUALS GREATEREQUALS
 %right EXPOENT
+%right NOT
 
 %start prog
 
@@ -202,6 +207,7 @@ cmd : cond   {$$ = $1;}
       }
     ;          
 
+/*
 cond : IF exp THEN cmds END_IF     {char * s = cat("if ", $2->code, " {\n", $4->code, "}", "");
                                     freeRecord($2);
                                     freeRecord($4);
@@ -219,6 +225,78 @@ cond : IF exp THEN cmds END_IF     {char * s = cat("if ", $2->code, " {\n", $4->
                                   free(s2);
                                  }
             ;
+*/
+
+cond : IF exp THEN cmds END_IF
+      {
+        // Incrementa o contador global
+        int currentLabel = labelCounter++;
+        
+        // Gera rótulos únicos com base no contador
+        char labelIf[20];
+        char labelEndIf[20];
+        snprintf(labelIf, sizeof(labelIf), "goto_if_%d", currentLabel);
+        snprintf(labelEndIf, sizeof(labelEndIf), "goto_end_if_%d", currentLabel);
+
+        // Etapa 1: Concatena até o "goto labelIf"
+        char *part1 = cat("if ", $2->code, " {\n goto ", labelIf, "; \n", "");
+
+        // Etapa 2: Concatena o "goto labelEndIf" e abre o bloco de código
+        char *part2 = cat("} \n goto ", labelEndIf, "; \n", labelIf, ": \n", $4->code);
+
+        // Etapa 3: Concatena o final com o "goto_end_if"
+        char *s = cat(part1, part2, labelEndIf, ": \n", "", "");
+
+        // Libera memória intermediária
+        free(part1);
+        free(part2);
+
+        // Cria o registro final
+        freeRecord($2);
+        freeRecord($4);
+        $$ = createRecord(s, "");
+        free(s);
+      }
+      | IF exp THEN cmds ELSE cmds END_IF
+      {
+        // Incrementa o contador global
+        int currentLabel = labelCounter++;
+        
+        // Gera rótulos únicos com base no contador
+        char labelIf[20];
+        char labelElse[20];
+        char labelEndIfElse[20];
+        snprintf(labelIf, sizeof(labelIf), "goto_if_%d", currentLabel);
+        snprintf(labelElse, sizeof(labelElse), "goto_else_%d", currentLabel);
+        snprintf(labelEndIfElse, sizeof(labelEndIfElse), "goto_end_if_else_%d", currentLabel);
+
+        // Etapa 1: Concatena a condição e os rótulos de "then" e "else"
+        char *part1 = cat("if ", $2->code, " {\n goto ", labelIf, "; \n", "");
+        char *part2 = cat("} \n goto ", labelElse, "; \n", "", "", "");
+
+        // Etapa 2: Concatena o bloco "then" com o rótulo de fim
+        char *part3 = cat(labelIf, ": \n", $4->code, "goto ", labelEndIfElse, "; \n");
+
+        // Etapa 3: Concatena o bloco "else" e o rótulo de fim
+        char *part4 = cat(labelElse, ": \n", $6->code, labelEndIfElse, ": \n", "");
+
+        // Junta todas as partes
+        char *s = cat(part1, part2, part3, part4, "", "");
+
+        // Libera memória intermediária
+        free(part1);
+        free(part2);
+        free(part3);
+        free(part4);
+
+        // Cria o registro final
+        freeRecord($2);
+        freeRecord($4);
+        freeRecord($6);
+        $$ = createRecord(s, "");
+        free(s);
+      }
+      ;
 
 return : RETURN exp ';'{char * s = cat("return ", $2->code, ";", "", "", "");
                          freeRecord($2);
@@ -235,226 +313,101 @@ write : PRINT '(' exps ')' ';' {char * s = cat("printf", "(", $3->code, ")", ";"
         ;
 
 exp : term        {$$ = $1;}
-    | ID          {$$ = createRecord($1, "");
-                   free($1);}
-    | BOOL_LIT    {$$ = createRecord($1, "");
-                   free($1);}
-    | STRING_LIT  {$$ = createRecord($1, "");
-                   free($1);}
+    | call        {$$ = $1;}
     | '(' exp ')' {char * s = cat("(", $2->code, ")", "", "", "");
                    freeRecord($2);
                    $$ = createRecord(s, "");
                    free(s);}
-    | call        {$$ = $1;}
-    | ID EQUALS exp   {char * s = cat($1, " == ", $3->code, "", "", "");
-                        free($1);
-                        freeRecord($3);
-                        $$ = createRecord(s, "");
-                        free(s);}
-    | INT EQUALS exp   {char * s = cat($1, " == ", $3->code, "", "", "");
-                         free($1);
+    | exp EQUALS term   {char * s = cat($1->code, " == ", $3->code, "", "", "");
+                         freeRecord($1);
                          freeRecord($3);
                          $$ = createRecord(s, "");
                          free(s);}
-    | FLOAT EQUALS exp   {char * s = cat($1, " == ", $3->code, "", "", "");
-                           free($1);
-                           freeRecord($3);
-                           $$ = createRecord(s, "");
-                           free(s);}
-    | ID DIFF exp   {char * s = cat($1, " != ", $3->code, "", "", "");
-                      free($1);
+    | exp DIFF term   {char * s = cat($1->code, " != ", $3->code, "", "", "");
+                      freeRecord($1);
                       freeRecord($3);
                       $$ = createRecord(s, "");
                       free(s);}
-    | INT DIFF exp   {char * s = cat($1, " != ", $3->code, "", "", "");
-                       free($1);
-                       freeRecord($3);
-                       $$ = createRecord(s, "");
-                       free(s);}
-    | FLOAT DIFF exp   {char * s = cat($1, " != ", $3->code, "", "", "");
-                         free($1);
-                         freeRecord($3);
-                         $$ = createRecord(s, "");
-                         free(s);}
-    | ID LESS exp   {char * s = cat($1, " < ", $3->code, "", "", "");
-                      free($1);
+    | exp LESS term   {char * s = cat($1->code, " < ", $3->code, "", "", "");
+                      freeRecord($1);
                       freeRecord($3);
                       $$ = createRecord(s, "");
                       free(s);}
-    | INT LESS exp   {char * s = cat($1, " < ", $3->code, "", "", "");
-                       free($1);
-                       freeRecord($3);
-                       $$ = createRecord(s, "");
-                       free(s);}
-    | FLOAT LESS exp   {char * s = cat($1, " < ", $3->code, "", "", "");
-                         free($1);
+    | exp GREATER term   {char * s = cat($1->code, " > ", $3->code, "", "", "");
+                         freeRecord($1);
                          freeRecord($3);
                          $$ = createRecord(s, "");
                          free(s);}
-    | ID GREATER exp   {char * s = cat($1, " > ", $3->code, "", "", "");
-                         free($1);
-                         freeRecord($3);
-                         $$ = createRecord(s, "");
-                         free(s);}
-    | INT GREATER exp   {char * s = cat($1, " > ", $3->code, "", "", "");
-                          free($1);
-                          freeRecord($3);
-                          $$ = createRecord(s, "");
-                          free(s);}
-    | FLOAT GREATER exp   {char * s = cat($1, " > ", $3->code, "", "", "");
-                            free($1);
+    | exp LESSEQUALS term   {char * s = cat($1->code, " <= ", $3->code, "", "", "");
+                            freeRecord($1);
                             freeRecord($3);
                             $$ = createRecord(s, "");
                             free(s);}
-    | ID LESSEQUALS exp   {char * s = cat($1, " <= ", $3->code, "", "", "");
-                            free($1);
-                            freeRecord($3);
-                            $$ = createRecord(s, "");
-                            free(s);}
-    | INT LESSEQUALS exp   {char * s = cat($1, " <= ", $3->code, "", "", "");
-                             free($1);
-                             freeRecord($3);
-                             $$ = createRecord(s, "");
-                             free(s);}
-    | FLOAT LESSEQUALS exp   {char * s = cat($1, " <= ", $3->code, "", "", "");
-                               free($1);
+    | exp GREATEREQUALS term   {char * s = cat($1->code, " >= ", $3->code, "", "", "");
+                               freeRecord($1);
                                freeRecord($3);
                                $$ = createRecord(s, "");
                                free(s);}
-    | ID GREATEREQUALS exp   {char * s = cat($1, " >= ", $3->code, "", "", "");
-                               free($1);
-                               freeRecord($3);
-                               $$ = createRecord(s, "");
-                               free(s);}
-    | INT GREATEREQUALS exp   {char * s = cat($1, " >= ", $3->code, "", "", "");
-                                free($1);
-                                freeRecord($3);
-                                $$ = createRecord(s, "");
-                                free(s);}
-    | FLOAT GREATEREQUALS exp   {char * s = cat($1, " >= ", $3->code, "", "", "");
-                                  free($1);
-                                  freeRecord($3);
-                                  $$ = createRecord(s, "");
-                                  free(s);}
-    | ID AND exp   {char * s = cat($1, " && ", $3->code, "", "", "");
-                     free($1);
+    | exp AND term   {char * s = cat($1->code, " && ", $3->code, "", "", "");
+                     freeRecord($1);
                      freeRecord($3);
                      $$ = createRecord(s, "");
                      free(s);}
-    | BOOL_LIT AND exp   {char * s = cat($1, " && ", $3->code, "", "", "");
-                           free($1);
-                           freeRecord($3);
-                           $$ = createRecord(s, "");
-                           free(s);}
-    | ID OR exp   {char * s = cat($1, " || ", $3->code, "", "", "");
-                    free($1);
+    | exp OR term   {char * s = cat($1->code, " || ", $3->code, "", "", "");
+                    freeRecord($1);
                     freeRecord($3);
                     $$ = createRecord(s, "");
                     free(s);}
-    | BOOL_LIT OR exp   {char * s = cat($1, " || ", $3->code, "", "", "");
-                          free($1);
-                          freeRecord($3);
-                          $$ = createRecord(s, "");
-                          free(s);}
-    | ID XOR exp   {char * s = cat($1, " ^ ", $3->code, "", "", "");
-                     free($1);
+    | exp XOR term   {char * s = cat($1->code, " ^ ", $3->code, "", "", "");
+                     freeRecord($1);
                      freeRecord($3);
                      $$ = createRecord(s, "");
                      free(s);}
-    | BOOL_LIT XOR exp   {char * s = cat($1, " ^ ", $3->code, "", "", "");
-                           free($1);
-                           freeRecord($3);
-                           $$ = createRecord(s, "");
-                           free(s);}
     | NOT exp   {char * s = cat("!", $2->code, "", "", "", "");
                   freeRecord($2);
                   $$ = createRecord(s, "");
                   free(s);}
-    | ID PLUS exp   {char * s = cat($1, " + ", $3->code, "", "", "");
-                      free($1);
+    | exp PLUS term   {char * s = cat($1->code, " + ", $3->code, "", "", "");
+                      freeRecord($1);
                       freeRecord($3);
                       $$ = createRecord(s, "");
                       free(s);}
-    | INT PLUS exp   {char * s = cat($1, " + ", $3->code, "", "", "");
-                       free($1);
+    | exp MINUS term   {char * s = cat($1->code, " - ", $3->code, "", "", "");
+                       freeRecord($1);
                        freeRecord($3);
                        $$ = createRecord(s, "");
                        free(s);}
-    | FLOAT PLUS exp   {char * s = cat($1, " + ", $3->code, "", "", "");
-                         free($1);
-                         freeRecord($3);
-                         $$ = createRecord(s, "");
-                         free(s);}
-    | ID MINUS exp   {char * s = cat($1, " - ", $3->code, "", "", "");
-                       free($1);
-                       freeRecord($3);
-                       $$ = createRecord(s, "");
-                       free(s);}
-    | INT MINUS exp   {char * s = cat($1, " - ", $3->code, "", "", "");
-                        free($1);
-                        freeRecord($3);
-                        $$ = createRecord(s, "");
-                        free(s);}
-    | FLOAT MINUS exp   {char * s = cat($1, " - ", $3->code, "", "", "");
-                          free($1);
-                          freeRecord($3);
-                          $$ = createRecord(s, "");
-                          free(s);}
-    | ID MULT exp   {char * s = cat($1, " * ", $3->code, "", "", "");
-                      free($1);
+    | exp MULT term   {char * s = cat($1->code, " * ", $3->code, "", "", "");
+                      freeRecord($1);
                       freeRecord($3);
                       $$ = createRecord(s, "");
                       free(s);}
-    | INT MULT exp   {char * s = cat($1, " * ", $3->code, "", "", "");
-                       free($1);
+    | exp DIVISION term   {char * s = cat($1->code, " / ", $3->code, "", "", "");
+                       freeRecord($1);
                        freeRecord($3);
                        $$ = createRecord(s, "");
                        free(s);}
-    | FLOAT MULT exp   {char * s = cat($1, " * ", $3->code, "", "", "");
-                         free($1);
+    | exp EXPOENT term   {char * s = cat("pow(", $1->code, ", ", $3->code, ")", "");
+                         freeRecord($1);
                          freeRecord($3);
                          $$ = createRecord(s, "");
                          free(s);}
-    | ID DIVISION exp   {char * s = cat($1, " / ", $3->code, "", "", "");
-                       free($1);
-                       freeRecord($3);
-                       $$ = createRecord(s, "");
-                       free(s);}
-    | INT DIVISION exp   {char * s = cat($1, " / ", $3->code, "", "", "");
-                        free($1);
-                        freeRecord($3);
-                        $$ = createRecord(s, "");
-                        free(s);}
-    | FLOAT DIVISION exp   {char * s = cat($1, " / ", $3->code, "", "", "");
-                          free($1);
-                          freeRecord($3);
-                          $$ = createRecord(s, "");
-                          free(s);}
-/*
-    | ID EXPOENT exp   {char * s = cat("pow(", $1, ", ", $3->code, ")", "");
-                         free($1);
-                         freeRecord($3);
-                         $$ = createRecord(s, "");
-                         free(s);}
-    | INT EXPOENT exp   {char * s = cat("pow(", $1, ", ", $3->code, ")", "");
-                          free($1);
-                          freeRecord($3);
-                          $$ = createRecord(s, "");
-                          free(s);}
-    | FLOAT EXPOENT exp   {char * s = cat("pow(", $1, ", ", $3->code, ")", "");
-                            free($1);
-                            freeRecord($3);
-                            $$ = createRecord(s, "");
-                            free(s);}
-*/
     ;       
 
 term : factor        {$$ = $1;}
      ;
 
-factor : INT         {$$ = createRecord($1, "");
+factor : ID          {$$ = createRecord($1, "");
+                      free($1);}
+       |INT          {$$ = createRecord($1, "");
                       free($1);}
        | FLOAT       {$$ = createRecord($1, "");
+                      free($1);}
+       | DOUBLE      {$$ = createRecord($1, "");
+                      free($1);}
+       | BOOL_LIT    {$$ = createRecord($1, "");
+                      free($1);}
+       | STRING_LIT  {$$ = createRecord($1, "");
                       free($1);}
        ;
 

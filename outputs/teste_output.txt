@@ -48,238 +48,447 @@ printf("Exp: w = z + y - k * m / d ^ e. O valor de z = %d, y = %d, k = %f, m = %
 w = pow((z + y - k * m / d), e);
 printf("Exp: w = (z + y - k * m / d) ^ e. O valor de z = %d, y = %d, k = %f, m = %d, d = %d, e = %d e w = %f. \n", z, y, k, m, d, e, w);
 printf("\n");
-printf("TESTE: == \n");
+printf("TESTE: == (if) \n");
 if (b == c) {
+ goto goto_if_1; 
+} 
+ goto goto_end_if_1; 
+goto_if_1: 
 printf("Os valores são: b = %d e c = %d. O resultado é: true. \n", b, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_1: 
+
+if (v == v1x) {
+ goto goto_if_2; 
+} 
+ goto goto_end_if_2; 
+goto_if_2: 
+printf("O valor de v é: %f. \n", v);
+goto_end_if_2: 
+
+if (y == 8) {
+ goto goto_if_3; 
+} 
+ goto goto_end_if_3; 
+goto_if_3: 
+printf("O valor de y é: %d. \n", y);
+goto_end_if_3: 
+
+printf("\n");
+printf("TESTE: == (if-else) \n");
 if (a == c) {
+ goto goto_if_c_1; 
+} 
+ goto goto_else_c_1; 
+goto_if_c_1: 
 printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
-else {
+goto goto_end_if_else_1; 
+goto_else_c_1: 
 printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
-}
+goto_end_if_else_1: 
+
 if (v == v1x) {
+ goto goto_if_c_2; 
+} 
+ goto goto_else_c_2; 
+goto_if_c_2: 
 printf("O valor de v é: %f. \n", v);
-}
-else {
+goto goto_end_if_else_2; 
+goto_else_c_2: 
 printf("O valor de k = %f e v = %f. \n", k, v);
-}
+goto_end_if_else_2: 
+
 if (y == 8) {
+ goto goto_if_c_3; 
+} 
+ goto goto_else_c_3; 
+goto_if_c_3: 
 printf("O valor de y é: %d. \n", y);
-}
-else {
+goto goto_end_if_else_3; 
+goto_else_c_3: 
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_else_3: 
+
 printf("\n");
 printf("TESTE: != \n");
 if (a != c) {
+ goto goto_if_c_4; 
+} 
+ goto goto_else_c_4; 
+goto_if_c_4: 
 printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
-else {
+goto goto_end_if_else_4; 
+goto_else_c_4: 
 printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
-}
+goto_end_if_else_4: 
+
 if (v != v1x) {
+ goto goto_if_c_5; 
+} 
+ goto goto_else_c_5; 
+goto_if_c_5: 
 printf("O valor de v é: %f. \n", v);
-}
-else {
+goto goto_end_if_else_5; 
+goto_else_c_5: 
 printf("O valor de k = %f e v = %f. \n", k, v);
-}
+goto_end_if_else_5: 
+
 if (y != 8) {
+ goto goto_if_c_6; 
+} 
+ goto goto_else_c_6; 
+goto_if_c_6: 
 printf("O valor de y é: %d. \n", y);
-}
-else {
+goto goto_end_if_else_6; 
+goto_else_c_6: 
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_else_6: 
+
 printf("\n");
 printf("TESTE: < \n");
 if (a < c) {
+ goto goto_if_c_7; 
+} 
+ goto goto_else_c_7; 
+goto_if_c_7: 
 printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
-else {
+goto goto_end_if_else_7; 
+goto_else_c_7: 
 printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
-}
+goto_end_if_else_7: 
+
 if (v < v1x) {
+ goto goto_if_c_8; 
+} 
+ goto goto_else_c_8; 
+goto_if_c_8: 
 printf("O valor de v é: %f. \n", v);
-}
-else {
+goto goto_end_if_else_8; 
+goto_else_c_8: 
 printf("O valor de k = %f e v = %f. \n", k, v);
-}
+goto_end_if_else_8: 
+
 if (y < 8) {
+ goto goto_if_c_9; 
+} 
+ goto goto_else_c_9; 
+goto_if_c_9: 
 printf("O valor de y é: %d. \n", y);
-}
-else {
+goto goto_end_if_else_9; 
+goto_else_c_9: 
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_else_9: 
+
 printf("\n");
 printf("TESTE: > \n");
 if (a > c) {
+ goto goto_if_c_10; 
+} 
+ goto goto_else_c_10; 
+goto_if_c_10: 
 printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
-else {
+goto goto_end_if_else_10; 
+goto_else_c_10: 
 printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
-}
+goto_end_if_else_10: 
+
 if (v > v1x) {
+ goto goto_if_c_11; 
+} 
+ goto goto_else_c_11; 
+goto_if_c_11: 
 printf("O valor de v é: %f. \n", v);
-}
-else {
+goto goto_end_if_else_11; 
+goto_else_c_11: 
 printf("O valor de k = %f e v = %f. \n", k, v);
-}
+goto_end_if_else_11: 
+
 if (y > 8) {
+ goto goto_if_c_12; 
+} 
+ goto goto_else_c_12; 
+goto_if_c_12: 
 printf("O valor de y é: %d. \n", y);
-}
-else {
+goto goto_end_if_else_12; 
+goto_else_c_12: 
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_else_12: 
+
 printf("\n");
 printf("TESTE: <= \n");
 if (a <= c) {
+ goto goto_if_c_13; 
+} 
+ goto goto_else_c_13; 
+goto_if_c_13: 
 printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
-else {
+goto goto_end_if_else_13; 
+goto_else_c_13: 
 printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
-}
+goto_end_if_else_13: 
+
 if (v <= v1x) {
+ goto goto_if_c_14; 
+} 
+ goto goto_else_c_14; 
+goto_if_c_14: 
 printf("O valor de v é: %f. \n", v);
-}
-else {
+goto goto_end_if_else_14; 
+goto_else_c_14: 
 printf("O valor de k = %f e v = %f. \n", k, v);
-}
+goto_end_if_else_14: 
+
 if (y <= 8) {
+ goto goto_if_c_15; 
+} 
+ goto goto_else_c_15; 
+goto_if_c_15: 
 printf("O valor de y é: %d. \n", y);
-}
-else {
+goto goto_end_if_else_15; 
+goto_else_c_15: 
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_else_15: 
+
 printf("\n");
 printf("TESTE: >= \n");
 if (a >= c) {
+ goto goto_if_c_16; 
+} 
+ goto goto_else_c_16; 
+goto_if_c_16: 
 printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
-else {
+goto goto_end_if_else_16; 
+goto_else_c_16: 
 printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
-}
+goto_end_if_else_16: 
+
 if (v >= v1x) {
+ goto goto_if_c_17; 
+} 
+ goto goto_else_c_17; 
+goto_if_c_17: 
 printf("O valor de v é: %f. \n", v);
-}
-else {
+goto goto_end_if_else_17; 
+goto_else_c_17: 
 printf("O valor de k = %f e v = %f. \n", k, v);
-}
+goto_end_if_else_17: 
+
 if (y >= 8) {
+ goto goto_if_c_18; 
+} 
+ goto goto_else_c_18; 
+goto_if_c_18: 
 printf("O valor de y é: %d. \n", y);
-}
-else {
+goto goto_end_if_else_18; 
+goto_else_c_18: 
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_else_18: 
+
 printf("\n");
 printf("TESTE: and \n");
 if (a && c) {
+ goto goto_if_c_19; 
+} 
+ goto goto_else_c_19; 
+goto_if_c_19: 
 printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
-else {
+goto goto_end_if_else_19; 
+goto_else_c_19: 
 printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
-}
+goto_end_if_else_19: 
+
 if (v && 0) {
+ goto goto_if_c_20; 
+} 
+ goto goto_else_c_20; 
+goto_if_c_20: 
 printf("O valor de v é: %f. \n", v);
-}
-else {
+goto goto_end_if_else_20; 
+goto_else_c_20: 
 printf("O valor de k = %f e v = %f. \n", k, v);
-}
+goto_end_if_else_20: 
+
 if (y && 8) {
+ goto goto_if_c_21; 
+} 
+ goto goto_else_c_21; 
+goto_if_c_21: 
 printf("O valor de y é: %d. \n", y);
-}
-else {
+goto goto_end_if_else_21; 
+goto_else_c_21: 
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_else_21: 
+
 printf("\n");
 printf("TESTE: or \n");
 if (a || c) {
+ goto goto_if_c_22; 
+} 
+ goto goto_else_c_22; 
+goto_if_c_22: 
 printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
-else {
+goto goto_end_if_else_22; 
+goto_else_c_22: 
 printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
-}
+goto_end_if_else_22: 
+
 if (v || 0) {
+ goto goto_if_c_23; 
+} 
+ goto goto_else_c_23; 
+goto_if_c_23: 
 printf("O valor de v é: %f. \n", v);
-}
-else {
+goto goto_end_if_else_23; 
+goto_else_c_23: 
 printf("O valor de k = %f e v = %f. \n", k, v);
-}
+goto_end_if_else_23: 
+
 if (y || 8) {
+ goto goto_if_c_24; 
+} 
+ goto goto_else_c_24; 
+goto_if_c_24: 
 printf("O valor de y é: %d. \n", y);
-}
-else {
+goto goto_end_if_else_24; 
+goto_else_c_24: 
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_else_24: 
+
 printf("\n");
 printf("TESTE: not x or y \n");
 if (!a || c) {
+ goto goto_if_c_25; 
+} 
+ goto goto_else_c_25; 
+goto_if_c_25: 
 printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
-else {
+goto goto_end_if_else_25; 
+goto_else_c_25: 
 printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
-}
+goto_end_if_else_25: 
+
 if (!v || 0) {
+ goto goto_if_c_26; 
+} 
+ goto goto_else_c_26; 
+goto_if_c_26: 
 printf("O valor de v é: %f. \n", v);
-}
-else {
+goto goto_end_if_else_26; 
+goto_else_c_26: 
 printf("O valor de k = %f e v = %f. \n", k, v);
-}
+goto_end_if_else_26: 
+
 if (!y || 8) {
+ goto goto_if_c_27; 
+} 
+ goto goto_else_c_27; 
+goto_if_c_27: 
 printf("O valor de y é: %d. \n", y);
-}
-else {
+goto goto_end_if_else_27; 
+goto_else_c_27: 
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_else_27: 
+
 printf("\n");
 printf("TESTE: not (x or y) \n");
 if (!(a || c)) {
+ goto goto_if_c_28; 
+} 
+ goto goto_else_c_28; 
+goto_if_c_28: 
 printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
-else {
+goto goto_end_if_else_28; 
+goto_else_c_28: 
 printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
-}
+goto_end_if_else_28: 
+
 if (!(v || 0)) {
+ goto goto_if_c_29; 
+} 
+ goto goto_else_c_29; 
+goto_if_c_29: 
 printf("O valor de v é: %f. \n", v);
-}
-else {
+goto goto_end_if_else_29; 
+goto_else_c_29: 
 printf("O valor de k = %f e v = %f. \n", k, v);
-}
+goto_end_if_else_29: 
+
 if (!(y || 8)) {
+ goto goto_if_c_30; 
+} 
+ goto goto_else_c_30; 
+goto_if_c_30: 
 printf("O valor de y é: %d. \n", y);
-}
-else {
+goto goto_end_if_else_30; 
+goto_else_c_30: 
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_else_30: 
+
 printf("\n");
 printf("TESTE: xor \n");
 if (a ^ c) {
+ goto goto_if_c_31; 
+} 
+ goto goto_else_c_31; 
+goto_if_c_31: 
 printf("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
-else {
+goto goto_end_if_else_31; 
+goto_else_c_31: 
 printf("Os valores são: a = %d e c = %d. O resultado é: false. \n", a, c);
-}
+goto_end_if_else_31: 
+
 if (a ^ false) {
+ goto goto_if_c_32; 
+} 
+ goto goto_else_c_32; 
+goto_if_c_32: 
 printf("O valor de v é: %f. \n", v);
-}
-else {
+goto goto_end_if_else_32; 
+goto_else_c_32: 
 printf("O valor de k = %f e v = %f. \n", k, v);
-}
+goto_end_if_else_32: 
+
 if (y ^ 8) {
+ goto goto_if_c_33; 
+} 
+ goto goto_else_c_33; 
+goto_if_c_33: 
 printf("O valor de y é: %d. \n", y);
-}
-else {
+goto goto_end_if_else_33; 
+goto_else_c_33: 
 printf("O valor de z = %d e y = %d. \n", z, y);
-}
+goto_end_if_else_33: 
+
+printf("\n");
+printf("TESTE: while \n");
+y = 1;
+label_while_start_1: if ((y < 100)) goto label_while_body_1;
+goto label_while_end_1;
+label_while_body_1:
+y++;
+goto label_while_start_1;
+label_while_end_1: 
+
+printf("O valor de y é: %d. \n", y);
+int cont = 0;
+label_while_start_2: if ((cont < 100)) goto label_while_body_2;
+goto label_while_end_2;
+label_while_body_2:
+z += 1;
+cont++;
+goto label_while_start_2;
+label_while_end_2: 
+
+printf("O valor de z é: %d. \n", z);
 }

@@ -51,12 +51,24 @@ main
 
   print("\n");
 
-	print("TESTE: == \n");
+	print("TESTE: == (if) \n");
 
 	If (b == c) Then
       print("Os valores são: b = %d e c = %d. O resultado é: true. \n", b, c);
 			print("O valor de z = %d e y = %d. \n", z, y);
     end_if
+
+	If (v == v1x) Then
+      print("O valor de v é: %f. \n", v);
+    end_if
+
+	If (y == 8) Then
+      print("O valor de y é: %d. \n", y);
+    end_if
+
+  print("\n");
+
+	print("TESTE: == (if-else) \n");
 
 	If (a == c) Then
       print("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
@@ -276,6 +288,7 @@ main
     end_if
 
 	print("\n");
+
 	print("TESTE: xor \n");
 	If (a xor c) Then
       print("Os valores são: a = %d e c = %d. O resultado é: true. \n", a, c);
@@ -295,4 +308,21 @@ main
     eLse
       print("O valor de z = %d e y = %d. \n", z, y);
     end_if
+
+	print("\n");
+	
+	print("TESTE: while \n");
+	y = 1;
+	while ( y < 100 )
+		y++;
+	end_while
+	print("O valor de y é: %d. \n", y);
+
+	int cont = 0;
+	while ( cont < 100 )
+		z += 1;
+		cont++;
+	end_while
+	print("O valor de z é: %d. \n", z);
+
 end_main
