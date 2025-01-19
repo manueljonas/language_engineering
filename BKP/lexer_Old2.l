@@ -5,12 +5,10 @@
   extern int yyerror (char *msg);  
 %}
 
-%option yylineno
-
 %%
 
 [ \t\r]+                {}
-[\n]+                   {}
+[\n]+                   {yylineno++;}
 [0-9]+                  {yylval.sValue = strdup(yytext); 
                          return INT;}
 [0-9]+\.[0-9]+          {yylval.sValue = strdup(yytext);
@@ -41,7 +39,6 @@
 "while"                 {return(WHILE);}
 "end_while"             {return(END_WHILE);}
 "for"                   {return(FOR);}
-"end_for"               {return(END_FOR);}
 "+"                     {return(PLUS);}
 "-"                     {return(MINUS);}
 "*"                     {return(MULT);}
@@ -73,7 +70,17 @@
 [a-zA-Z][a-zA-Z0-9]*    {yylval.sValue = strdup(yytext); 
                          return ID;}
 \/\/.*                  {}
-\/\*([^*]|\*+[^\/])*\*+\/ {}
+\/\*([^*]|\*+[^\/])*\*+\/ {const char *ptr = yytext;
+                           increment_line:
+                           if (*ptr == '\n') {
+                               yylineno++;
+                           }
+
+                           if (*ptr != '\0') {
+                               ptr++;
+                               goto increment_line;
+                           }
+                          }
 .                       {fprintf(stderr, "Erro léxico: caractere inválido '%s' na linha %d\n", yytext, yylineno);
                          exit(1);}
 %%

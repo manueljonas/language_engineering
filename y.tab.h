@@ -60,37 +60,41 @@ extern int yydebug;
     THEN = 261,                    /* THEN  */
     ELSE = 262,                    /* ELSE  */
     END_IF = 263,                  /* END_IF  */
-    ASSIGN = 264,                  /* ASSIGN  */
-    MAIN = 265,                    /* MAIN  */
-    END_MAIN = 266,                /* END_MAIN  */
-    PRINT = 267,                   /* PRINT  */
-    RETURN = 268,                  /* RETURN  */
-    EQUALS = 269,                  /* EQUALS  */
-    DIFF = 270,                    /* DIFF  */
-    LESS = 271,                    /* LESS  */
-    GREATER = 272,                 /* GREATER  */
-    LESSEQUALS = 273,              /* LESSEQUALS  */
-    GREATEREQUALS = 274,           /* GREATEREQUALS  */
-    AND = 275,                     /* AND  */
-    OR = 276,                      /* OR  */
-    XOR = 277,                     /* XOR  */
-    NOT = 278,                     /* NOT  */
-    TYPE = 279,                    /* TYPE  */
-    STRING_LIT = 280,              /* STRING_LIT  */
-    BOOL_LIT = 281,                /* BOOL_LIT  */
-    ID = 282,                      /* ID  */
-    INT = 283,                     /* INT  */
-    FLOAT = 284,                   /* FLOAT  */
-    DOUBLE = 285,                  /* DOUBLE  */
-    INCREMENT = 286,               /* INCREMENT  */
-    DECREMENT = 287,               /* DECREMENT  */
-    INCREMENT_ASSIGN = 288,        /* INCREMENT_ASSIGN  */
-    DECREMENT_ASSIGN = 289,        /* DECREMENT_ASSIGN  */
-    PLUS = 290,                    /* PLUS  */
-    MINUS = 291,                   /* MINUS  */
-    MULT = 292,                    /* MULT  */
-    DIVISION = 293,                /* DIVISION  */
-    EXPOENT = 294                  /* EXPOENT  */
+    WHILE = 264,                   /* WHILE  */
+    END_WHILE = 265,               /* END_WHILE  */
+    FOR = 266,                     /* FOR  */
+    END_FOR = 267,                 /* END_FOR  */
+    ASSIGN = 268,                  /* ASSIGN  */
+    MAIN = 269,                    /* MAIN  */
+    END_MAIN = 270,                /* END_MAIN  */
+    PRINT = 271,                   /* PRINT  */
+    RETURN = 272,                  /* RETURN  */
+    EQUALS = 273,                  /* EQUALS  */
+    DIFF = 274,                    /* DIFF  */
+    LESS = 275,                    /* LESS  */
+    GREATER = 276,                 /* GREATER  */
+    LESSEQUALS = 277,              /* LESSEQUALS  */
+    GREATEREQUALS = 278,           /* GREATEREQUALS  */
+    AND = 279,                     /* AND  */
+    OR = 280,                      /* OR  */
+    XOR = 281,                     /* XOR  */
+    NOT = 282,                     /* NOT  */
+    TYPE = 283,                    /* TYPE  */
+    STRING_LIT = 284,              /* STRING_LIT  */
+    BOOL_LIT = 285,                /* BOOL_LIT  */
+    ID = 286,                      /* ID  */
+    INT = 287,                     /* INT  */
+    FLOAT = 288,                   /* FLOAT  */
+    DOUBLE = 289,                  /* DOUBLE  */
+    INCREMENT = 290,               /* INCREMENT  */
+    DECREMENT = 291,               /* DECREMENT  */
+    INCREMENT_ASSIGN = 292,        /* INCREMENT_ASSIGN  */
+    DECREMENT_ASSIGN = 293,        /* DECREMENT_ASSIGN  */
+    PLUS = 294,                    /* PLUS  */
+    MINUS = 295,                   /* MINUS  */
+    MULT = 296,                    /* MULT  */
+    DIVISION = 297,                /* DIVISION  */
+    EXPOENT = 298                  /* EXPOENT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -99,13 +103,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "parser.y"
+#line 21 "parser.y"
 
-	char * sValue;  /* string value */
+	char * sValue;         // string value
 	struct record * rec;
  
 
-#line 109 "y.tab.h"
+#line 113 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

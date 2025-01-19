@@ -491,4 +491,56 @@ goto label_while_start_2;
 label_while_end_2: 
 
 printf("O valor de z é: %d. \n", z);
+printf("\n");
+printf("TESTE: for \n");
+y = 1;
+int label_for_init_1_contador = 1;
+label_for_start_1: if (!(label_for_init_1_contador < 100)) goto label_for_end_1;
+label_for_body_1:
+++y;
+
+label_for_init_1_contador++;
+;
+goto label_for_start_1;
+label_for_end_1: 
+
+printf("O valor de y é: %d. \n", y);
+y = 1;
+int label_for_init_2_contador = 1;
+label_for_start_2: if (!(label_for_init_2_contador < 100)) goto label_for_end_2;
+label_for_body_2:
+++y;
+
+label_for_init_2_contador++;
+;
+goto label_for_start_2;
+label_for_end_2: 
+
+printf("O valor de y é: %d. \n", y);
+z = 22;
+int contador2;
+contador2 = 0;
+label_for_start_3: if (!(contador2 < 100)) goto label_for_end_3;
+label_for_body_3:
+z += 1;
+
+contador2++;
+;
+goto label_for_start_3;
+label_for_end_3: 
+
+printf("O valor de z é: %d. \n", z);
+z = 22;
+int contador3 = 0;
+contador3;
+label_for_start_4: if (!(contador3 < 100)) goto label_for_end_4;
+label_for_body_4:
+z += 1;
+
+contador3++;
+;
+goto label_for_start_4;
+label_for_end_4: 
+
+printf("O valor de z é: %d. \n", z);
 }

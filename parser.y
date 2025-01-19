@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "./lib/record.h"
-#include "./lib/matrix.h"
 
 int yylex(void);
 int yyerror(char *s);
@@ -15,6 +14,7 @@ char * cat(char *, char *, char *, char *, char *, char *);
 int labelCounterIf = 1; // Contador global para os rótulos goto if
 int labelCounterIfElse = 1; // Contador global para os rótulos goto if-else
 int labelCounterWhile = 1; // Contador global para os rótulos goto while
+int labelCounterFor = 1; // Contador global para os rótulos goto for
 
 %}
 
@@ -24,7 +24,7 @@ int labelCounterWhile = 1; // Contador global para os rótulos goto while
  };
 
 %token FUNCTION END_FUNCTION 
-%token IF THEN ELSE END_IF WHILE END_WHILE FOR ASSIGN
+%token IF THEN ELSE END_IF WHILE END_WHILE FOR END_FOR ASSIGN
 %token MAIN END_MAIN 
 %token PRINT RETURN
 %token EQUALS DIFF LESS GREATER LESSEQUALS GREATEREQUALS
@@ -34,8 +34,8 @@ int labelCounterWhile = 1; // Contador global para os rótulos goto while
 %token <sValue> INCREMENT DECREMENT INCREMENT_ASSIGN DECREMENT_ASSIGN
 %token <sValue> PLUS MINUS MULT DIVISION EXPOENT 
 
-%type <rec> subprogs subprog args_op args arg ids main cmds cmd dms dm mtr_row mtr_rows
-%type <rec> cond return write exp term factor call exps_op exps iteration
+%type <rec> subprogs subprog args_op args arg ids main cmds cmd 
+%type <rec> cond return write exp term factor call exps_op exps iteration for_init for_init_declaration for_cond for_incr
 
 %left PLUS MINUS
 %left MULT DIVISION
@@ -209,87 +209,7 @@ cmd : cond                      {$$ = $1;}
          $$ = createRecord(s, "");
          free(s);
       }
-    | TYPE ID dms ';' {
-      //int a[2];
-      char *s = cat($1, " ", $2, $3->code, ";", "");
-      free($1);
-      free($2);
-      freeRecord($3);
-      $$ = createRecord(s, "");
-      free(s);
-    }
-    | ID dms ASSIGN exp ';' { 
-      char *s = cat($1, $2->code, " = ", $4->code, ";", "");
-      free($1);
-      freeRecord($2);
-      freeRecord($4);
-      $$ = createRecord(s, "");
-      free(s);
-    }
-    | TYPE ID dms ASSIGN '(' mtr_rows ')' ';' { 
-      char *s = cat($1, " ", $2, " ", "", "");
-      char *s1 = cat(s, $3->code, " = {", $6->code, "};", "");
-      free($1);
-      free($2);
-      freeRecord($3);
-      freeRecord($6);
-      $$ = createRecord(s1, "");
-      free(s);
-      free(s1);
-    }
-    ;     
-
-dms: dm
-    | dms dm {
-      char *s = cat($1->code, $2->code, "", "", "", "");
-      freeRecord($1);
-      freeRecord($2);
-      $$ = createRecord(s, "");
-      free(s);
-    } 
-    ;
-
-dm: '[' ']' { 
-      char *s = cat("[", "]", "", "", "", "");
-      $$ = createRecord(s, "");
-      free(s);
-     }
-     | '[' term ']' {
-      char *s = cat("[", $2->code, "]", "", "", "");
-      freeRecord($2);
-      $$ = createRecord(s, "");
-      free(s);
-     }
-    ; 
-
-mtr_rows: {
-           $$ = createRecord("{}", "");
-        }
-        | mtr_row {
-            char *s = cat($1->code, "", "", "", "", "");
-            freeRecord($1);
-            $$ = createRecord(s, "");
-            free(s);
-         }
-         | mtr_row ',' mtr_rows  {
-          char *s = cat($1->code, "," , $3->code, "", "", "");
-          freeRecord($1);
-          freeRecord($3);
-          $$ = createRecord(s, "");
-          free(s);
-         }
-         ;
-
-mtr_row: '{' '}' {
-          $$ = createRecord("{}", "");
-        }
-        | '{' exps '}' {
-          char *s = cat("{", $2->code, "}", "", "", "");
-          freeRecord($2);
-          $$ = createRecord(s, "");
-          free(s);
-        }
-        ;
+    ;          
 
 cond : IF exp THEN cmds END_IF
       {
@@ -297,8 +217,8 @@ cond : IF exp THEN cmds END_IF
         int currentLabelIf = labelCounterIf++;
         
         // Gera rótulos únicos com base no contador
-        char labelIf[20];
-        char labelEndIf[20];
+        char labelIf[30];
+        char labelEndIf[30];
         snprintf(labelIf, sizeof(labelIf), "goto_if_%d", currentLabelIf);
         snprintf(labelEndIf, sizeof(labelEndIf), "goto_end_if_%d", currentLabelIf);
 
@@ -323,9 +243,9 @@ cond : IF exp THEN cmds END_IF
         int currentLabelIfElse = labelCounterIfElse++;
         
         // Gera rótulos únicos com base no contador
-        char labelIf[20];
-        char labelElse[20];
-        char labelEndIfElse[20];
+        char labelIf[30];
+        char labelElse[30];
+        char labelEndIfElse[30];
         snprintf(labelIf, sizeof(labelIf), "goto_if_c_%d", currentLabelIfElse);
         snprintf(labelElse, sizeof(labelElse), "goto_else_c_%d", currentLabelIfElse);
         snprintf(labelEndIfElse, sizeof(labelEndIfElse), "goto_end_if_else_%d", currentLabelIfElse);
@@ -354,7 +274,7 @@ cond : IF exp THEN cmds END_IF
       }
       ;
 
-return : RETURN exp ';'{char * s = cat("return ", $2->code, ";", "", "", "");
+return : RETURN exp ';' {char * s = cat("return ", $2->code, ";", "", "", "");
                          freeRecord($2);
                          $$ = createRecord(s, "");
                          free(s);
@@ -369,33 +289,180 @@ write : PRINT '(' exps ')' ';' {char * s = cat("printf", "(", $3->code, ")", ";"
         ;
 
 iteration : WHILE '(' exp ')' cmds END_WHILE
-{
-    // Incrementar o contador de rótulos para gerar identificadores únicos
-    int currentLabelWhile = labelCounterWhile++;
-    char labelStart[30], labelEnd[30], labelBody[30];
+    {
+        // Incrementar o contador de rótulos para gerar identificadores únicos
+        int currentLabelWhile = labelCounterWhile++;
+        char labelStart[30], labelEnd[30], labelBody[30];
 
-    // Criar rótulos únicos com base no contador
-    snprintf(labelStart, sizeof(labelStart), "label_while_start_%d", currentLabelWhile);
-    snprintf(labelEnd, sizeof(labelEnd), "label_while_end_%d", currentLabelWhile);
-    snprintf(labelBody, sizeof(labelBody), "label_while_body_%d", currentLabelWhile);
+        // Criar rótulos únicos com base no contador
+        snprintf(labelStart, sizeof(labelStart), "label_while_start_%d", currentLabelWhile);
+        snprintf(labelEnd, sizeof(labelEnd), "label_while_end_%d", currentLabelWhile);
+        snprintf(labelBody, sizeof(labelBody), "label_while_body_%d", currentLabelWhile);
 
-    // Gerar as partes do código do bloco WHILE
-    char *part1 = cat(labelStart, ": if ((", $3->code, ")) goto ", labelBody, ";\n");
-    char *part2 = cat("goto ", labelEnd, ";\n", labelBody, ":\n", $5->code);
-    char *part3 = cat("goto ", labelStart, ";\n", labelEnd, ": \n", "");
+        // Gerar as partes do código do bloco WHILE
+        char *part1 = cat(labelStart, ": if ((", $3->code, ")) goto ", labelBody, ";\n");
+        char *part2 = cat("goto ", labelEnd, ";\n", labelBody, ":\n", $5->code);
+        char *part3 = cat("goto ", labelStart, ";\n", labelEnd, ": \n", "");
 
-    // Concatenar todas as partes do código gerado
-    char *s = cat(part1, part2, part3, "", "", "");
-    free(part1);
-    free(part2);
-    free(part3);
-    freeRecord($3);
-    freeRecord($5);
+        // Concatenar todas as partes do código gerado
+        char *s = cat(part1, part2, part3, "", "", "");
+        free(part1);
+        free(part2);
+        free(part3);
+        freeRecord($3);
+        freeRecord($5);
+        $$ = createRecord(s, "");
+        free(s);
+    }
+    | FOR '(' for_init ';' for_cond ';' for_incr ')' cmds END_FOR
+    {
+        // Gerar rótulos únicos para o laço
+        int currentLabelFor = labelCounterFor++;
+        char labelStart[30], labelEnd[30], labelBody[30];
 
-    // Criar o registro final para a regra WHILE
-    $$ = createRecord(s, "");
-    free(s);
-}
+        snprintf(labelStart, sizeof(labelStart), "label_for_start_%d", currentLabelFor);
+        snprintf(labelEnd, sizeof(labelEnd), "label_for_end_%d", currentLabelFor);
+        snprintf(labelBody, sizeof(labelBody), "label_for_body_%d", currentLabelFor);
+
+        // Inicialização
+        char *init = cat($3->code, ";\n", "", "", "", "");
+
+        // Condição
+        char *cond = cat("if (!(", $5->code, ")) goto ", labelEnd, ";\n", "");
+
+        // Incremento
+        char *increment = cat($7->code, ";\n", "", "", "", "");
+
+        // Combinar as partes do laço
+        char *part1 = cat(init, labelStart, ": ", cond, "", "");
+        char *part2 = cat(labelBody, ":\n", $9->code, "\n", increment, ";\n");
+        char *part3 = cat("goto ", labelStart, ";\n", labelEnd, ": \n", "");
+
+        char *s = cat(part1, part2, part3, "", "", "");
+        free(init);
+        free(cond);
+        free(part1);
+        free(part2);
+        free(part3);
+        freeRecord($3);
+        freeRecord($5);
+        freeRecord($7);
+        freeRecord($9);
+        $$ = createRecord(s, "");
+        free(s);
+    }
+    | FOR '(' for_init_declaration ';' for_cond ';' for_incr ')' cmds END_FOR
+    {
+        // Gerar rótulos únicos para o laço
+        int currentLabelFor = labelCounterFor++;
+        char labelInit[30], labelStart[30], labelEnd[30], labelBody[30];
+
+        snprintf(labelInit, sizeof(labelInit), "label_for_init_%d_", currentLabelFor);
+        snprintf(labelStart, sizeof(labelStart), "label_for_start_%d", currentLabelFor);
+        snprintf(labelEnd, sizeof(labelEnd), "label_for_end_%d", currentLabelFor);
+        snprintf(labelBody, sizeof(labelBody), "label_for_body_%d", currentLabelFor);
+
+        // Inicialização
+        char *init = cat($3->code, ";\n", "", "", "", "");
+
+        // Condição
+        char *cond = cat("if (!(", labelInit, $5->code, ")) goto ", labelEnd, ";\n");
+
+        // Incremento
+        char *increment = cat(labelInit, $7->code, ";\n", "", "", "");
+
+        // Combinar as partes do laço
+        char *part1 = cat(init, labelStart, ": ", cond, "", "");
+        char *part2 = cat(labelBody, ":\n", $9->code, "\n", increment, ";\n");
+        char *part3 = cat("goto ", labelStart, ";\n", labelEnd, ": \n", "");
+
+        char *s = cat(part1, part2, part3, "", "", "");
+        free(init);
+        free(cond);
+        free(part1);
+        free(part2);
+        free(part3);
+        freeRecord($3);
+        freeRecord($5);
+        freeRecord($7);
+        freeRecord($9);
+        $$ = createRecord(s, "");
+        free(s);
+    }
+    ;
+
+for_init : ID ASSIGN exp
+         {
+            char *s = cat($1, " = ", $3->code, "", "", "");
+            free($1);
+            freeRecord($3);
+            $$ = createRecord(s, "");
+            free(s);
+         }
+         | ID
+         {
+            char *s = cat($1, "", "", "", "", "");
+            free($1);
+            $$ = createRecord(s, "");
+            free(s);
+         }
+    ;
+
+for_init_declaration : TYPE ID ASSIGN exp
+         {
+            // Gerar rótulos únicos para o laço
+            int currentLabelFor = labelCounterFor;
+            char labelInit[30];
+
+            snprintf(labelInit, sizeof(labelInit), "label_for_init_%d_", currentLabelFor);
+
+            char *s = cat($1, " ", labelInit, $2, " = ", $4->code);
+            free($1);
+            free($2);
+            freeRecord($4);
+            $$ = createRecord(s, "");
+            free(s);
+         }
+    ;
+
+for_cond : exp
+    {
+        $$ = $1;
+    }
+    ;
+
+for_incr : ID INCREMENT
+    {
+        char *s = cat($1, "++", "", "", "", "");
+        free($1);
+        $$ = createRecord(s, "");
+        free(s);
+    }
+    | ID DECREMENT
+    {
+        char *s = cat($1, "--", "", "", "", "");
+        free($1);
+        $$ = createRecord(s, "");
+        free(s);
+    }
+    | INCREMENT ID
+    {
+        char *s = cat("++", $2, "", "", "", "");
+        free($2);
+        $$ = createRecord(s, "");
+        free(s);
+    }
+    | DECREMENT ID
+    {
+        char *s = cat("--", $2, "", "", "", "");
+        free($2);
+        $$ = createRecord(s, "");
+        free(s);
+    }
+    | exp
+    {
+        $$ = $1;
+    }
     ;
 
 exp : term        {$$ = $1;}
