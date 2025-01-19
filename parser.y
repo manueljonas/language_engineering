@@ -327,20 +327,22 @@ iteration : WHILE '(' exp ')' cmds END_WHILE
         // Inicialização
         char *init = cat($3->code, ";\n", "", "", "", "");
 
-        // Condição
-        char *cond = cat("if (!(", $5->code, ")) goto ", labelEnd, ";\n", "");
+        // Condição (ajustada para if ((...) em vez de if (!(...))
+        char *cond = cat("if ((", $5->code, ")) goto ", labelBody, ";\n", "");
+        char *skipToEnd = cat("goto ", labelEnd, ";\n", "", "", "");
 
         // Incremento
         char *increment = cat($7->code, ";\n", "", "", "", "");
 
         // Combinar as partes do laço
-        char *part1 = cat(init, labelStart, ": ", cond, "", "");
+        char *part1 = cat(init, labelStart, ": ", cond, skipToEnd, "");
         char *part2 = cat(labelBody, ":\n", $9->code, "\n", increment, ";\n");
         char *part3 = cat("goto ", labelStart, ";\n", labelEnd, ": \n", "");
 
         char *s = cat(part1, part2, part3, "", "", "");
         free(init);
         free(cond);
+        free(skipToEnd);
         free(part1);
         free(part2);
         free(part3);
@@ -365,20 +367,22 @@ iteration : WHILE '(' exp ')' cmds END_WHILE
         // Inicialização
         char *init = cat($3->code, ";\n", "", "", "", "");
 
-        // Condição
-        char *cond = cat("if (!(", labelInit, $5->code, ")) goto ", labelEnd, ";\n");
+        // Condição (ajustada para if ((...) em vez de if (!(...))
+        char *cond = cat("if ((", labelInit, $5->code, ")) goto ", labelBody, ";\n");
+        char *skipToEnd = cat("goto ", labelEnd, ";\n", "", "", "");
 
         // Incremento
         char *increment = cat(labelInit, $7->code, ";\n", "", "", "");
 
         // Combinar as partes do laço
-        char *part1 = cat(init, labelStart, ": ", cond, "", "");
+        char *part1 = cat(init, labelStart, ": ", cond, skipToEnd, "");
         char *part2 = cat(labelBody, ":\n", $9->code, "\n", increment, ";\n");
         char *part3 = cat("goto ", labelStart, ";\n", labelEnd, ": \n", "");
 
         char *s = cat(part1, part2, part3, "", "", "");
         free(init);
         free(cond);
+        free(skipToEnd);
         free(part1);
         free(part2);
         free(part3);
