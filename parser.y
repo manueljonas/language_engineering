@@ -361,11 +361,19 @@ return : RETURN exp ';'{char * s = cat("return ", $2->code, ";", "", "", "");
                         }
         ;
 
-write : PRINT '(' exps ')' ';' {char * s = cat("printf", "(", $3->code, ")", ";", "");
+write : PRINT '(' exps ')' ';' {  
+                                  char *s;
+                                  //@todo mexer no opt da matriz
+                                  if(strcmp($3->opt1, "matrix") == 0) {
+                                    s = cat("print_matrix(", $3->code, ")", ";", "", "");
+                                  } else {
+                                    s = cat("printf", "(", $3->code, ")", ";", "");
+                                  }
+
                                   freeRecord($3);
                                   $$ = createRecord(s, "");
                                   free(s);
-                                 }
+                                }
         ;
 
 iteration : WHILE '(' exp ')' cmds END_WHILE
