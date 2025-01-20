@@ -105,9 +105,9 @@ union YYSTYPE
 {
 #line 21 "parser.y"
 
-	char * sValue;         // string value
-	struct record * rec;
- 
+    char * sValue;         // string value
+    struct record * rec;
+  
 
 #line 113 "y.tab.h"
 

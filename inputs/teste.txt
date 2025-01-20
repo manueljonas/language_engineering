@@ -44,10 +44,10 @@ main
   y + z + w;
   w = z + y + k;
   print("O valor de z = %d, y = %d, k = %f e w = %f. \n", z, y, k, w);
-  w = z + y - k * m / d ^ e;
-  print("Exp: w = z + y - k * m / d ^ e. O valor de z = %d, y = %d, k = %f, m = %d, d = %d, e = %d e w = %f. \n", z, y, k, m, d, e, w);
-  w = (z + y - k * m / d) ^ e;
-  print("Exp: w = (z + y - k * m / d) ^ e. O valor de z = %d, y = %d, k = %f, m = %d, d = %d, e = %d e w = %f. \n", z, y, k, m, d, e, w);
+  w = z + y - k * m / d ^ (2 * e + 1);
+  print("Exp: w = z + y - k * m / d ^ (2 * e + 1). O valor de z = %d, y = %d, k = %f, m = %d, d = %d, e = %d e w = %f. \n", z, y, k, m, d, e, w);
+  w = ((z + y) - ((k * m) / d)) ^ ((2 * e) + 1);
+  print("Exp: w = ((z + y) - ((k * m) / d)) ^ ((2 * e) + 1). O valor de z = %d, y = %d, k = %f, m = %d, d = %d, e = %d e w = %f. \n", z, y, k, m, d, e, w);
 
   print("\n");
 
@@ -354,5 +354,90 @@ main
 		z += 1;
 	end_for
 	print("O valor de z é: %d. \n", z);
+
+	print("\n");
+	
+	print("TESTE: ARRAY (while e for) \n");
+
+	float arr[5] = {1.1, 2.5, 3, 4, 5};
+	float somaWhile = 0;
+	float somaFor = 0;
+
+	arr[2] = 2 * arr[2];
+	arr[3] = 30 + 70;
+	arr[4] = 50;
+
+	// Testa também se a inserção de vários while daria problema
+	int i = 0;
+	while ( i < 5 )
+		somaWhile += arr[i];
+		print("while: arr[%d] = %f\n", i, arr[i]);
+		i++;
+	end_while
+		print("somaWhile = %f\n", somaWhile);
+
+	i = 0;
+	while ( i < 5 )
+		somaWhile += arr[i];
+		print("while: arr[%d] = %f\n", i, arr[i]);
+		i++;
+	end_while
+		print("somaWhile = %f\n", somaWhile);
+
+	// Testa também se a inserção de vários for daria problema
+	for (int ix : arr)
+			somaFor += arr[ix];
+	    print("for: arr[%d] = %f\n", ix, arr[ix]);	    
+	end_for
+			print("somaFor = %f\n", somaFor);
+
+	for (int ix : arr)
+			somaFor += arr[ix];
+	    print("for: arr[%d] = %f\n", ix, arr[ix]);	    
+	end_for
+			print("somaFor = %f\n", somaFor);
+
+i = 0;
+while(i < 5)
+        int xx = 1;
+        xx += i;
+        i++;
+        print("O valor de xx é: %d.\n", xx);
+end_while
+
+i = 0;
+while(i < 5)
+        int xx = 1;
+        xx += i;
+        i++;
+        print("O valor de xx é: %d.\n", xx);
+end_while
+
+
+for (int i = 0; i < 5; i++)
+	      int xx = 1;
+	      xx += i;
+	      print("O valor de xx é: %d.\n", xx);
+end_for
+
+for (int i = 0; i < 5; i++)
+	      int xx = 1;
+	      xx += i;
+	      print("O valor de xx é: %d.\n", xx);
+end_for
+
+i = 0;
+for (i; i < 5; i++)
+	      int xx = 1;
+	      xx += i;
+	      print("O valor de xx é: %d.\n", xx);
+end_for
+
+i = 0;
+for (i; i < 5; i++)
+	      int xx = 1;
+	      xx += i;
+	      print("O valor de xx é: %d.\n", xx);
+end_for
 
 end_main
