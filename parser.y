@@ -227,13 +227,10 @@ cmd : cond                      {$$ = $1;}
       free(s);
     }
     | TYPE ID '[' term ']' '[' term ']' ASSIGN '(' mtr_rows ')' ';' { 
-      char *s = cat($1, " ", $2, " ", "", "");
-      char *s1 = cat(s, "", " = {", "", "};", "");
-      free($1);
-      free($2);
-      //freeRecord($3);
-      //freeRecord($6);
+      char *s = cat(" = ", "parse_matrix_string(\"", $11->code, "\",", $4->code, ",");
+      char *s1 = cat("Matrix *", $2, s, $7->code, ")", ";");
       $$ = createRecord(s1, "");
+      freeRecord($11);
       free(s);
       free(s1);
     }

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "matrix.h"
 
 Matrix* create_matrix(int rows, int cols) {
@@ -26,7 +27,10 @@ void free_matrix(Matrix* matrix) {
 void print_matrix(Matrix* matrix) {
     for (int i = 0; i < matrix->rows; i++) {
         for (int j = 0; j < matrix->cols; j++) {
-            printf("%.2f ", matrix->data[i][j]);
+            printf("%d", (int)matrix->data[i][j]);
+            if (j < matrix->cols - 1) {
+                printf(" ");
+            }
         }
         printf("\n");
     }
@@ -78,4 +82,63 @@ Matrix* transpose_matrix(Matrix* matrix) {
     }
 
     return result;
+}
+
+int* get_data(const char *str, int *size) {
+    int *result = malloc(strlen(str) * sizeof(int)); 
+    *size = 0;
+
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] >= '0' && str[i] <= '9') {
+            result[*size] = str[i] - '0';
+            (*size)++;
+        }
+    }
+
+    return result;
+}
+
+char* clean_params(const char *str) {
+    int i = 0, j = 0;
+    int len = strlen(str);
+    
+    char *nova_str = malloc(len + 1);
+
+    if (nova_str == NULL) {
+        printf("Erro ao alocar memória.\n");
+        return NULL;
+    }
+
+    while (str[i] != '\0') {
+        if (str[i] != '{' && str[i] != '}' && str[i] != ' ') {
+            nova_str[j] = str[i];
+            j++;
+        }
+        i++;
+    }
+
+    nova_str[j] = '\0';
+
+    return nova_str;
+}
+
+Matrix* parse_matrix_string(const char* input, int rows, int cols) {
+
+    input = clean_params(input);
+
+    Matrix* matrix = create_matrix(rows, cols);
+   
+    int k = 0;
+    int size = 0;
+
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            matrix->data[i][j] = get_data(input, &size)[k];
+            k++; 
+        }
+    }
+    
+    print_matrix(matrix);
+    return matrix;
 }
