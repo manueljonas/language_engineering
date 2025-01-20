@@ -26,7 +26,7 @@
   %token FUNCTION END_FUNCTION 
   %token IF THEN ELSE END_IF WHILE END_WHILE FOR END_FOR ASSIGN
   %token MAIN END_MAIN 
-  %token PRINT RETURN
+  %token PRINT SCAN RETURN
   %token EQUALS DIFF LESS GREATER LESSEQUALS GREATEREQUALS
   %token AND OR XOR NOT
   %token <sValue> TYPE STRING_LIT BOOL_LIT ID
@@ -35,7 +35,7 @@
   %token <sValue> PLUS MINUS MULT DIVISION EXPOENT 
   
   %type <rec> subprogs subprog args_op args arg ids main cmds cmd 
-  %type <rec> cond return write exp term factor call exps_op exps iteration for_incr 
+  %type <rec> cond return write read exp term factor call exps_op exps iteration for_incr 
   
   %left PLUS MINUS
   %left MULT DIVISION
@@ -131,9 +131,10 @@
                  }
      ;
   
-  cmd : cond                      {$$ = $1;}
+  cmd : cond                    {$$ = $1;}
     | return                    {$$ = $1;}
     | write                     {$$ = $1;}
+    | read                      {$$ = $1;}
     | iteration                 {$$ = $1;}
     | TYPE ID ASSIGN exp ';' {char * s = cat($1, " ", $2, " = ", $4->code, ";");
                               free($1);
@@ -276,7 +277,13 @@
                                   free(s);
                                  }
         ;
-  
+
+  read : SCAN '(' exps ')' ';' {char * s = cat("scanf", "(", $3->code, ")", ";", "");
+                                  freeRecord($3);
+                                  $$ = createRecord(s, "");
+                                  free(s);
+                                 }
+        ;
   iteration : WHILE '(' exp ')' cmds END_WHILE
     {
         // Incrementar o contador de rótulos para gerar identificadores únicos

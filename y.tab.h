@@ -68,33 +68,34 @@ extern int yydebug;
     MAIN = 269,                    /* MAIN  */
     END_MAIN = 270,                /* END_MAIN  */
     PRINT = 271,                   /* PRINT  */
-    RETURN = 272,                  /* RETURN  */
-    EQUALS = 273,                  /* EQUALS  */
-    DIFF = 274,                    /* DIFF  */
-    LESS = 275,                    /* LESS  */
-    GREATER = 276,                 /* GREATER  */
-    LESSEQUALS = 277,              /* LESSEQUALS  */
-    GREATEREQUALS = 278,           /* GREATEREQUALS  */
-    AND = 279,                     /* AND  */
-    OR = 280,                      /* OR  */
-    XOR = 281,                     /* XOR  */
-    NOT = 282,                     /* NOT  */
-    TYPE = 283,                    /* TYPE  */
-    STRING_LIT = 284,              /* STRING_LIT  */
-    BOOL_LIT = 285,                /* BOOL_LIT  */
-    ID = 286,                      /* ID  */
-    INT = 287,                     /* INT  */
-    FLOAT = 288,                   /* FLOAT  */
-    DOUBLE = 289,                  /* DOUBLE  */
-    INCREMENT = 290,               /* INCREMENT  */
-    DECREMENT = 291,               /* DECREMENT  */
-    INCREMENT_ASSIGN = 292,        /* INCREMENT_ASSIGN  */
-    DECREMENT_ASSIGN = 293,        /* DECREMENT_ASSIGN  */
-    PLUS = 294,                    /* PLUS  */
-    MINUS = 295,                   /* MINUS  */
-    MULT = 296,                    /* MULT  */
-    DIVISION = 297,                /* DIVISION  */
-    EXPOENT = 298                  /* EXPOENT  */
+    SCAN = 272,                    /* SCAN  */
+    RETURN = 273,                  /* RETURN  */
+    EQUALS = 274,                  /* EQUALS  */
+    DIFF = 275,                    /* DIFF  */
+    LESS = 276,                    /* LESS  */
+    GREATER = 277,                 /* GREATER  */
+    LESSEQUALS = 278,              /* LESSEQUALS  */
+    GREATEREQUALS = 279,           /* GREATEREQUALS  */
+    AND = 280,                     /* AND  */
+    OR = 281,                      /* OR  */
+    XOR = 282,                     /* XOR  */
+    NOT = 283,                     /* NOT  */
+    TYPE = 284,                    /* TYPE  */
+    STRING_LIT = 285,              /* STRING_LIT  */
+    BOOL_LIT = 286,                /* BOOL_LIT  */
+    ID = 287,                      /* ID  */
+    INT = 288,                     /* INT  */
+    FLOAT = 289,                   /* FLOAT  */
+    DOUBLE = 290,                  /* DOUBLE  */
+    INCREMENT = 291,               /* INCREMENT  */
+    DECREMENT = 292,               /* DECREMENT  */
+    INCREMENT_ASSIGN = 293,        /* INCREMENT_ASSIGN  */
+    DECREMENT_ASSIGN = 294,        /* DECREMENT_ASSIGN  */
+    PLUS = 295,                    /* PLUS  */
+    MINUS = 296,                   /* MINUS  */
+    MULT = 297,                    /* MULT  */
+    DIVISION = 298,                /* DIVISION  */
+    EXPOENT = 299                  /* EXPOENT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -109,7 +110,7 @@ union YYSTYPE
     struct record * rec;
   
 
-#line 113 "y.tab.h"
+#line 114 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

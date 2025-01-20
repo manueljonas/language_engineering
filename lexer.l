@@ -50,6 +50,7 @@
 "main"                  {return MAIN;}
 "end_main"              {return END_MAIN;}
 "print"                 {return PRINT;}
+"scan"                  {return SCAN;}
 "return"                {return RETURN;}
 "("                     {return yytext[0];}
 ")"                     {return yytext[0];}
@@ -74,7 +75,7 @@
                          return BOOL_LIT;}
 \"(\\.|[^\"])*\"        {yylval.sValue = strdup(yytext); 
                          return STRING_LIT;}                       
-[a-zA-Z_][a-zA-Z0-9_]*    {yylval.sValue = strdup(yytext); 
+&?[a-zA-Z_][a-zA-Z0-9_]*    {yylval.sValue = strdup(yytext); 
                          return ID;}
 \/\/.*                  {}
 \/\*([^*]|\*+[^\/])*\*+\/ {}

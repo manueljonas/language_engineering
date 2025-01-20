@@ -28,200 +28,207 @@ Gramática
    15 cmd: cond
    16    | return
    17    | write
-   18    | iteration
-   19    | TYPE ID ASSIGN exp ';'
-   20    | TYPE exps ';'
-   21    | exps ';'
-   22    | ID ASSIGN exp ';'
-   23    | ID INCREMENT ';'
-   24    | ID DECREMENT ';'
-   25    | INCREMENT ID ';'
-   26    | DECREMENT ID ';'
-   27    | ID INCREMENT_ASSIGN exp ';'
-   28    | ID DECREMENT_ASSIGN exp ';'
+   18    | read
+   19    | iteration
+   20    | TYPE ID ASSIGN exp ';'
+   21    | TYPE exps ';'
+   22    | exps ';'
+   23    | ID ASSIGN exp ';'
+   24    | ID INCREMENT ';'
+   25    | ID DECREMENT ';'
+   26    | INCREMENT ID ';'
+   27    | DECREMENT ID ';'
+   28    | ID INCREMENT_ASSIGN exp ';'
+   29    | ID DECREMENT_ASSIGN exp ';'
 
-   29 cond: IF exp THEN cmds END_IF
-   30     | IF exp THEN cmds ELSE cmds END_IF
+   30 cond: IF exp THEN cmds END_IF
+   31     | IF exp THEN cmds ELSE cmds END_IF
 
-   31 return: RETURN exp ';'
+   32 return: RETURN exp ';'
 
-   32 write: PRINT '(' exps ')' ';'
+   33 write: PRINT '(' exps ')' ';'
 
-   33 iteration: WHILE '(' exp ')' cmds END_WHILE
-   34          | FOR '(' ID ';' exp ';' for_incr ')' cmds END_FOR
-   35          | FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
-   36          | FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
-   37          | FOR '(' TYPE ID ':' ID ')' cmds END_FOR
+   34 read: SCAN '(' exps ')' ';'
 
-   38 for_incr: ID INCREMENT
-   39         | ID DECREMENT
-   40         | INCREMENT ID
-   41         | DECREMENT ID
-   42         | exp
+   35 iteration: WHILE '(' exp ')' cmds END_WHILE
+   36          | FOR '(' ID ';' exp ';' for_incr ')' cmds END_FOR
+   37          | FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
+   38          | FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
+   39          | FOR '(' TYPE ID ':' ID ')' cmds END_FOR
 
-   43 exp: term
-   44    | call
-   45    | exp EQUALS term
-   46    | exp DIFF term
-   47    | exp LESS term
-   48    | exp GREATER term
-   49    | exp LESSEQUALS term
-   50    | exp GREATEREQUALS term
-   51    | exp AND term
-   52    | exp OR term
-   53    | exp XOR term
-   54    | NOT exp
-   55    | exp PLUS term
-   56    | exp MINUS term
-   57    | exp MULT term
-   58    | exp DIVISION term
-   59    | exp EXPOENT term
+   40 for_incr: ID INCREMENT
+   41         | ID DECREMENT
+   42         | INCREMENT ID
+   43         | DECREMENT ID
+   44         | exp
 
-   60 term: factor
-   61     | '(' exps ')'
-   62     | ID '[' exps ']'
-   63     | '{' exps '}'
-   64     | ID '[' exps ']' ASSIGN exp
+   45 exp: term
+   46    | call
+   47    | exp EQUALS term
+   48    | exp DIFF term
+   49    | exp LESS term
+   50    | exp GREATER term
+   51    | exp LESSEQUALS term
+   52    | exp GREATEREQUALS term
+   53    | exp AND term
+   54    | exp OR term
+   55    | exp XOR term
+   56    | NOT exp
+   57    | exp PLUS term
+   58    | exp MINUS term
+   59    | exp MULT term
+   60    | exp DIVISION term
+   61    | exp EXPOENT term
 
-   65 factor: ID
-   66       | INT
-   67       | FLOAT
-   68       | DOUBLE
-   69       | BOOL_LIT
-   70       | STRING_LIT
+   62 term: factor
+   63     | '(' exps ')'
+   64     | ID '[' exps ']'
+   65     | '{' exps '}'
+   66     | ID '[' exps ']' ASSIGN exp
 
-   71 call: ID '(' exps_op ')'
+   67 factor: ID
+   68       | INT
+   69       | FLOAT
+   70       | DOUBLE
+   71       | BOOL_LIT
+   72       | STRING_LIT
 
-   72 exps_op: ε
-   73        | exps
+   73 call: ID '(' exps_op ')'
 
-   74 exps: exp
-   75     | exp ',' exps
+   74 exps_op: ε
+   75        | exps
+
+   76 exps: exp
+   77     | exp ',' exps
 
 
 Terminais, com as regras onde eles aparecem
 
     $end (0) 0
-    '(' (40) 4 32 33 34 35 36 37 61 71
-    ')' (41) 4 32 33 34 35 36 37 61 71
-    ',' (44) 10 75
-    ':' (58) 37
-    ';' (59) 8 19 20 21 22 23 24 25 26 27 28 31 32 34 35 36
-    '[' (91) 62 64
-    ']' (93) 62 64
-    '{' (123) 63
-    '}' (125) 63
+    '(' (40) 4 33 34 35 36 37 38 39 63 73
+    ')' (41) 4 33 34 35 36 37 38 39 63 73
+    ',' (44) 10 77
+    ':' (58) 39
+    ';' (59) 8 20 21 22 23 24 25 26 27 28 29 32 33 34 36 37 38
+    '[' (91) 64 66
+    ']' (93) 64 66
+    '{' (123) 65
+    '}' (125) 65
     error (256)
     FUNCTION (258) 4
     END_FUNCTION (259) 4
-    IF (260) 29 30
-    THEN (261) 29 30
-    ELSE (262) 30
-    END_IF (263) 29 30
-    WHILE (264) 33
-    END_WHILE (265) 33
-    FOR (266) 34 35 36 37
-    END_FOR (267) 34 35 36 37
-    ASSIGN (268) 19 22 35 36 64
+    IF (260) 30 31
+    THEN (261) 30 31
+    ELSE (262) 31
+    END_IF (263) 30 31
+    WHILE (264) 35
+    END_WHILE (265) 35
+    FOR (266) 36 37 38 39
+    END_FOR (267) 36 37 38 39
+    ASSIGN (268) 20 23 37 38 66
     MAIN (269) 12
     END_MAIN (270) 12
-    PRINT (271) 32
-    RETURN (272) 31
-    EQUALS (273) 45
-    DIFF (274) 46
-    LESS (275) 47
-    GREATER (276) 48
-    LESSEQUALS (277) 49
-    GREATEREQUALS (278) 50
-    AND (279) 51
-    OR (280) 52
-    XOR (281) 53
-    NOT (282) 54
-    TYPE <sValue> (283) 4 9 10 19 20 36 37
-    STRING_LIT <sValue> (284) 70
-    BOOL_LIT <sValue> (285) 69
-    ID <sValue> (286) 4 11 19 22 23 24 25 26 27 28 34 35 36 37 38 39 40 41 62 64 65 71
-    INT <sValue> (287) 66
-    FLOAT <sValue> (288) 67
-    DOUBLE <sValue> (289) 68
-    INCREMENT <sValue> (290) 23 25 38 40
-    DECREMENT <sValue> (291) 24 26 39 41
-    INCREMENT_ASSIGN <sValue> (292) 27
-    DECREMENT_ASSIGN <sValue> (293) 28
-    PLUS <sValue> (294) 55
-    MINUS <sValue> (295) 56
-    MULT <sValue> (296) 57
-    DIVISION <sValue> (297) 58
-    EXPOENT <sValue> (298) 59
+    PRINT (271) 33
+    SCAN (272) 34
+    RETURN (273) 32
+    EQUALS (274) 47
+    DIFF (275) 48
+    LESS (276) 49
+    GREATER (277) 50
+    LESSEQUALS (278) 51
+    GREATEREQUALS (279) 52
+    AND (280) 53
+    OR (281) 54
+    XOR (282) 55
+    NOT (283) 56
+    TYPE <sValue> (284) 4 9 10 20 21 38 39
+    STRING_LIT <sValue> (285) 72
+    BOOL_LIT <sValue> (286) 71
+    ID <sValue> (287) 4 11 20 23 24 25 26 27 28 29 36 37 38 39 40 41 42 43 64 66 67 73
+    INT <sValue> (288) 68
+    FLOAT <sValue> (289) 69
+    DOUBLE <sValue> (290) 70
+    INCREMENT <sValue> (291) 24 26 40 42
+    DECREMENT <sValue> (292) 25 27 41 43
+    INCREMENT_ASSIGN <sValue> (293) 28
+    DECREMENT_ASSIGN <sValue> (294) 29
+    PLUS <sValue> (295) 57
+    MINUS <sValue> (296) 58
+    MULT <sValue> (297) 59
+    DIVISION <sValue> (298) 60
+    EXPOENT <sValue> (299) 61
 
 
 Não terminais com as regras onde eles aparecem
 
-    $accept (53)
+    $accept (54)
         à esquerda: 0
-    prog (54)
+    prog (55)
         à esquerda: 1
         à direita: 0
-    subprogs <rec> (55)
+    subprogs <rec> (56)
         à esquerda: 2 3
         à direita: 1 3
-    subprog <rec> (56)
+    subprog <rec> (57)
         à esquerda: 4
         à direita: 3
-    args_op <rec> (57)
+    args_op <rec> (58)
         à esquerda: 5 6
         à direita: 4
-    args <rec> (58)
+    args <rec> (59)
         à esquerda: 7 8
         à direita: 6 8
-    arg <rec> (59)
+    arg <rec> (60)
         à esquerda: 9 10
         à direita: 7 8 10
-    ids <rec> (60)
+    ids <rec> (61)
         à esquerda: 11
         à direita: 9 10
-    main <rec> (61)
+    main <rec> (62)
         à esquerda: 12
         à direita: 1
-    cmds <rec> (62)
+    cmds <rec> (63)
         à esquerda: 13 14
-        à direita: 4 12 14 29 30 33 34 35 36 37
-    cmd <rec> (63)
-        à esquerda: 15 16 17 18 19 20 21 22 23 24 25 26 27 28
+        à direita: 4 12 14 30 31 35 36 37 38 39
+    cmd <rec> (64)
+        à esquerda: 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
         à direita: 14
-    cond <rec> (64)
-        à esquerda: 29 30
+    cond <rec> (65)
+        à esquerda: 30 31
         à direita: 15
-    return <rec> (65)
-        à esquerda: 31
-        à direita: 16
-    write <rec> (66)
+    return <rec> (66)
         à esquerda: 32
+        à direita: 16
+    write <rec> (67)
+        à esquerda: 33
         à direita: 17
-    iteration <rec> (67)
-        à esquerda: 33 34 35 36 37
+    read <rec> (68)
+        à esquerda: 34
         à direita: 18
-    for_incr <rec> (68)
-        à esquerda: 38 39 40 41 42
-        à direita: 34 35 36
-    exp <rec> (69)
-        à esquerda: 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59
-        à direita: 19 22 27 28 29 30 31 33 34 35 36 42 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 64 74 75
-    term <rec> (70)
-        à esquerda: 60 61 62 63 64
-        à direita: 43 45 46 47 48 49 50 51 52 53 55 56 57 58 59
-    factor <rec> (71)
-        à esquerda: 65 66 67 68 69 70
-        à direita: 60
-    call <rec> (72)
-        à esquerda: 71
-        à direita: 44
-    exps_op <rec> (73)
-        à esquerda: 72 73
-        à direita: 71
-    exps <rec> (74)
+    iteration <rec> (69)
+        à esquerda: 35 36 37 38 39
+        à direita: 19
+    for_incr <rec> (70)
+        à esquerda: 40 41 42 43 44
+        à direita: 36 37 38
+    exp <rec> (71)
+        à esquerda: 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61
+        à direita: 20 23 28 29 30 31 32 35 36 37 38 44 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 66 76 77
+    term <rec> (72)
+        à esquerda: 62 63 64 65 66
+        à direita: 45 47 48 49 50 51 52 53 54 55 57 58 59 60 61
+    factor <rec> (73)
+        à esquerda: 67 68 69 70 71 72
+        à direita: 62
+    call <rec> (74)
+        à esquerda: 73
+        à direita: 46
+    exps_op <rec> (75)
         à esquerda: 74 75
-        à direita: 20 21 32 61 62 63 64 73 75
+        à direita: 73
+    exps <rec> (76)
+        à esquerda: 76 77
+        à direita: 21 22 33 34 63 64 65 66 75 77
 
 
 Estado 0
@@ -294,33 +301,35 @@ Estado 7
     WHILE       deslocar, e ir ao estado 12
     FOR         deslocar, e ir ao estado 13
     PRINT       deslocar, e ir ao estado 14
-    RETURN      deslocar, e ir ao estado 15
-    NOT         deslocar, e ir ao estado 16
-    TYPE        deslocar, e ir ao estado 17
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 20
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 24
-    DECREMENT   deslocar, e ir ao estado 25
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    SCAN        deslocar, e ir ao estado 15
+    RETURN      deslocar, e ir ao estado 16
+    NOT         deslocar, e ir ao estado 17
+    TYPE        deslocar, e ir ao estado 18
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 21
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 25
+    DECREMENT   deslocar, e ir ao estado 26
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
     $padrão  reduzir usando a regra 13 (cmds)
 
-    cmds       ir ao estado 28
-    cmd        ir ao estado 29
-    cond       ir ao estado 30
-    return     ir ao estado 31
-    write      ir ao estado 32
-    iteration  ir ao estado 33
-    exp        ir ao estado 34
-    term       ir ao estado 35
-    factor     ir ao estado 36
-    call       ir ao estado 37
-    exps       ir ao estado 38
+    cmds       ir ao estado 29
+    cmd        ir ao estado 30
+    cond       ir ao estado 31
+    return     ir ao estado 32
+    write      ir ao estado 33
+    read       ir ao estado 34
+    iteration  ir ao estado 35
+    exp        ir ao estado 36
+    term       ir ao estado 37
+    factor     ir ao estado 38
+    call       ir ao estado 39
+    exps       ir ao estado 40
 
 
 Estado 8
@@ -341,238 +350,245 @@ Estado 10
 
     4 subprog: TYPE FUNCTION ID • '(' args_op ')' cmds END_FUNCTION
 
-    '('  deslocar, e ir ao estado 39
+    '('  deslocar, e ir ao estado 41
 
 
 Estado 11
 
-   29 cond: IF • exp THEN cmds END_IF
-   30     | IF • exp THEN cmds ELSE cmds END_IF
+   30 cond: IF • exp THEN cmds END_IF
+   31     | IF • exp THEN cmds ELSE cmds END_IF
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    exp     ir ao estado 41
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
+    exp     ir ao estado 43
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
 
 
 Estado 12
 
-   33 iteration: WHILE • '(' exp ')' cmds END_WHILE
-
-    '('  deslocar, e ir ao estado 42
-
-
-Estado 13
-
-   34 iteration: FOR • '(' ID ';' exp ';' for_incr ')' cmds END_FOR
-   35          | FOR • '(' ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
-   36          | FOR • '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
-   37          | FOR • '(' TYPE ID ':' ID ')' cmds END_FOR
-
-    '('  deslocar, e ir ao estado 43
-
-
-Estado 14
-
-   32 write: PRINT • '(' exps ')' ';'
+   35 iteration: WHILE • '(' exp ')' cmds END_WHILE
 
     '('  deslocar, e ir ao estado 44
 
 
+Estado 13
+
+   36 iteration: FOR • '(' ID ';' exp ';' for_incr ')' cmds END_FOR
+   37          | FOR • '(' ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
+   38          | FOR • '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
+   39          | FOR • '(' TYPE ID ':' ID ')' cmds END_FOR
+
+    '('  deslocar, e ir ao estado 45
+
+
+Estado 14
+
+   33 write: PRINT • '(' exps ')' ';'
+
+    '('  deslocar, e ir ao estado 46
+
+
 Estado 15
 
-   31 return: RETURN • exp ';'
+   34 read: SCAN • '(' exps ')' ';'
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 45
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
+    '('  deslocar, e ir ao estado 47
 
 
 Estado 16
 
-   54 exp: NOT • exp
+   32 return: RETURN • exp ';'
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    exp     ir ao estado 46
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
+    exp     ir ao estado 48
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
 
 
 Estado 17
 
-   19 cmd: TYPE • ID ASSIGN exp ';'
-   20    | TYPE • exps ';'
+   56 exp: NOT • exp
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 47
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    exp     ir ao estado 34
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
-    exps    ir ao estado 48
+    exp     ir ao estado 49
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
 
 
 Estado 18
 
-   70 factor: STRING_LIT •
+   20 cmd: TYPE • ID ASSIGN exp ';'
+   21    | TYPE • exps ';'
 
-    $padrão  reduzir usando a regra 70 (factor)
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 50
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 36
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
+    exps    ir ao estado 51
 
 
 Estado 19
 
-   69 factor: BOOL_LIT •
+   72 factor: STRING_LIT •
 
-    $padrão  reduzir usando a regra 69 (factor)
+    $padrão  reduzir usando a regra 72 (factor)
 
 
 Estado 20
 
-   22 cmd: ID • ASSIGN exp ';'
-   23    | ID • INCREMENT ';'
-   24    | ID • DECREMENT ';'
-   27    | ID • INCREMENT_ASSIGN exp ';'
-   28    | ID • DECREMENT_ASSIGN exp ';'
-   62 term: ID • '[' exps ']'
-   64     | ID • '[' exps ']' ASSIGN exp
-   65 factor: ID •
-   71 call: ID • '(' exps_op ')'
+   71 factor: BOOL_LIT •
 
-    ASSIGN            deslocar, e ir ao estado 49
-    INCREMENT         deslocar, e ir ao estado 50
-    DECREMENT         deslocar, e ir ao estado 51
-    INCREMENT_ASSIGN  deslocar, e ir ao estado 52
-    DECREMENT_ASSIGN  deslocar, e ir ao estado 53
-    '['               deslocar, e ir ao estado 54
-    '('               deslocar, e ir ao estado 55
-
-    $padrão  reduzir usando a regra 65 (factor)
+    $padrão  reduzir usando a regra 71 (factor)
 
 
 Estado 21
 
-   66 factor: INT •
+   23 cmd: ID • ASSIGN exp ';'
+   24    | ID • INCREMENT ';'
+   25    | ID • DECREMENT ';'
+   28    | ID • INCREMENT_ASSIGN exp ';'
+   29    | ID • DECREMENT_ASSIGN exp ';'
+   64 term: ID • '[' exps ']'
+   66     | ID • '[' exps ']' ASSIGN exp
+   67 factor: ID •
+   73 call: ID • '(' exps_op ')'
 
-    $padrão  reduzir usando a regra 66 (factor)
-
-
-Estado 22
-
-   67 factor: FLOAT •
+    ASSIGN            deslocar, e ir ao estado 52
+    INCREMENT         deslocar, e ir ao estado 53
+    DECREMENT         deslocar, e ir ao estado 54
+    INCREMENT_ASSIGN  deslocar, e ir ao estado 55
+    DECREMENT_ASSIGN  deslocar, e ir ao estado 56
+    '['               deslocar, e ir ao estado 57
+    '('               deslocar, e ir ao estado 58
 
     $padrão  reduzir usando a regra 67 (factor)
 
 
-Estado 23
+Estado 22
 
-   68 factor: DOUBLE •
+   68 factor: INT •
 
     $padrão  reduzir usando a regra 68 (factor)
 
 
+Estado 23
+
+   69 factor: FLOAT •
+
+    $padrão  reduzir usando a regra 69 (factor)
+
+
 Estado 24
 
-   25 cmd: INCREMENT • ID ';'
+   70 factor: DOUBLE •
 
-    ID  deslocar, e ir ao estado 56
+    $padrão  reduzir usando a regra 70 (factor)
 
 
 Estado 25
 
-   26 cmd: DECREMENT • ID ';'
+   26 cmd: INCREMENT • ID ';'
 
-    ID  deslocar, e ir ao estado 57
+    ID  deslocar, e ir ao estado 59
 
 
 Estado 26
 
-   61 term: '(' • exps ')'
+   27 cmd: DECREMENT • ID ';'
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 34
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
-    exps    ir ao estado 58
+    ID  deslocar, e ir ao estado 60
 
 
 Estado 27
 
-   63 term: '{' • exps '}'
+   63 term: '(' • exps ')'
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    exp     ir ao estado 34
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
-    exps    ir ao estado 59
+    exp     ir ao estado 36
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
+    exps    ir ao estado 61
 
 
 Estado 28
 
-   12 main: MAIN cmds • END_MAIN
+   65 term: '{' • exps '}'
 
-    END_MAIN  deslocar, e ir ao estado 60
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 36
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
+    exps    ir ao estado 62
 
 
 Estado 29
+
+   12 main: MAIN cmds • END_MAIN
+
+    END_MAIN  deslocar, e ir ao estado 63
+
+
+Estado 30
 
    14 cmds: cmd • cmds
 
@@ -580,1217 +596,1256 @@ Estado 29
     WHILE       deslocar, e ir ao estado 12
     FOR         deslocar, e ir ao estado 13
     PRINT       deslocar, e ir ao estado 14
-    RETURN      deslocar, e ir ao estado 15
-    NOT         deslocar, e ir ao estado 16
-    TYPE        deslocar, e ir ao estado 17
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 20
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 24
-    DECREMENT   deslocar, e ir ao estado 25
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    SCAN        deslocar, e ir ao estado 15
+    RETURN      deslocar, e ir ao estado 16
+    NOT         deslocar, e ir ao estado 17
+    TYPE        deslocar, e ir ao estado 18
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 21
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 25
+    DECREMENT   deslocar, e ir ao estado 26
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
     $padrão  reduzir usando a regra 13 (cmds)
 
-    cmds       ir ao estado 61
-    cmd        ir ao estado 29
-    cond       ir ao estado 30
-    return     ir ao estado 31
-    write      ir ao estado 32
-    iteration  ir ao estado 33
-    exp        ir ao estado 34
-    term       ir ao estado 35
-    factor     ir ao estado 36
-    call       ir ao estado 37
-    exps       ir ao estado 38
+    cmds       ir ao estado 64
+    cmd        ir ao estado 30
+    cond       ir ao estado 31
+    return     ir ao estado 32
+    write      ir ao estado 33
+    read       ir ao estado 34
+    iteration  ir ao estado 35
+    exp        ir ao estado 36
+    term       ir ao estado 37
+    factor     ir ao estado 38
+    call       ir ao estado 39
+    exps       ir ao estado 40
 
 
-Estado 30
+Estado 31
 
    15 cmd: cond •
 
     $padrão  reduzir usando a regra 15 (cmd)
 
 
-Estado 31
+Estado 32
 
    16 cmd: return •
 
     $padrão  reduzir usando a regra 16 (cmd)
 
 
-Estado 32
+Estado 33
 
    17 cmd: write •
 
     $padrão  reduzir usando a regra 17 (cmd)
 
 
-Estado 33
+Estado 34
 
-   18 cmd: iteration •
+   18 cmd: read •
 
     $padrão  reduzir usando a regra 18 (cmd)
 
 
-Estado 34
-
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
-   74 exps: exp •
-   75     | exp • ',' exps
-
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-    ','            deslocar, e ir ao estado 76
-
-    $padrão  reduzir usando a regra 74 (exps)
-
-
 Estado 35
 
-   43 exp: term •
+   19 cmd: iteration •
 
-    $padrão  reduzir usando a regra 43 (exp)
+    $padrão  reduzir usando a regra 19 (cmd)
 
 
 Estado 36
 
-   60 term: factor •
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
+   76 exps: exp •
+   77     | exp • ',' exps
 
-    $padrão  reduzir usando a regra 60 (term)
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+    ','            deslocar, e ir ao estado 79
+
+    $padrão  reduzir usando a regra 76 (exps)
 
 
 Estado 37
 
-   44 exp: call •
+   45 exp: term •
 
-    $padrão  reduzir usando a regra 44 (exp)
+    $padrão  reduzir usando a regra 45 (exp)
 
 
 Estado 38
 
-   21 cmd: exps • ';'
+   62 term: factor •
 
-    ';'  deslocar, e ir ao estado 77
+    $padrão  reduzir usando a regra 62 (term)
 
 
 Estado 39
 
-    4 subprog: TYPE FUNCTION ID '(' • args_op ')' cmds END_FUNCTION
+   46 exp: call •
 
-    TYPE  deslocar, e ir ao estado 78
-
-    $padrão  reduzir usando a regra 5 (args_op)
-
-    args_op  ir ao estado 79
-    args     ir ao estado 80
-    arg      ir ao estado 81
+    $padrão  reduzir usando a regra 46 (exp)
 
 
 Estado 40
 
-   62 term: ID • '[' exps ']'
-   64     | ID • '[' exps ']' ASSIGN exp
-   65 factor: ID •
-   71 call: ID • '(' exps_op ')'
+   22 cmd: exps • ';'
 
-    '['  deslocar, e ir ao estado 54
-    '('  deslocar, e ir ao estado 55
-
-    $padrão  reduzir usando a regra 65 (factor)
+    ';'  deslocar, e ir ao estado 80
 
 
 Estado 41
 
-   29 cond: IF exp • THEN cmds END_IF
-   30     | IF exp • THEN cmds ELSE cmds END_IF
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
+    4 subprog: TYPE FUNCTION ID '(' • args_op ')' cmds END_FUNCTION
 
-    THEN           deslocar, e ir ao estado 82
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
+    TYPE  deslocar, e ir ao estado 81
+
+    $padrão  reduzir usando a regra 5 (args_op)
+
+    args_op  ir ao estado 82
+    args     ir ao estado 83
+    arg      ir ao estado 84
 
 
 Estado 42
 
-   33 iteration: WHILE '(' • exp ')' cmds END_WHILE
+   64 term: ID • '[' exps ']'
+   66     | ID • '[' exps ']' ASSIGN exp
+   67 factor: ID •
+   73 call: ID • '(' exps_op ')'
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    '['  deslocar, e ir ao estado 57
+    '('  deslocar, e ir ao estado 58
 
-    exp     ir ao estado 83
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
+    $padrão  reduzir usando a regra 67 (factor)
 
 
 Estado 43
 
-   34 iteration: FOR '(' • ID ';' exp ';' for_incr ')' cmds END_FOR
-   35          | FOR '(' • ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
-   36          | FOR '(' • TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
-   37          | FOR '(' • TYPE ID ':' ID ')' cmds END_FOR
+   30 cond: IF exp • THEN cmds END_IF
+   31     | IF exp • THEN cmds ELSE cmds END_IF
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
 
-    TYPE  deslocar, e ir ao estado 84
-    ID    deslocar, e ir ao estado 85
+    THEN           deslocar, e ir ao estado 85
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
 
 
 Estado 44
 
-   32 write: PRINT '(' • exps ')' ';'
+   35 iteration: WHILE '(' • exp ')' cmds END_WHILE
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    exp     ir ao estado 34
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
-    exps    ir ao estado 86
+    exp     ir ao estado 86
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
 
 
 Estado 45
 
-   31 return: RETURN exp • ';'
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
+   36 iteration: FOR '(' • ID ';' exp ';' for_incr ')' cmds END_FOR
+   37          | FOR '(' • ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
+   38          | FOR '(' • TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
+   39          | FOR '(' • TYPE ID ':' ID ')' cmds END_FOR
 
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-    ';'            deslocar, e ir ao estado 87
+    TYPE  deslocar, e ir ao estado 87
+    ID    deslocar, e ir ao estado 88
 
 
 Estado 46
 
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   54    | NOT exp •
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
+   33 write: PRINT '(' • exps ')' ';'
 
-    $padrão  reduzir usando a regra 54 (exp)
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 36
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
+    exps    ir ao estado 89
 
 
 Estado 47
 
-   19 cmd: TYPE ID • ASSIGN exp ';'
-   62 term: ID • '[' exps ']'
-   64     | ID • '[' exps ']' ASSIGN exp
-   65 factor: ID •
-   71 call: ID • '(' exps_op ')'
+   34 read: SCAN '(' • exps ')' ';'
 
-    ASSIGN  deslocar, e ir ao estado 88
-    '['     deslocar, e ir ao estado 54
-    '('     deslocar, e ir ao estado 55
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    $padrão  reduzir usando a regra 65 (factor)
+    exp     ir ao estado 36
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
+    exps    ir ao estado 90
 
 
 Estado 48
 
-   20 cmd: TYPE exps • ';'
+   32 return: RETURN exp • ';'
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
 
-    ';'  deslocar, e ir ao estado 89
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+    ';'            deslocar, e ir ao estado 91
 
 
 Estado 49
 
-   22 cmd: ID ASSIGN • exp ';'
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   56    | NOT exp •
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 90
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
+    $padrão  reduzir usando a regra 56 (exp)
 
 
 Estado 50
 
-   23 cmd: ID INCREMENT • ';'
+   20 cmd: TYPE ID • ASSIGN exp ';'
+   64 term: ID • '[' exps ']'
+   66     | ID • '[' exps ']' ASSIGN exp
+   67 factor: ID •
+   73 call: ID • '(' exps_op ')'
 
-    ';'  deslocar, e ir ao estado 91
+    ASSIGN  deslocar, e ir ao estado 92
+    '['     deslocar, e ir ao estado 57
+    '('     deslocar, e ir ao estado 58
+
+    $padrão  reduzir usando a regra 67 (factor)
 
 
 Estado 51
 
-   24 cmd: ID DECREMENT • ';'
+   21 cmd: TYPE exps • ';'
 
-    ';'  deslocar, e ir ao estado 92
+    ';'  deslocar, e ir ao estado 93
 
 
 Estado 52
 
-   27 cmd: ID INCREMENT_ASSIGN • exp ';'
+   23 cmd: ID ASSIGN • exp ';'
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    exp     ir ao estado 93
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
+    exp     ir ao estado 94
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
 
 
 Estado 53
 
-   28 cmd: ID DECREMENT_ASSIGN • exp ';'
+   24 cmd: ID INCREMENT • ';'
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 94
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
+    ';'  deslocar, e ir ao estado 95
 
 
 Estado 54
 
-   62 term: ID '[' • exps ']'
-   64     | ID '[' • exps ']' ASSIGN exp
+   25 cmd: ID DECREMENT • ';'
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 34
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
-    exps    ir ao estado 95
+    ';'  deslocar, e ir ao estado 96
 
 
 Estado 55
 
-   71 call: ID '(' • exps_op ')'
+   28 cmd: ID INCREMENT_ASSIGN • exp ';'
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    $padrão  reduzir usando a regra 72 (exps_op)
-
-    exp      ir ao estado 34
-    term     ir ao estado 35
-    factor   ir ao estado 36
-    call     ir ao estado 37
-    exps_op  ir ao estado 96
-    exps     ir ao estado 97
+    exp     ir ao estado 97
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
 
 
 Estado 56
 
-   25 cmd: INCREMENT ID • ';'
+   29 cmd: ID DECREMENT_ASSIGN • exp ';'
 
-    ';'  deslocar, e ir ao estado 98
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 98
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
 
 
 Estado 57
 
-   26 cmd: DECREMENT ID • ';'
+   64 term: ID '[' • exps ']'
+   66     | ID '[' • exps ']' ASSIGN exp
 
-    ';'  deslocar, e ir ao estado 99
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 36
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
+    exps    ir ao estado 99
 
 
 Estado 58
 
-   61 term: '(' exps • ')'
+   73 call: ID '(' • exps_op ')'
 
-    ')'  deslocar, e ir ao estado 100
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    $padrão  reduzir usando a regra 74 (exps_op)
+
+    exp      ir ao estado 36
+    term     ir ao estado 37
+    factor   ir ao estado 38
+    call     ir ao estado 39
+    exps_op  ir ao estado 100
+    exps     ir ao estado 101
 
 
 Estado 59
 
-   63 term: '{' exps • '}'
+   26 cmd: INCREMENT ID • ';'
 
-    '}'  deslocar, e ir ao estado 101
+    ';'  deslocar, e ir ao estado 102
 
 
 Estado 60
+
+   27 cmd: DECREMENT ID • ';'
+
+    ';'  deslocar, e ir ao estado 103
+
+
+Estado 61
+
+   63 term: '(' exps • ')'
+
+    ')'  deslocar, e ir ao estado 104
+
+
+Estado 62
+
+   65 term: '{' exps • '}'
+
+    '}'  deslocar, e ir ao estado 105
+
+
+Estado 63
 
    12 main: MAIN cmds END_MAIN •
 
     $padrão  reduzir usando a regra 12 (main)
 
 
-Estado 61
+Estado 64
 
    14 cmds: cmd cmds •
 
     $padrão  reduzir usando a regra 14 (cmds)
 
 
-Estado 62
-
-   45 exp: exp EQUALS • term
-
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    term    ir ao estado 103
-    factor  ir ao estado 36
-
-
-Estado 63
-
-   46 exp: exp DIFF • term
-
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    term    ir ao estado 104
-    factor  ir ao estado 36
-
-
-Estado 64
-
-   47 exp: exp LESS • term
-
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    term    ir ao estado 105
-    factor  ir ao estado 36
-
-
 Estado 65
 
-   48 exp: exp GREATER • term
+   47 exp: exp EQUALS • term
 
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    term    ir ao estado 106
-    factor  ir ao estado 36
+    term    ir ao estado 107
+    factor  ir ao estado 38
 
 
 Estado 66
 
-   49 exp: exp LESSEQUALS • term
+   48 exp: exp DIFF • term
 
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    term    ir ao estado 107
-    factor  ir ao estado 36
+    term    ir ao estado 108
+    factor  ir ao estado 38
 
 
 Estado 67
 
-   50 exp: exp GREATEREQUALS • term
+   49 exp: exp LESS • term
 
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    term    ir ao estado 108
-    factor  ir ao estado 36
+    term    ir ao estado 109
+    factor  ir ao estado 38
 
 
 Estado 68
 
-   51 exp: exp AND • term
+   50 exp: exp GREATER • term
 
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    term    ir ao estado 109
-    factor  ir ao estado 36
+    term    ir ao estado 110
+    factor  ir ao estado 38
 
 
 Estado 69
 
-   52 exp: exp OR • term
+   51 exp: exp LESSEQUALS • term
 
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    term    ir ao estado 110
-    factor  ir ao estado 36
+    term    ir ao estado 111
+    factor  ir ao estado 38
 
 
 Estado 70
 
-   53 exp: exp XOR • term
+   52 exp: exp GREATEREQUALS • term
 
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    term    ir ao estado 111
-    factor  ir ao estado 36
+    term    ir ao estado 112
+    factor  ir ao estado 38
 
 
 Estado 71
 
-   55 exp: exp PLUS • term
+   53 exp: exp AND • term
 
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    term    ir ao estado 112
-    factor  ir ao estado 36
+    term    ir ao estado 113
+    factor  ir ao estado 38
 
 
 Estado 72
 
-   56 exp: exp MINUS • term
+   54 exp: exp OR • term
 
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    term    ir ao estado 113
-    factor  ir ao estado 36
+    term    ir ao estado 114
+    factor  ir ao estado 38
 
 
 Estado 73
 
-   57 exp: exp MULT • term
+   55 exp: exp XOR • term
 
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    term    ir ao estado 114
-    factor  ir ao estado 36
+    term    ir ao estado 115
+    factor  ir ao estado 38
 
 
 Estado 74
 
-   58 exp: exp DIVISION • term
+   57 exp: exp PLUS • term
 
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    term    ir ao estado 115
-    factor  ir ao estado 36
+    term    ir ao estado 116
+    factor  ir ao estado 38
 
 
 Estado 75
 
-   59 exp: exp EXPOENT • term
+   58 exp: exp MINUS • term
 
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 102
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    term    ir ao estado 116
-    factor  ir ao estado 36
+    term    ir ao estado 117
+    factor  ir ao estado 38
 
 
 Estado 76
 
-   75 exps: exp ',' • exps
+   59 exp: exp MULT • term
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    exp     ir ao estado 34
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
-    exps    ir ao estado 117
+    term    ir ao estado 118
+    factor  ir ao estado 38
 
 
 Estado 77
 
-   21 cmd: exps ';' •
+   60 exp: exp DIVISION • term
 
-    $padrão  reduzir usando a regra 21 (cmd)
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    term    ir ao estado 119
+    factor  ir ao estado 38
 
 
 Estado 78
 
-    9 arg: TYPE • ids
-   10    | TYPE • ids ',' arg
+   61 exp: exp EXPOENT • term
 
-    ID  deslocar, e ir ao estado 118
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 106
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
-    ids  ir ao estado 119
+    term    ir ao estado 120
+    factor  ir ao estado 38
 
 
 Estado 79
 
-    4 subprog: TYPE FUNCTION ID '(' args_op • ')' cmds END_FUNCTION
+   77 exps: exp ',' • exps
 
-    ')'  deslocar, e ir ao estado 120
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 36
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
+    exps    ir ao estado 121
 
 
 Estado 80
+
+   22 cmd: exps ';' •
+
+    $padrão  reduzir usando a regra 22 (cmd)
+
+
+Estado 81
+
+    9 arg: TYPE • ids
+   10    | TYPE • ids ',' arg
+
+    ID  deslocar, e ir ao estado 122
+
+    ids  ir ao estado 123
+
+
+Estado 82
+
+    4 subprog: TYPE FUNCTION ID '(' args_op • ')' cmds END_FUNCTION
+
+    ')'  deslocar, e ir ao estado 124
+
+
+Estado 83
 
     6 args_op: args •
 
     $padrão  reduzir usando a regra 6 (args_op)
 
 
-Estado 81
+Estado 84
 
     7 args: arg •
     8     | arg • ';' args
 
-    ';'  deslocar, e ir ao estado 121
+    ';'  deslocar, e ir ao estado 125
 
     $padrão  reduzir usando a regra 7 (args)
 
 
-Estado 82
+Estado 85
 
-   29 cond: IF exp THEN • cmds END_IF
-   30     | IF exp THEN • cmds ELSE cmds END_IF
+   30 cond: IF exp THEN • cmds END_IF
+   31     | IF exp THEN • cmds ELSE cmds END_IF
 
     IF          deslocar, e ir ao estado 11
     WHILE       deslocar, e ir ao estado 12
     FOR         deslocar, e ir ao estado 13
     PRINT       deslocar, e ir ao estado 14
-    RETURN      deslocar, e ir ao estado 15
-    NOT         deslocar, e ir ao estado 16
-    TYPE        deslocar, e ir ao estado 17
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 20
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 24
-    DECREMENT   deslocar, e ir ao estado 25
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    SCAN        deslocar, e ir ao estado 15
+    RETURN      deslocar, e ir ao estado 16
+    NOT         deslocar, e ir ao estado 17
+    TYPE        deslocar, e ir ao estado 18
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 21
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 25
+    DECREMENT   deslocar, e ir ao estado 26
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
     $padrão  reduzir usando a regra 13 (cmds)
 
-    cmds       ir ao estado 122
-    cmd        ir ao estado 29
-    cond       ir ao estado 30
-    return     ir ao estado 31
-    write      ir ao estado 32
-    iteration  ir ao estado 33
-    exp        ir ao estado 34
-    term       ir ao estado 35
-    factor     ir ao estado 36
-    call       ir ao estado 37
-    exps       ir ao estado 38
-
-
-Estado 83
-
-   33 iteration: WHILE '(' exp • ')' cmds END_WHILE
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
-
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-    ')'            deslocar, e ir ao estado 123
-
-
-Estado 84
-
-   36 iteration: FOR '(' TYPE • ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
-   37          | FOR '(' TYPE • ID ':' ID ')' cmds END_FOR
-
-    ID  deslocar, e ir ao estado 124
-
-
-Estado 85
-
-   34 iteration: FOR '(' ID • ';' exp ';' for_incr ')' cmds END_FOR
-   35          | FOR '(' ID • ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
-
-    ASSIGN  deslocar, e ir ao estado 125
-    ';'     deslocar, e ir ao estado 126
+    cmds       ir ao estado 126
+    cmd        ir ao estado 30
+    cond       ir ao estado 31
+    return     ir ao estado 32
+    write      ir ao estado 33
+    read       ir ao estado 34
+    iteration  ir ao estado 35
+    exp        ir ao estado 36
+    term       ir ao estado 37
+    factor     ir ao estado 38
+    call       ir ao estado 39
+    exps       ir ao estado 40
 
 
 Estado 86
 
-   32 write: PRINT '(' exps • ')' ';'
+   35 iteration: WHILE '(' exp • ')' cmds END_WHILE
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
 
-    ')'  deslocar, e ir ao estado 127
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+    ')'            deslocar, e ir ao estado 127
 
 
 Estado 87
 
-   31 return: RETURN exp ';' •
+   38 iteration: FOR '(' TYPE • ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
+   39          | FOR '(' TYPE • ID ':' ID ')' cmds END_FOR
 
-    $padrão  reduzir usando a regra 31 (return)
+    ID  deslocar, e ir ao estado 128
 
 
 Estado 88
 
-   19 cmd: TYPE ID ASSIGN • exp ';'
+   36 iteration: FOR '(' ID • ';' exp ';' for_incr ')' cmds END_FOR
+   37          | FOR '(' ID • ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 128
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
+    ASSIGN  deslocar, e ir ao estado 129
+    ';'     deslocar, e ir ao estado 130
 
 
 Estado 89
 
-   20 cmd: TYPE exps ';' •
+   33 write: PRINT '(' exps • ')' ';'
 
-    $padrão  reduzir usando a regra 20 (cmd)
+    ')'  deslocar, e ir ao estado 131
 
 
 Estado 90
 
-   22 cmd: ID ASSIGN exp • ';'
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
+   34 read: SCAN '(' exps • ')' ';'
 
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-    ';'            deslocar, e ir ao estado 129
+    ')'  deslocar, e ir ao estado 132
 
 
 Estado 91
 
-   23 cmd: ID INCREMENT ';' •
+   32 return: RETURN exp ';' •
 
-    $padrão  reduzir usando a regra 23 (cmd)
+    $padrão  reduzir usando a regra 32 (return)
 
 
 Estado 92
 
-   24 cmd: ID DECREMENT ';' •
+   20 cmd: TYPE ID ASSIGN • exp ';'
 
-    $padrão  reduzir usando a regra 24 (cmd)
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 133
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
 
 
 Estado 93
 
-   27 cmd: ID INCREMENT_ASSIGN exp • ';'
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
+   21 cmd: TYPE exps ';' •
 
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-    ';'            deslocar, e ir ao estado 130
+    $padrão  reduzir usando a regra 21 (cmd)
 
 
 Estado 94
 
-   28 cmd: ID DECREMENT_ASSIGN exp • ';'
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
+   23 cmd: ID ASSIGN exp • ';'
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
 
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-    ';'            deslocar, e ir ao estado 131
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+    ';'            deslocar, e ir ao estado 134
 
 
 Estado 95
 
-   62 term: ID '[' exps • ']'
-   64     | ID '[' exps • ']' ASSIGN exp
+   24 cmd: ID INCREMENT ';' •
 
-    ']'  deslocar, e ir ao estado 132
+    $padrão  reduzir usando a regra 24 (cmd)
 
 
 Estado 96
 
-   71 call: ID '(' exps_op • ')'
-
-    ')'  deslocar, e ir ao estado 133
-
-
-Estado 97
-
-   73 exps_op: exps •
-
-    $padrão  reduzir usando a regra 73 (exps_op)
-
-
-Estado 98
-
-   25 cmd: INCREMENT ID ';' •
+   25 cmd: ID DECREMENT ';' •
 
     $padrão  reduzir usando a regra 25 (cmd)
 
 
+Estado 97
+
+   28 cmd: ID INCREMENT_ASSIGN exp • ';'
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
+
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+    ';'            deslocar, e ir ao estado 135
+
+
+Estado 98
+
+   29 cmd: ID DECREMENT_ASSIGN exp • ';'
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
+
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+    ';'            deslocar, e ir ao estado 136
+
+
 Estado 99
 
-   26 cmd: DECREMENT ID ';' •
+   64 term: ID '[' exps • ']'
+   66     | ID '[' exps • ']' ASSIGN exp
 
-    $padrão  reduzir usando a regra 26 (cmd)
+    ']'  deslocar, e ir ao estado 137
 
 
 Estado 100
 
-   61 term: '(' exps ')' •
+   73 call: ID '(' exps_op • ')'
 
-    $padrão  reduzir usando a regra 61 (term)
+    ')'  deslocar, e ir ao estado 138
 
 
 Estado 101
 
-   63 term: '{' exps '}' •
+   75 exps_op: exps •
 
-    $padrão  reduzir usando a regra 63 (term)
+    $padrão  reduzir usando a regra 75 (exps_op)
 
 
 Estado 102
 
-   62 term: ID • '[' exps ']'
-   64     | ID • '[' exps ']' ASSIGN exp
-   65 factor: ID •
+   26 cmd: INCREMENT ID ';' •
 
-    '['  deslocar, e ir ao estado 54
-
-    $padrão  reduzir usando a regra 65 (factor)
+    $padrão  reduzir usando a regra 26 (cmd)
 
 
 Estado 103
 
-   45 exp: exp EQUALS term •
+   27 cmd: DECREMENT ID ';' •
 
-    $padrão  reduzir usando a regra 45 (exp)
+    $padrão  reduzir usando a regra 27 (cmd)
 
 
 Estado 104
 
-   46 exp: exp DIFF term •
+   63 term: '(' exps ')' •
 
-    $padrão  reduzir usando a regra 46 (exp)
+    $padrão  reduzir usando a regra 63 (term)
 
 
 Estado 105
 
-   47 exp: exp LESS term •
+   65 term: '{' exps '}' •
 
-    $padrão  reduzir usando a regra 47 (exp)
+    $padrão  reduzir usando a regra 65 (term)
 
 
 Estado 106
 
-   48 exp: exp GREATER term •
+   64 term: ID • '[' exps ']'
+   66     | ID • '[' exps ']' ASSIGN exp
+   67 factor: ID •
 
-    $padrão  reduzir usando a regra 48 (exp)
+    '['  deslocar, e ir ao estado 57
+
+    $padrão  reduzir usando a regra 67 (factor)
 
 
 Estado 107
 
-   49 exp: exp LESSEQUALS term •
+   47 exp: exp EQUALS term •
 
-    $padrão  reduzir usando a regra 49 (exp)
+    $padrão  reduzir usando a regra 47 (exp)
 
 
 Estado 108
 
-   50 exp: exp GREATEREQUALS term •
+   48 exp: exp DIFF term •
 
-    $padrão  reduzir usando a regra 50 (exp)
+    $padrão  reduzir usando a regra 48 (exp)
 
 
 Estado 109
 
-   51 exp: exp AND term •
+   49 exp: exp LESS term •
 
-    $padrão  reduzir usando a regra 51 (exp)
+    $padrão  reduzir usando a regra 49 (exp)
 
 
 Estado 110
 
-   52 exp: exp OR term •
+   50 exp: exp GREATER term •
 
-    $padrão  reduzir usando a regra 52 (exp)
+    $padrão  reduzir usando a regra 50 (exp)
 
 
 Estado 111
 
-   53 exp: exp XOR term •
+   51 exp: exp LESSEQUALS term •
 
-    $padrão  reduzir usando a regra 53 (exp)
+    $padrão  reduzir usando a regra 51 (exp)
 
 
 Estado 112
 
-   55 exp: exp PLUS term •
+   52 exp: exp GREATEREQUALS term •
 
-    $padrão  reduzir usando a regra 55 (exp)
+    $padrão  reduzir usando a regra 52 (exp)
 
 
 Estado 113
 
-   56 exp: exp MINUS term •
+   53 exp: exp AND term •
 
-    $padrão  reduzir usando a regra 56 (exp)
+    $padrão  reduzir usando a regra 53 (exp)
 
 
 Estado 114
 
-   57 exp: exp MULT term •
+   54 exp: exp OR term •
 
-    $padrão  reduzir usando a regra 57 (exp)
+    $padrão  reduzir usando a regra 54 (exp)
 
 
 Estado 115
 
-   58 exp: exp DIVISION term •
+   55 exp: exp XOR term •
 
-    $padrão  reduzir usando a regra 58 (exp)
+    $padrão  reduzir usando a regra 55 (exp)
 
 
 Estado 116
 
-   59 exp: exp EXPOENT term •
+   57 exp: exp PLUS term •
 
-    $padrão  reduzir usando a regra 59 (exp)
+    $padrão  reduzir usando a regra 57 (exp)
 
 
 Estado 117
 
-   75 exps: exp ',' exps •
+   58 exp: exp MINUS term •
 
-    $padrão  reduzir usando a regra 75 (exps)
+    $padrão  reduzir usando a regra 58 (exp)
 
 
 Estado 118
+
+   59 exp: exp MULT term •
+
+    $padrão  reduzir usando a regra 59 (exp)
+
+
+Estado 119
+
+   60 exp: exp DIVISION term •
+
+    $padrão  reduzir usando a regra 60 (exp)
+
+
+Estado 120
+
+   61 exp: exp EXPOENT term •
+
+    $padrão  reduzir usando a regra 61 (exp)
+
+
+Estado 121
+
+   77 exps: exp ',' exps •
+
+    $padrão  reduzir usando a regra 77 (exps)
+
+
+Estado 122
 
    11 ids: ID •
 
     $padrão  reduzir usando a regra 11 (ids)
 
 
-Estado 119
+Estado 123
 
     9 arg: TYPE ids •
    10    | TYPE ids • ',' arg
 
-    ','  deslocar, e ir ao estado 134
+    ','  deslocar, e ir ao estado 139
 
     $padrão  reduzir usando a regra 9 (arg)
 
 
-Estado 120
+Estado 124
 
     4 subprog: TYPE FUNCTION ID '(' args_op ')' • cmds END_FUNCTION
 
@@ -1798,1019 +1853,1047 @@ Estado 120
     WHILE       deslocar, e ir ao estado 12
     FOR         deslocar, e ir ao estado 13
     PRINT       deslocar, e ir ao estado 14
-    RETURN      deslocar, e ir ao estado 15
-    NOT         deslocar, e ir ao estado 16
-    TYPE        deslocar, e ir ao estado 17
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 20
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 24
-    DECREMENT   deslocar, e ir ao estado 25
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    SCAN        deslocar, e ir ao estado 15
+    RETURN      deslocar, e ir ao estado 16
+    NOT         deslocar, e ir ao estado 17
+    TYPE        deslocar, e ir ao estado 18
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 21
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 25
+    DECREMENT   deslocar, e ir ao estado 26
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
     $padrão  reduzir usando a regra 13 (cmds)
 
-    cmds       ir ao estado 135
-    cmd        ir ao estado 29
-    cond       ir ao estado 30
-    return     ir ao estado 31
-    write      ir ao estado 32
-    iteration  ir ao estado 33
-    exp        ir ao estado 34
-    term       ir ao estado 35
-    factor     ir ao estado 36
-    call       ir ao estado 37
-    exps       ir ao estado 38
+    cmds       ir ao estado 140
+    cmd        ir ao estado 30
+    cond       ir ao estado 31
+    return     ir ao estado 32
+    write      ir ao estado 33
+    read       ir ao estado 34
+    iteration  ir ao estado 35
+    exp        ir ao estado 36
+    term       ir ao estado 37
+    factor     ir ao estado 38
+    call       ir ao estado 39
+    exps       ir ao estado 40
 
 
-Estado 121
+Estado 125
 
     8 args: arg ';' • args
 
-    TYPE  deslocar, e ir ao estado 78
+    TYPE  deslocar, e ir ao estado 81
 
-    args  ir ao estado 136
-    arg   ir ao estado 81
-
-
-Estado 122
-
-   29 cond: IF exp THEN cmds • END_IF
-   30     | IF exp THEN cmds • ELSE cmds END_IF
-
-    ELSE    deslocar, e ir ao estado 137
-    END_IF  deslocar, e ir ao estado 138
+    args  ir ao estado 141
+    arg   ir ao estado 84
 
 
-Estado 123
+Estado 126
 
-   33 iteration: WHILE '(' exp ')' • cmds END_WHILE
+   30 cond: IF exp THEN cmds • END_IF
+   31     | IF exp THEN cmds • ELSE cmds END_IF
+
+    ELSE    deslocar, e ir ao estado 142
+    END_IF  deslocar, e ir ao estado 143
+
+
+Estado 127
+
+   35 iteration: WHILE '(' exp ')' • cmds END_WHILE
 
     IF          deslocar, e ir ao estado 11
     WHILE       deslocar, e ir ao estado 12
     FOR         deslocar, e ir ao estado 13
     PRINT       deslocar, e ir ao estado 14
-    RETURN      deslocar, e ir ao estado 15
-    NOT         deslocar, e ir ao estado 16
-    TYPE        deslocar, e ir ao estado 17
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 20
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 24
-    DECREMENT   deslocar, e ir ao estado 25
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    SCAN        deslocar, e ir ao estado 15
+    RETURN      deslocar, e ir ao estado 16
+    NOT         deslocar, e ir ao estado 17
+    TYPE        deslocar, e ir ao estado 18
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 21
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 25
+    DECREMENT   deslocar, e ir ao estado 26
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
     $padrão  reduzir usando a regra 13 (cmds)
 
-    cmds       ir ao estado 139
-    cmd        ir ao estado 29
-    cond       ir ao estado 30
-    return     ir ao estado 31
-    write      ir ao estado 32
-    iteration  ir ao estado 33
-    exp        ir ao estado 34
-    term       ir ao estado 35
-    factor     ir ao estado 36
-    call       ir ao estado 37
-    exps       ir ao estado 38
-
-
-Estado 124
-
-   36 iteration: FOR '(' TYPE ID • ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
-   37          | FOR '(' TYPE ID • ':' ID ')' cmds END_FOR
-
-    ASSIGN  deslocar, e ir ao estado 140
-    ':'     deslocar, e ir ao estado 141
-
-
-Estado 125
-
-   35 iteration: FOR '(' ID ASSIGN • exp ';' exp ';' for_incr ')' cmds END_FOR
-
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 142
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
-
-
-Estado 126
-
-   34 iteration: FOR '(' ID ';' • exp ';' for_incr ')' cmds END_FOR
-
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 143
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
-
-
-Estado 127
-
-   32 write: PRINT '(' exps ')' • ';'
-
-    ';'  deslocar, e ir ao estado 144
+    cmds       ir ao estado 144
+    cmd        ir ao estado 30
+    cond       ir ao estado 31
+    return     ir ao estado 32
+    write      ir ao estado 33
+    read       ir ao estado 34
+    iteration  ir ao estado 35
+    exp        ir ao estado 36
+    term       ir ao estado 37
+    factor     ir ao estado 38
+    call       ir ao estado 39
+    exps       ir ao estado 40
 
 
 Estado 128
 
-   19 cmd: TYPE ID ASSIGN exp • ';'
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
+   38 iteration: FOR '(' TYPE ID • ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
+   39          | FOR '(' TYPE ID • ':' ID ')' cmds END_FOR
 
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-    ';'            deslocar, e ir ao estado 145
+    ASSIGN  deslocar, e ir ao estado 145
+    ':'     deslocar, e ir ao estado 146
 
 
 Estado 129
 
-   22 cmd: ID ASSIGN exp ';' •
+   37 iteration: FOR '(' ID ASSIGN • exp ';' exp ';' for_incr ')' cmds END_FOR
 
-    $padrão  reduzir usando a regra 22 (cmd)
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 147
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
 
 
 Estado 130
 
-   27 cmd: ID INCREMENT_ASSIGN exp ';' •
+   36 iteration: FOR '(' ID ';' • exp ';' for_incr ')' cmds END_FOR
 
-    $padrão  reduzir usando a regra 27 (cmd)
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 148
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
 
 
 Estado 131
 
-   28 cmd: ID DECREMENT_ASSIGN exp ';' •
+   33 write: PRINT '(' exps ')' • ';'
 
-    $padrão  reduzir usando a regra 28 (cmd)
+    ';'  deslocar, e ir ao estado 149
 
 
 Estado 132
 
-   62 term: ID '[' exps ']' •
-   64     | ID '[' exps ']' • ASSIGN exp
+   34 read: SCAN '(' exps ')' • ';'
 
-    ASSIGN  deslocar, e ir ao estado 146
-
-    $padrão  reduzir usando a regra 62 (term)
+    ';'  deslocar, e ir ao estado 150
 
 
 Estado 133
 
-   71 call: ID '(' exps_op ')' •
+   20 cmd: TYPE ID ASSIGN exp • ';'
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
 
-    $padrão  reduzir usando a regra 71 (call)
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+    ';'            deslocar, e ir ao estado 151
 
 
 Estado 134
 
-   10 arg: TYPE ids ',' • arg
+   23 cmd: ID ASSIGN exp ';' •
 
-    TYPE  deslocar, e ir ao estado 78
-
-    arg  ir ao estado 147
+    $padrão  reduzir usando a regra 23 (cmd)
 
 
 Estado 135
 
-    4 subprog: TYPE FUNCTION ID '(' args_op ')' cmds • END_FUNCTION
+   28 cmd: ID INCREMENT_ASSIGN exp ';' •
 
-    END_FUNCTION  deslocar, e ir ao estado 148
+    $padrão  reduzir usando a regra 28 (cmd)
 
 
 Estado 136
+
+   29 cmd: ID DECREMENT_ASSIGN exp ';' •
+
+    $padrão  reduzir usando a regra 29 (cmd)
+
+
+Estado 137
+
+   64 term: ID '[' exps ']' •
+   66     | ID '[' exps ']' • ASSIGN exp
+
+    ASSIGN  deslocar, e ir ao estado 152
+
+    $padrão  reduzir usando a regra 64 (term)
+
+
+Estado 138
+
+   73 call: ID '(' exps_op ')' •
+
+    $padrão  reduzir usando a regra 73 (call)
+
+
+Estado 139
+
+   10 arg: TYPE ids ',' • arg
+
+    TYPE  deslocar, e ir ao estado 81
+
+    arg  ir ao estado 153
+
+
+Estado 140
+
+    4 subprog: TYPE FUNCTION ID '(' args_op ')' cmds • END_FUNCTION
+
+    END_FUNCTION  deslocar, e ir ao estado 154
+
+
+Estado 141
 
     8 args: arg ';' args •
 
     $padrão  reduzir usando a regra 8 (args)
 
 
-Estado 137
+Estado 142
 
-   30 cond: IF exp THEN cmds ELSE • cmds END_IF
+   31 cond: IF exp THEN cmds ELSE • cmds END_IF
 
     IF          deslocar, e ir ao estado 11
     WHILE       deslocar, e ir ao estado 12
     FOR         deslocar, e ir ao estado 13
     PRINT       deslocar, e ir ao estado 14
-    RETURN      deslocar, e ir ao estado 15
-    NOT         deslocar, e ir ao estado 16
-    TYPE        deslocar, e ir ao estado 17
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 20
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 24
-    DECREMENT   deslocar, e ir ao estado 25
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    SCAN        deslocar, e ir ao estado 15
+    RETURN      deslocar, e ir ao estado 16
+    NOT         deslocar, e ir ao estado 17
+    TYPE        deslocar, e ir ao estado 18
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 21
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 25
+    DECREMENT   deslocar, e ir ao estado 26
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
     $padrão  reduzir usando a regra 13 (cmds)
 
-    cmds       ir ao estado 149
-    cmd        ir ao estado 29
-    cond       ir ao estado 30
-    return     ir ao estado 31
-    write      ir ao estado 32
-    iteration  ir ao estado 33
-    exp        ir ao estado 34
-    term       ir ao estado 35
-    factor     ir ao estado 36
-    call       ir ao estado 37
-    exps       ir ao estado 38
-
-
-Estado 138
-
-   29 cond: IF exp THEN cmds END_IF •
-
-    $padrão  reduzir usando a regra 29 (cond)
-
-
-Estado 139
-
-   33 iteration: WHILE '(' exp ')' cmds • END_WHILE
-
-    END_WHILE  deslocar, e ir ao estado 150
-
-
-Estado 140
-
-   36 iteration: FOR '(' TYPE ID ASSIGN • exp ';' exp ';' for_incr ')' cmds END_FOR
-
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 151
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
-
-
-Estado 141
-
-   37 iteration: FOR '(' TYPE ID ':' • ID ')' cmds END_FOR
-
-    ID  deslocar, e ir ao estado 152
-
-
-Estado 142
-
-   35 iteration: FOR '(' ID ASSIGN exp • ';' exp ';' for_incr ')' cmds END_FOR
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
-
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-    ';'            deslocar, e ir ao estado 153
+    cmds       ir ao estado 155
+    cmd        ir ao estado 30
+    cond       ir ao estado 31
+    return     ir ao estado 32
+    write      ir ao estado 33
+    read       ir ao estado 34
+    iteration  ir ao estado 35
+    exp        ir ao estado 36
+    term       ir ao estado 37
+    factor     ir ao estado 38
+    call       ir ao estado 39
+    exps       ir ao estado 40
 
 
 Estado 143
 
-   34 iteration: FOR '(' ID ';' exp • ';' for_incr ')' cmds END_FOR
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
+   30 cond: IF exp THEN cmds END_IF •
 
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-    ';'            deslocar, e ir ao estado 154
+    $padrão  reduzir usando a regra 30 (cond)
 
 
 Estado 144
 
-   32 write: PRINT '(' exps ')' ';' •
+   35 iteration: WHILE '(' exp ')' cmds • END_WHILE
 
-    $padrão  reduzir usando a regra 32 (write)
+    END_WHILE  deslocar, e ir ao estado 156
 
 
 Estado 145
 
-   19 cmd: TYPE ID ASSIGN exp ';' •
+   38 iteration: FOR '(' TYPE ID ASSIGN • exp ';' exp ';' for_incr ')' cmds END_FOR
 
-    $padrão  reduzir usando a regra 19 (cmd)
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 157
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
 
 
 Estado 146
 
-   64 term: ID '[' exps ']' ASSIGN • exp
+   39 iteration: FOR '(' TYPE ID ':' • ID ')' cmds END_FOR
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 155
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
+    ID  deslocar, e ir ao estado 158
 
 
 Estado 147
+
+   37 iteration: FOR '(' ID ASSIGN exp • ';' exp ';' for_incr ')' cmds END_FOR
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
+
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+    ';'            deslocar, e ir ao estado 159
+
+
+Estado 148
+
+   36 iteration: FOR '(' ID ';' exp • ';' for_incr ')' cmds END_FOR
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
+
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+    ';'            deslocar, e ir ao estado 160
+
+
+Estado 149
+
+   33 write: PRINT '(' exps ')' ';' •
+
+    $padrão  reduzir usando a regra 33 (write)
+
+
+Estado 150
+
+   34 read: SCAN '(' exps ')' ';' •
+
+    $padrão  reduzir usando a regra 34 (read)
+
+
+Estado 151
+
+   20 cmd: TYPE ID ASSIGN exp ';' •
+
+    $padrão  reduzir usando a regra 20 (cmd)
+
+
+Estado 152
+
+   66 term: ID '[' exps ']' ASSIGN • exp
+
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 161
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
+
+
+Estado 153
 
    10 arg: TYPE ids ',' arg •
 
     $padrão  reduzir usando a regra 10 (arg)
 
 
-Estado 148
+Estado 154
 
     4 subprog: TYPE FUNCTION ID '(' args_op ')' cmds END_FUNCTION •
 
     $padrão  reduzir usando a regra 4 (subprog)
 
 
-Estado 149
-
-   30 cond: IF exp THEN cmds ELSE cmds • END_IF
-
-    END_IF  deslocar, e ir ao estado 156
-
-
-Estado 150
-
-   33 iteration: WHILE '(' exp ')' cmds END_WHILE •
-
-    $padrão  reduzir usando a regra 33 (iteration)
-
-
-Estado 151
-
-   36 iteration: FOR '(' TYPE ID ASSIGN exp • ';' exp ';' for_incr ')' cmds END_FOR
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
-
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-    ';'            deslocar, e ir ao estado 157
-
-
-Estado 152
-
-   37 iteration: FOR '(' TYPE ID ':' ID • ')' cmds END_FOR
-
-    ')'  deslocar, e ir ao estado 158
-
-
-Estado 153
-
-   35 iteration: FOR '(' ID ASSIGN exp ';' • exp ';' for_incr ')' cmds END_FOR
-
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 159
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
-
-
-Estado 154
-
-   34 iteration: FOR '(' ID ';' exp ';' • for_incr ')' cmds END_FOR
-
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 160
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 161
-    DECREMENT   deslocar, e ir ao estado 162
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    for_incr  ir ao estado 163
-    exp       ir ao estado 164
-    term      ir ao estado 35
-    factor    ir ao estado 36
-    call      ir ao estado 37
-
-
 Estado 155
 
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
-   64 term: ID '[' exps ']' ASSIGN exp •
+   31 cond: IF exp THEN cmds ELSE cmds • END_IF
 
-    EXPOENT  deslocar, e ir ao estado 75
-
-    $padrão  reduzir usando a regra 64 (term)
+    END_IF  deslocar, e ir ao estado 162
 
 
 Estado 156
 
-   30 cond: IF exp THEN cmds ELSE cmds END_IF •
+   35 iteration: WHILE '(' exp ')' cmds END_WHILE •
 
-    $padrão  reduzir usando a regra 30 (cond)
+    $padrão  reduzir usando a regra 35 (iteration)
 
 
 Estado 157
 
-   36 iteration: FOR '(' TYPE ID ASSIGN exp ';' • exp ';' for_incr ')' cmds END_FOR
+   38 iteration: FOR '(' TYPE ID ASSIGN exp • ';' exp ';' for_incr ')' cmds END_FOR
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 40
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    exp     ir ao estado 165
-    term    ir ao estado 35
-    factor  ir ao estado 36
-    call    ir ao estado 37
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+    ';'            deslocar, e ir ao estado 163
 
 
 Estado 158
 
-   37 iteration: FOR '(' TYPE ID ':' ID ')' • cmds END_FOR
+   39 iteration: FOR '(' TYPE ID ':' ID • ')' cmds END_FOR
+
+    ')'  deslocar, e ir ao estado 164
+
+
+Estado 159
+
+   37 iteration: FOR '(' ID ASSIGN exp ';' • exp ';' for_incr ')' cmds END_FOR
+
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 165
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
+
+
+Estado 160
+
+   36 iteration: FOR '(' ID ';' exp ';' • for_incr ')' cmds END_FOR
+
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 166
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 167
+    DECREMENT   deslocar, e ir ao estado 168
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    for_incr  ir ao estado 169
+    exp       ir ao estado 170
+    term      ir ao estado 37
+    factor    ir ao estado 38
+    call      ir ao estado 39
+
+
+Estado 161
+
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
+   66 term: ID '[' exps ']' ASSIGN exp •
+
+    EXPOENT  deslocar, e ir ao estado 78
+
+    $padrão  reduzir usando a regra 66 (term)
+
+
+Estado 162
+
+   31 cond: IF exp THEN cmds ELSE cmds END_IF •
+
+    $padrão  reduzir usando a regra 31 (cond)
+
+
+Estado 163
+
+   38 iteration: FOR '(' TYPE ID ASSIGN exp ';' • exp ';' for_incr ')' cmds END_FOR
+
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 42
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    exp     ir ao estado 171
+    term    ir ao estado 37
+    factor  ir ao estado 38
+    call    ir ao estado 39
+
+
+Estado 164
+
+   39 iteration: FOR '(' TYPE ID ':' ID ')' • cmds END_FOR
 
     IF          deslocar, e ir ao estado 11
     WHILE       deslocar, e ir ao estado 12
     FOR         deslocar, e ir ao estado 13
     PRINT       deslocar, e ir ao estado 14
-    RETURN      deslocar, e ir ao estado 15
-    NOT         deslocar, e ir ao estado 16
-    TYPE        deslocar, e ir ao estado 17
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 20
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 24
-    DECREMENT   deslocar, e ir ao estado 25
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    SCAN        deslocar, e ir ao estado 15
+    RETURN      deslocar, e ir ao estado 16
+    NOT         deslocar, e ir ao estado 17
+    TYPE        deslocar, e ir ao estado 18
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 21
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 25
+    DECREMENT   deslocar, e ir ao estado 26
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
     $padrão  reduzir usando a regra 13 (cmds)
 
-    cmds       ir ao estado 166
-    cmd        ir ao estado 29
-    cond       ir ao estado 30
-    return     ir ao estado 31
-    write      ir ao estado 32
-    iteration  ir ao estado 33
-    exp        ir ao estado 34
-    term       ir ao estado 35
-    factor     ir ao estado 36
-    call       ir ao estado 37
-    exps       ir ao estado 38
-
-
-Estado 159
-
-   35 iteration: FOR '(' ID ASSIGN exp ';' exp • ';' for_incr ')' cmds END_FOR
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
-
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-    ';'            deslocar, e ir ao estado 167
-
-
-Estado 160
-
-   38 for_incr: ID • INCREMENT
-   39         | ID • DECREMENT
-   62 term: ID • '[' exps ']'
-   64     | ID • '[' exps ']' ASSIGN exp
-   65 factor: ID •
-   71 call: ID • '(' exps_op ')'
-
-    INCREMENT  deslocar, e ir ao estado 168
-    DECREMENT  deslocar, e ir ao estado 169
-    '['        deslocar, e ir ao estado 54
-    '('        deslocar, e ir ao estado 55
-
-    $padrão  reduzir usando a regra 65 (factor)
-
-
-Estado 161
-
-   40 for_incr: INCREMENT • ID
-
-    ID  deslocar, e ir ao estado 170
-
-
-Estado 162
-
-   41 for_incr: DECREMENT • ID
-
-    ID  deslocar, e ir ao estado 171
-
-
-Estado 163
-
-   34 iteration: FOR '(' ID ';' exp ';' for_incr • ')' cmds END_FOR
-
-    ')'  deslocar, e ir ao estado 172
-
-
-Estado 164
-
-   42 for_incr: exp •
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
-
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
-
-    $padrão  reduzir usando a regra 42 (for_incr)
+    cmds       ir ao estado 172
+    cmd        ir ao estado 30
+    cond       ir ao estado 31
+    return     ir ao estado 32
+    write      ir ao estado 33
+    read       ir ao estado 34
+    iteration  ir ao estado 35
+    exp        ir ao estado 36
+    term       ir ao estado 37
+    factor     ir ao estado 38
+    call       ir ao estado 39
+    exps       ir ao estado 40
 
 
 Estado 165
 
-   36 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp • ';' for_incr ')' cmds END_FOR
-   45 exp: exp • EQUALS term
-   46    | exp • DIFF term
-   47    | exp • LESS term
-   48    | exp • GREATER term
-   49    | exp • LESSEQUALS term
-   50    | exp • GREATEREQUALS term
-   51    | exp • AND term
-   52    | exp • OR term
-   53    | exp • XOR term
-   55    | exp • PLUS term
-   56    | exp • MINUS term
-   57    | exp • MULT term
-   58    | exp • DIVISION term
-   59    | exp • EXPOENT term
+   37 iteration: FOR '(' ID ASSIGN exp ';' exp • ';' for_incr ')' cmds END_FOR
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
 
-    EQUALS         deslocar, e ir ao estado 62
-    DIFF           deslocar, e ir ao estado 63
-    LESS           deslocar, e ir ao estado 64
-    GREATER        deslocar, e ir ao estado 65
-    LESSEQUALS     deslocar, e ir ao estado 66
-    GREATEREQUALS  deslocar, e ir ao estado 67
-    AND            deslocar, e ir ao estado 68
-    OR             deslocar, e ir ao estado 69
-    XOR            deslocar, e ir ao estado 70
-    PLUS           deslocar, e ir ao estado 71
-    MINUS          deslocar, e ir ao estado 72
-    MULT           deslocar, e ir ao estado 73
-    DIVISION       deslocar, e ir ao estado 74
-    EXPOENT        deslocar, e ir ao estado 75
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
     ';'            deslocar, e ir ao estado 173
 
 
 Estado 166
 
-   37 iteration: FOR '(' TYPE ID ':' ID ')' cmds • END_FOR
+   40 for_incr: ID • INCREMENT
+   41         | ID • DECREMENT
+   64 term: ID • '[' exps ']'
+   66     | ID • '[' exps ']' ASSIGN exp
+   67 factor: ID •
+   73 call: ID • '(' exps_op ')'
 
-    END_FOR  deslocar, e ir ao estado 174
+    INCREMENT  deslocar, e ir ao estado 174
+    DECREMENT  deslocar, e ir ao estado 175
+    '['        deslocar, e ir ao estado 57
+    '('        deslocar, e ir ao estado 58
+
+    $padrão  reduzir usando a regra 67 (factor)
 
 
 Estado 167
 
-   35 iteration: FOR '(' ID ASSIGN exp ';' exp ';' • for_incr ')' cmds END_FOR
+   42 for_incr: INCREMENT • ID
 
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 160
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 161
-    DECREMENT   deslocar, e ir ao estado 162
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    for_incr  ir ao estado 175
-    exp       ir ao estado 164
-    term      ir ao estado 35
-    factor    ir ao estado 36
-    call      ir ao estado 37
+    ID  deslocar, e ir ao estado 176
 
 
 Estado 168
 
-   38 for_incr: ID INCREMENT •
+   43 for_incr: DECREMENT • ID
 
-    $padrão  reduzir usando a regra 38 (for_incr)
+    ID  deslocar, e ir ao estado 177
 
 
 Estado 169
 
-   39 for_incr: ID DECREMENT •
-
-    $padrão  reduzir usando a regra 39 (for_incr)
-
-
-Estado 170
-
-   40 for_incr: INCREMENT ID •
-
-    $padrão  reduzir usando a regra 40 (for_incr)
-
-
-Estado 171
-
-   41 for_incr: DECREMENT ID •
-
-    $padrão  reduzir usando a regra 41 (for_incr)
-
-
-Estado 172
-
-   34 iteration: FOR '(' ID ';' exp ';' for_incr ')' • cmds END_FOR
-
-    IF          deslocar, e ir ao estado 11
-    WHILE       deslocar, e ir ao estado 12
-    FOR         deslocar, e ir ao estado 13
-    PRINT       deslocar, e ir ao estado 14
-    RETURN      deslocar, e ir ao estado 15
-    NOT         deslocar, e ir ao estado 16
-    TYPE        deslocar, e ir ao estado 17
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 20
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 24
-    DECREMENT   deslocar, e ir ao estado 25
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    $padrão  reduzir usando a regra 13 (cmds)
-
-    cmds       ir ao estado 176
-    cmd        ir ao estado 29
-    cond       ir ao estado 30
-    return     ir ao estado 31
-    write      ir ao estado 32
-    iteration  ir ao estado 33
-    exp        ir ao estado 34
-    term       ir ao estado 35
-    factor     ir ao estado 36
-    call       ir ao estado 37
-    exps       ir ao estado 38
-
-
-Estado 173
-
-   36 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp ';' • for_incr ')' cmds END_FOR
-
-    NOT         deslocar, e ir ao estado 16
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 160
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 161
-    DECREMENT   deslocar, e ir ao estado 162
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    for_incr  ir ao estado 177
-    exp       ir ao estado 164
-    term      ir ao estado 35
-    factor    ir ao estado 36
-    call      ir ao estado 37
-
-
-Estado 174
-
-   37 iteration: FOR '(' TYPE ID ':' ID ')' cmds END_FOR •
-
-    $padrão  reduzir usando a regra 37 (iteration)
-
-
-Estado 175
-
-   35 iteration: FOR '(' ID ASSIGN exp ';' exp ';' for_incr • ')' cmds END_FOR
+   36 iteration: FOR '(' ID ';' exp ';' for_incr • ')' cmds END_FOR
 
     ')'  deslocar, e ir ao estado 178
 
 
+Estado 170
+
+   44 for_incr: exp •
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
+
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+
+    $padrão  reduzir usando a regra 44 (for_incr)
+
+
+Estado 171
+
+   38 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp • ';' for_incr ')' cmds END_FOR
+   47 exp: exp • EQUALS term
+   48    | exp • DIFF term
+   49    | exp • LESS term
+   50    | exp • GREATER term
+   51    | exp • LESSEQUALS term
+   52    | exp • GREATEREQUALS term
+   53    | exp • AND term
+   54    | exp • OR term
+   55    | exp • XOR term
+   57    | exp • PLUS term
+   58    | exp • MINUS term
+   59    | exp • MULT term
+   60    | exp • DIVISION term
+   61    | exp • EXPOENT term
+
+    EQUALS         deslocar, e ir ao estado 65
+    DIFF           deslocar, e ir ao estado 66
+    LESS           deslocar, e ir ao estado 67
+    GREATER        deslocar, e ir ao estado 68
+    LESSEQUALS     deslocar, e ir ao estado 69
+    GREATEREQUALS  deslocar, e ir ao estado 70
+    AND            deslocar, e ir ao estado 71
+    OR             deslocar, e ir ao estado 72
+    XOR            deslocar, e ir ao estado 73
+    PLUS           deslocar, e ir ao estado 74
+    MINUS          deslocar, e ir ao estado 75
+    MULT           deslocar, e ir ao estado 76
+    DIVISION       deslocar, e ir ao estado 77
+    EXPOENT        deslocar, e ir ao estado 78
+    ';'            deslocar, e ir ao estado 179
+
+
+Estado 172
+
+   39 iteration: FOR '(' TYPE ID ':' ID ')' cmds • END_FOR
+
+    END_FOR  deslocar, e ir ao estado 180
+
+
+Estado 173
+
+   37 iteration: FOR '(' ID ASSIGN exp ';' exp ';' • for_incr ')' cmds END_FOR
+
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 166
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 167
+    DECREMENT   deslocar, e ir ao estado 168
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    for_incr  ir ao estado 181
+    exp       ir ao estado 170
+    term      ir ao estado 37
+    factor    ir ao estado 38
+    call      ir ao estado 39
+
+
+Estado 174
+
+   40 for_incr: ID INCREMENT •
+
+    $padrão  reduzir usando a regra 40 (for_incr)
+
+
+Estado 175
+
+   41 for_incr: ID DECREMENT •
+
+    $padrão  reduzir usando a regra 41 (for_incr)
+
+
 Estado 176
 
-   34 iteration: FOR '(' ID ';' exp ';' for_incr ')' cmds • END_FOR
+   42 for_incr: INCREMENT ID •
 
-    END_FOR  deslocar, e ir ao estado 179
+    $padrão  reduzir usando a regra 42 (for_incr)
 
 
 Estado 177
 
-   36 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr • ')' cmds END_FOR
+   43 for_incr: DECREMENT ID •
 
-    ')'  deslocar, e ir ao estado 180
+    $padrão  reduzir usando a regra 43 (for_incr)
 
 
 Estado 178
 
-   35 iteration: FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' • cmds END_FOR
+   36 iteration: FOR '(' ID ';' exp ';' for_incr ')' • cmds END_FOR
 
     IF          deslocar, e ir ao estado 11
     WHILE       deslocar, e ir ao estado 12
     FOR         deslocar, e ir ao estado 13
     PRINT       deslocar, e ir ao estado 14
-    RETURN      deslocar, e ir ao estado 15
-    NOT         deslocar, e ir ao estado 16
-    TYPE        deslocar, e ir ao estado 17
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 20
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 24
-    DECREMENT   deslocar, e ir ao estado 25
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
-
-    $padrão  reduzir usando a regra 13 (cmds)
-
-    cmds       ir ao estado 181
-    cmd        ir ao estado 29
-    cond       ir ao estado 30
-    return     ir ao estado 31
-    write      ir ao estado 32
-    iteration  ir ao estado 33
-    exp        ir ao estado 34
-    term       ir ao estado 35
-    factor     ir ao estado 36
-    call       ir ao estado 37
-    exps       ir ao estado 38
-
-
-Estado 179
-
-   34 iteration: FOR '(' ID ';' exp ';' for_incr ')' cmds END_FOR •
-
-    $padrão  reduzir usando a regra 34 (iteration)
-
-
-Estado 180
-
-   36 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' • cmds END_FOR
-
-    IF          deslocar, e ir ao estado 11
-    WHILE       deslocar, e ir ao estado 12
-    FOR         deslocar, e ir ao estado 13
-    PRINT       deslocar, e ir ao estado 14
-    RETURN      deslocar, e ir ao estado 15
-    NOT         deslocar, e ir ao estado 16
-    TYPE        deslocar, e ir ao estado 17
-    STRING_LIT  deslocar, e ir ao estado 18
-    BOOL_LIT    deslocar, e ir ao estado 19
-    ID          deslocar, e ir ao estado 20
-    INT         deslocar, e ir ao estado 21
-    FLOAT       deslocar, e ir ao estado 22
-    DOUBLE      deslocar, e ir ao estado 23
-    INCREMENT   deslocar, e ir ao estado 24
-    DECREMENT   deslocar, e ir ao estado 25
-    '('         deslocar, e ir ao estado 26
-    '{'         deslocar, e ir ao estado 27
+    SCAN        deslocar, e ir ao estado 15
+    RETURN      deslocar, e ir ao estado 16
+    NOT         deslocar, e ir ao estado 17
+    TYPE        deslocar, e ir ao estado 18
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 21
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 25
+    DECREMENT   deslocar, e ir ao estado 26
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
 
     $padrão  reduzir usando a regra 13 (cmds)
 
     cmds       ir ao estado 182
-    cmd        ir ao estado 29
-    cond       ir ao estado 30
-    return     ir ao estado 31
-    write      ir ao estado 32
-    iteration  ir ao estado 33
-    exp        ir ao estado 34
-    term       ir ao estado 35
-    factor     ir ao estado 36
-    call       ir ao estado 37
-    exps       ir ao estado 38
+    cmd        ir ao estado 30
+    cond       ir ao estado 31
+    return     ir ao estado 32
+    write      ir ao estado 33
+    read       ir ao estado 34
+    iteration  ir ao estado 35
+    exp        ir ao estado 36
+    term       ir ao estado 37
+    factor     ir ao estado 38
+    call       ir ao estado 39
+    exps       ir ao estado 40
+
+
+Estado 179
+
+   38 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp ';' • for_incr ')' cmds END_FOR
+
+    NOT         deslocar, e ir ao estado 17
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 166
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 167
+    DECREMENT   deslocar, e ir ao estado 168
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    for_incr  ir ao estado 183
+    exp       ir ao estado 170
+    term      ir ao estado 37
+    factor    ir ao estado 38
+    call      ir ao estado 39
+
+
+Estado 180
+
+   39 iteration: FOR '(' TYPE ID ':' ID ')' cmds END_FOR •
+
+    $padrão  reduzir usando a regra 39 (iteration)
 
 
 Estado 181
 
-   35 iteration: FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' cmds • END_FOR
+   37 iteration: FOR '(' ID ASSIGN exp ';' exp ';' for_incr • ')' cmds END_FOR
 
-    END_FOR  deslocar, e ir ao estado 183
+    ')'  deslocar, e ir ao estado 184
 
 
 Estado 182
 
-   36 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds • END_FOR
+   36 iteration: FOR '(' ID ';' exp ';' for_incr ')' cmds • END_FOR
 
-    END_FOR  deslocar, e ir ao estado 184
+    END_FOR  deslocar, e ir ao estado 185
 
 
 Estado 183
 
-   35 iteration: FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR •
+   38 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr • ')' cmds END_FOR
 
-    $padrão  reduzir usando a regra 35 (iteration)
+    ')'  deslocar, e ir ao estado 186
 
 
 Estado 184
 
-   36 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR •
+   37 iteration: FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' • cmds END_FOR
+
+    IF          deslocar, e ir ao estado 11
+    WHILE       deslocar, e ir ao estado 12
+    FOR         deslocar, e ir ao estado 13
+    PRINT       deslocar, e ir ao estado 14
+    SCAN        deslocar, e ir ao estado 15
+    RETURN      deslocar, e ir ao estado 16
+    NOT         deslocar, e ir ao estado 17
+    TYPE        deslocar, e ir ao estado 18
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 21
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 25
+    DECREMENT   deslocar, e ir ao estado 26
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    $padrão  reduzir usando a regra 13 (cmds)
+
+    cmds       ir ao estado 187
+    cmd        ir ao estado 30
+    cond       ir ao estado 31
+    return     ir ao estado 32
+    write      ir ao estado 33
+    read       ir ao estado 34
+    iteration  ir ao estado 35
+    exp        ir ao estado 36
+    term       ir ao estado 37
+    factor     ir ao estado 38
+    call       ir ao estado 39
+    exps       ir ao estado 40
+
+
+Estado 185
+
+   36 iteration: FOR '(' ID ';' exp ';' for_incr ')' cmds END_FOR •
 
     $padrão  reduzir usando a regra 36 (iteration)
+
+
+Estado 186
+
+   38 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' • cmds END_FOR
+
+    IF          deslocar, e ir ao estado 11
+    WHILE       deslocar, e ir ao estado 12
+    FOR         deslocar, e ir ao estado 13
+    PRINT       deslocar, e ir ao estado 14
+    SCAN        deslocar, e ir ao estado 15
+    RETURN      deslocar, e ir ao estado 16
+    NOT         deslocar, e ir ao estado 17
+    TYPE        deslocar, e ir ao estado 18
+    STRING_LIT  deslocar, e ir ao estado 19
+    BOOL_LIT    deslocar, e ir ao estado 20
+    ID          deslocar, e ir ao estado 21
+    INT         deslocar, e ir ao estado 22
+    FLOAT       deslocar, e ir ao estado 23
+    DOUBLE      deslocar, e ir ao estado 24
+    INCREMENT   deslocar, e ir ao estado 25
+    DECREMENT   deslocar, e ir ao estado 26
+    '('         deslocar, e ir ao estado 27
+    '{'         deslocar, e ir ao estado 28
+
+    $padrão  reduzir usando a regra 13 (cmds)
+
+    cmds       ir ao estado 188
+    cmd        ir ao estado 30
+    cond       ir ao estado 31
+    return     ir ao estado 32
+    write      ir ao estado 33
+    read       ir ao estado 34
+    iteration  ir ao estado 35
+    exp        ir ao estado 36
+    term       ir ao estado 37
+    factor     ir ao estado 38
+    call       ir ao estado 39
+    exps       ir ao estado 40
+
+
+Estado 187
+
+   37 iteration: FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' cmds • END_FOR
+
+    END_FOR  deslocar, e ir ao estado 189
+
+
+Estado 188
+
+   38 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds • END_FOR
+
+    END_FOR  deslocar, e ir ao estado 190
+
+
+Estado 189
+
+   37 iteration: FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR •
+
+    $padrão  reduzir usando a regra 37 (iteration)
+
+
+Estado 190
+
+   38 iteration: FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR •
+
+    $padrão  reduzir usando a regra 38 (iteration)

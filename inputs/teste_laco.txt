@@ -1,5 +1,5 @@
 main
-/*
+
 int i = 0;
 while(i < 5)
         int xx = 1;
@@ -97,7 +97,6 @@ float arr[5] = {1.1, 2.5, 3, 4, 5};
 	    print("for: arr[%d] = %f\n", ix, arr[ix]);	    
 	end_for
 			print("somaFor = %f\n", somaFor);
-*/
 
 	// Teste de laços aninhados
 
@@ -116,7 +115,25 @@ while(ai < 5)
 	ai++;
 end_while
 
+for (int ai = 0; ai < 5; ai++)
+	for (int aj = 0; aj < 5; aj++)
+		print("for aninhado 2.1: O valor dos elementos da matriz são: [%d][%d].\n", ai, aj);
+	end_for
+end_for
 
+for (ai = 0; ai < 5; ai++)
+	for (aj = 0; aj < 5; aj++)
+		print("for aninhado 2.2: O valor dos elementos da matriz são: [%d][%d].\n", ai, aj);
+	end_for
+end_for
 
+ai = 0;
+aj = 0;
+for (ai; ai < 5; ai++)
+	for (aj; aj < 5; aj++)
+		print("for aninhado 2.3: O valor dos elementos da matriz são: [%d][%d].\n", ai, aj);
+	end_for
+	aj = 0;
+end_for
 
 end_main
