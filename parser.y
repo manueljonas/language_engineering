@@ -49,7 +49,7 @@ int labelCounterWhile = 1; // Contador global para os rótulos goto while
 
 %%
 prog : subprogs main {
-                      char *headers = "#include<stdio.h>\n#include<stdlib.h>\n#include<stdbool.h>\n#include<math.h>\n\n";
+                      char *headers = "#include <stdio.h>\n#include <stdlib.h>\n#include <stdbool.h>\n#include <math.h>\n#include \"../lib/matrix.h\"\n\n";
                       char *s = cat(headers, $1->code, "\n", $2->code, "", "");
                       fprintf(yyout, "%s", s);
                       freeRecord($1);
@@ -209,14 +209,14 @@ cmd : cond                      {$$ = $1;}
          $$ = createRecord(s, "");
          free(s);
       }
-    | TYPE ID dms ';' {
-      //int a[2];
-      char *s = cat($1, " ", $2, $3->code, ";", "");
-      free($1);
-      free($2);
-      freeRecord($3);
-      $$ = createRecord(s, "");
+    | TYPE ID '[' term ']' '[' term ']' ';' {
+      char *s = cat(" = ", "create_matrix(", $4->code, ",", $7->code, ")");
+      char *s1 = cat("Matrix *", $2, s, ";", "", "");
+      $$ = createRecord(s1, "");
+      freeRecord($4);
+      freeRecord($7);
       free(s);
+      free(s1);
     }
     | ID dms ASSIGN exp ';' { 
       char *s = cat($1, $2->code, " = ", $4->code, ";", "");
@@ -226,13 +226,13 @@ cmd : cond                      {$$ = $1;}
       $$ = createRecord(s, "");
       free(s);
     }
-    | TYPE ID dms ASSIGN '(' mtr_rows ')' ';' { 
+    | TYPE ID '[' term ']' '[' term ']' ASSIGN '(' mtr_rows ')' ';' { 
       char *s = cat($1, " ", $2, " ", "", "");
-      char *s1 = cat(s, $3->code, " = {", $6->code, "};", "");
+      char *s1 = cat(s, "", " = {", "", "};", "");
       free($1);
       free($2);
-      freeRecord($3);
-      freeRecord($6);
+      //freeRecord($3);
+      //freeRecord($6);
       $$ = createRecord(s1, "");
       free(s);
       free(s1);
@@ -453,21 +453,39 @@ exp : term        {$$ = $1;}
                   freeRecord($2);
                   $$ = createRecord(s, "");
                   free(s);}
-    | exp PLUS term   {char * s = cat($1->code, " + ", $3->code, "", "", "");
-                      freeRecord($1);
-                      freeRecord($3);
-                      $$ = createRecord(s, "");
-                      free(s);}
+    | exp PLUS term   {
+                        char * s;
+                        //@todo validar opt1 e se a expressão é lida corretamente 
+                        if(strcmp($1->opt1, "matrix") == 0 && strcmp($3->opt1, "matrix") == 0) {
+                          s = cat("add_matrices(", $1->code, ",", $3->code, ")", "");
+                        } else {
+                          s = cat($1->code, " + ", $3->code, "", "", "");
+                        }
+                        
+                        $$ = createRecord(s, "");
+                        freeRecord($1);
+                        freeRecord($3);
+                        free(s);
+                      }
     | exp MINUS term   {char * s = cat($1->code, " - ", $3->code, "", "", "");
                        freeRecord($1);
                        freeRecord($3);
                        $$ = createRecord(s, "");
                        free(s);}
-    | exp MULT term   {char * s = cat($1->code, " * ", $3->code, "", "", "");
-                      freeRecord($1);
-                      freeRecord($3);
-                      $$ = createRecord(s, "");
-                      free(s);}
+    | exp MULT term   {
+                       char * s;
+                        //@todo validar opt1 e se a expressão é lida corretamente 
+                        if(strcmp($1->opt1, "matrix") == 0 && strcmp($3->opt1, "matrix") == 0) {
+                          s = cat("multiply_matrices(", $1->code, ",", $3->code, ")", "");
+                        } else {
+                          s = cat($1->code, " * ", $3->code, "", "", "");
+                        }
+                        
+                        $$ = createRecord(s, "");
+                        freeRecord($1);
+                        freeRecord($3);
+                        free(s);
+                      }
     | exp DIVISION term   {char * s = cat($1->code, " / ", $3->code, "", "", "");
                        freeRecord($1);
                        freeRecord($3);
