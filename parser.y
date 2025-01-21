@@ -82,7 +82,7 @@ type_table *typeTable;
                             } 
          ;
   
-  subprog : TYPE FUNCTION ID '(' args_op ')' cmds END_FUNCTION 
+  subprog : TYPE FUNCTION ID {scope_push(stackScope, $3);} '(' args_op ')' cmds END_FUNCTION 
            {
             if(function_table_get(functionTable, $3) != NULL){
                 yyerror("função já existente");
@@ -91,41 +91,42 @@ type_table *typeTable;
                 yyerror("Tipo não encontrado");
             }
 
-            function_table_set(functionTable, $3, $1, $5->code);
-            scope_push(stackScope, $3);
-            char * s1 = cat($1, " ", $3, "(", $5->code, "");
-            char * s2 = cat(s1, ")\n", "{\n", $7->code, "}", "");
+            function_table_set(functionTable, $3, $1, $6->code);
+            char * s1 = cat($1, " ", $3, "(", $6->code, "");
+            char * s2 = cat(s1, ")\n", "{\n", $8->code, "}", "");
             free(s1);
             free($1);
             free($3);
-            freeRecord($5);
-            freeRecord($7);
+            freeRecord($6);
+            freeRecord($8);
             $$ = createRecord(s2, "");
             free(s2);
             scope_pop(stackScope);
            }
-           | TYPE '[' ']' '[' ']' FUNCTION ID '(' args_op ')' cmds END_FUNCTION 
-           {char * s1 = cat($1, " ", $7, "(", $9->code, "");
-            char * s2 = cat(s1, ")\n", "{\n", $11->code, "}", "");
+           | TYPE '[' ']' '[' ']' FUNCTION ID {scope_push(stackScope, $7);} '(' args_op ')' cmds END_FUNCTION 
+           {char * s1 = cat($1, " ", $7, "(", $10->code, "");
+            char * s2 = cat(s1, ")\n", "{\n", $12->code, "}", "");
             free(s1);
             free($1);
             free($7);
-            freeRecord($9);
-            freeRecord($11);
+            freeRecord($10);
+            freeRecord($12);
             $$ = createRecord(s2, "");
             free(s2);
+            scope_pop(stackScope);
            }
-           | '(' TYPE ',' TYPE ')' FUNCTION ID '(' args_op ')' cmds END_FUNCTION 
+           | '(' TYPE ',' TYPE ')' FUNCTION ID {scope_push(stackScope, $7);} '(' args_op ')' cmds END_FUNCTION 
            {char * s1 = cat("(", $2, ", ", $4, ") ", $7);
-            char * s2 = cat(s1, "(", $9->code, ")\n{\n", $11->code, "}");
+            char * s2 = cat(s1, "(", $10->code, ")\n{\n", $12->code, "}");
             free(s1);
             free($2);
             free($4);
             free($7);
-            freeRecord($9);
-            freeRecord($11);
+            freeRecord($10);
+            freeRecord($12);
             $$ = createRecord(s2, "");
             free(s2);
+            scope_pop(stackScope);
            }
         ;
   
@@ -170,10 +171,9 @@ type_table *typeTable;
                  }
     ;
   
-  main : MAIN cmds END_MAIN {
-    scope_push(stackScope, "main");
-    char * s = cat("int main(){\n", $2->code, "}", "", "", "");
-                                  freeRecord($2);
+  main : MAIN {scope_push(stackScope, "main");} cmds END_MAIN {
+    char * s = cat("int main(){\n", $3->code, "}", "", "", "");
+                                  freeRecord($3);
                                   $$ = createRecord(s, "");
                                   free(s);
                                   scope_pop(stackScope);
@@ -453,9 +453,8 @@ type_table *typeTable;
                                   free(s);
                                  }
         ;
-  iteration : WHILE '(' exp ')' cmds END_WHILE
+  iteration : WHILE '(' exp ')' {scope_push(stackScope, generateLabel());} cmds END_WHILE
     {
-      scope_push(stackScope, generateLabel());
         // Incrementar o contador de rótulos para gerar identificadores únicos
         int currentLabelWhile = labelCounterWhile++;
         char labelStart[30], labelEnd[30], labelBody[30];
@@ -467,7 +466,7 @@ type_table *typeTable;
   
         // Gerar as partes do código do bloco WHILE
         char *part1 = cat(labelStart, ": if ((", $3->code, ")) goto ", labelBody, ";\n");
-        char *part2 = cat("goto ", labelEnd, ";\n", labelBody, ":\n{\n", $5->code);
+        char *part2 = cat("goto ", labelEnd, ";\n", labelBody, ":\n{\n", $6->code);
         char *part3 = cat("}\n", "goto ", labelStart, ";\n", labelEnd, ": \n");
   
         // Concatenar todas as partes do código gerado
@@ -476,14 +475,13 @@ type_table *typeTable;
         free(part2);
         free(part3);
         freeRecord($3);
-        freeRecord($5);
+        freeRecord($6);
         $$ = createRecord(s, "");
         free(s);
         scope_pop(stackScope);
     }
-    | FOR '(' ID ';' exp ';' for_incr ')' cmds END_FOR
+    | FOR '(' ID ';' exp ';' for_incr ')' {scope_push(stackScope, generateLabel());} cmds END_FOR
     {
-      scope_push(stackScope, generateLabel());
       char * key = generateKey($3, scope_get(stackScope));
       hashtable_set(symbol_table, key, "int");
         // Gerar rótulos únicos para o laço
@@ -506,7 +504,7 @@ type_table *typeTable;
   
         // Combinar as partes do laço
         char *part1 = cat("\n{\n", init, labelStart, ": ", cond, skipToEnd);
-        char *part2 = cat(labelBody, ":\n{\n", $9->code, "}\n", increment, ";\n");
+        char *part2 = cat(labelBody, ":\n{\n", $10->code, "}\n", increment, ";\n");
         char *part3 = cat("goto ", labelStart, ";\n", labelEnd, ": \n}\n", "");
   
         char *s = cat(part1, part2, part3, "", "", "");
@@ -519,15 +517,14 @@ type_table *typeTable;
         free($3);
         freeRecord($5);
         freeRecord($7);
-        freeRecord($9);
+        freeRecord($10);
         $$ = createRecord(s, "");
         free(s);
         free(key);
         scope_pop(stackScope);
     }
-    | FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
+    | FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' {scope_push(stackScope, generateLabel());} cmds END_FOR
     {
-      scope_push(stackScope, generateLabel());
       if($5->opt1 != "int"){
         yyerror("o id do for tem que receber int");
       }
@@ -553,7 +550,7 @@ type_table *typeTable;
   
         // Combinar as partes do laço
         char *part1 = cat("\n{\n", init, labelStart, ": ", cond, skipToEnd);
-        char *part2 = cat(labelBody, ":\n{\n", $11->code, "}\n", increment, ";\n");
+        char *part2 = cat(labelBody, ":\n{\n", $12->code, "}\n", increment, ";\n");
         char *part3 = cat("goto ", labelStart, ";\n", labelEnd, ": \n}\n", "");
   
         char *s = cat(part1, part2, part3, "", "", "");
@@ -567,13 +564,13 @@ type_table *typeTable;
         freeRecord($5);
         freeRecord($7);
         freeRecord($9);
-        freeRecord($11);
+        freeRecord($12);
         $$ = createRecord(s, "");
         free(s);
         free(key);
         scope_pop(stackScope);
     }
-    | FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
+    | FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' {scope_push(stackScope, generateLabel());} cmds END_FOR
     {
         if(type_table_get(typeTable, $3) == NULL){
           yyerror("tipo inexistente");
@@ -581,7 +578,6 @@ type_table *typeTable;
         if($3 != $6->opt1){
           yyerror("tipos incompativeis");
         }
-        scope_push(stackScope, generateLabel());
         char * key = generateKey($4, scope_get(stackScope));
         hashtable_set(symbol_table, key, $3);
         // Gerar rótulos únicos para o laço
@@ -604,7 +600,7 @@ type_table *typeTable;
   
         // Combinar as partes do laço
         char *part1 = cat("\n{\n", init, labelStart, ": ", cond, skipToEnd);
-        char *part2 = cat(labelBody, ":\n{\n", $12->code, "}\n", increment, ";\n");
+        char *part2 = cat(labelBody, ":\n{\n", $13->code, "}\n", increment, ";\n");
         char *part3 = cat("goto ", labelStart, ";\n", labelEnd, ": \n}\n", "");
   
         char *s = cat(part1, part2, part3, "", "", "");
@@ -619,13 +615,13 @@ type_table *typeTable;
         freeRecord($6);
         freeRecord($8);
         freeRecord($10);
-        freeRecord($12);
+        freeRecord($13);
         $$ = createRecord(s, "");
         free(s);
         free(key);
         scope_pop(stackScope);
     }
-    | FOR '(' TYPE ID ':' ID ')' cmds END_FOR
+    | FOR '(' TYPE ID ':' ID ')' {scope_push(stackScope, generateLabel());} cmds END_FOR
     {
       if(type_table_get(typeTable, $3) == NULL){
         yyerror("tipo inexistente");
@@ -635,7 +631,6 @@ type_table *typeTable;
       if(typeId == NULL){
         yyerror("id inexistente todos os escopos");
       }
-      scope_push(stackScope, generateLabel());
       char * key = generateKey($4, scope_get(stackScope));
       hashtable_set(symbol_table, key, $3);
         // Incrementa o contador global de rótulos
@@ -658,7 +653,7 @@ type_table *typeTable;
   
         // Corpo do laço: atribui o valor atual do array à variável auxiliar
         char *assignValue = cat($3, " aux = ", $6, "[", $4, "];\n");
-        char *body = cat(labelBody, ":\n{\n", assignValue, $8->code, "}\n", "");
+        char *body = cat(labelBody, ":\n{\n", assignValue, $9->code, "}\n", "");
   
         // Incremento: avança o índice
         char *increment = cat($4, "++;\n", "", "", "", "");
@@ -683,7 +678,7 @@ type_table *typeTable;
         free(part3);
         free($4);
         free($6);
-        freeRecord($8);
+        freeRecord($9);
   
         $$ = createRecord(s, "");
         free(s);
