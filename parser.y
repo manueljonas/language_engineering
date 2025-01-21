@@ -3,6 +3,12 @@
   #include <stdlib.h>
   #include <string.h>
   #include "./lib/record.h"
+  #include "./lib/hashtable.h"
+#include "./lib/scope.h"
+#include "./lib/label_generator.h"
+#include "./lib/function_hashtable.h"
+#include "./lib/type_hashtable.h"
+#include "./lib/label_generator.h"
   
   int yylex(void);
   int yyerror(char *s);
@@ -16,6 +22,13 @@
   int labelCounterWhile = 1; // Contador global para os rótulos goto while
   int labelCounterFor = 1; // Contador global para os rótulos goto for
   
+   char * generateKey(char *, char *);
+char * verificaEscopos(stack_scope * stack , char * id);
+ hash_table_base *symbol_table;
+stack_scope *stackScope;
+function_table *functionTable;
+type_table *typeTable;
+
   %}
   
   %union {
@@ -70,7 +83,17 @@
          ;
   
   subprog : TYPE FUNCTION ID '(' args_op ')' cmds END_FUNCTION 
-           {char * s1 = cat($1, " ", $3, "(", $5->code, "");
+           {
+            if(function_table_get(functionTable, $3) != NULL){
+                yyerror("função já existente");
+            }
+            if(type_table_get(typeTable, $1) == NULL){
+                yyerror("Tipo não encontrado");
+            }
+
+            function_table_set(functionTable, $3, $1, $5->code);
+            scope_push(stackScope, $3);
+            char * s1 = cat($1, " ", $3, "(", $5->code, "");
             char * s2 = cat(s1, ")\n", "{\n", $7->code, "}", "");
             free(s1);
             free($1);
@@ -79,6 +102,7 @@
             freeRecord($7);
             $$ = createRecord(s2, "");
             free(s2);
+            scope_pop(stackScope);
            }
            | TYPE '[' ']' '[' ']' FUNCTION ID '(' args_op ')' cmds END_FUNCTION 
            {char * s1 = cat($1, " ", $7, "(", $9->code, "");
@@ -118,13 +142,21 @@
                     }
      ;
   
-  arg : TYPE ids {char * s = cat($1, " ", $2->code, "", "", "");
+  arg : TYPE ids {
+    if(type_table_get(typeTable, $1) == NULL){
+                  yyerror("tipo invalido");
+                }
+    char * s = cat($1, " ", $2->code, "", "", "");
                 free($1);
                 freeRecord($2);
                 $$ = createRecord(s, "");
                 free(s);
                }
-      | TYPE ids ',' arg {char * s = cat($1, " ", $2->code, ", ", $4->code, "");
+      | TYPE ids ',' arg {
+        if(type_table_get(typeTable, $1) == NULL){
+                  yyerror("tipo invalido");
+                }
+        char * s = cat($1, " ", $2->code, ", ", $4->code, "");
                 free($1);
                 freeRecord($2);
                 freeRecord($4);
@@ -138,10 +170,13 @@
                  }
     ;
   
-  main : MAIN cmds END_MAIN {char * s = cat("int main(){\n", $2->code, "}", "", "", "");
+  main : MAIN cmds END_MAIN {
+    scope_push(stackScope, "main");
+    char * s = cat("int main(){\n", $2->code, "}", "", "", "");
                                   freeRecord($2);
                                   $$ = createRecord(s, "");
                                   free(s);
+                                  scope_pop(stackScope);
                                  }
           ;
   
@@ -159,14 +194,29 @@
     | write                     {$$ = $1;}
     | read                      {$$ = $1;}
     | iteration                 {$$ = $1;}
-    | TYPE ID ASSIGN exp ';' {char * s = cat($1, " ", $2, " = ", $4->code, ";");
+    | TYPE ID ASSIGN exp ';' {
+      if(type_table_get(typeTable, $1) == NULL){
+        yyerror("tipo não encontrado");
+      }
+      char *key = generateKey($2, scope_get(stackScope));
+      if(hashtable_get(symbol_table, key) != NULL){
+        yyerror("id já usada");
+      }
+      yyerror(key);
+      hashtable_set(symbol_table, key, $1);
+      free(key);
+      char * s = cat($1, " ", $2, " = ", $4->code, ";");
                               free($1);
                               free($2);
                               freeRecord($4);
                               $$ = createRecord(s, "");
                               free(s);
       }
-    | TYPE exps ';' {char * s = cat($1, " ", $2->code, ";", "", "");
+    | TYPE exps ';' {
+      if(type_table_get(typeTable, $1) == NULL){
+        yyerror("tipo não encontrado");
+      }
+      char * s = cat($1, " ", $2->code, ";", "", "");
                      free($1);
                      freeRecord($2);
                      $$ = createRecord(s, "");
@@ -178,54 +228,147 @@
                 free(s);
                }
     | ID ASSIGN exp ';' { 
+        if(function_table_get(functionTable, $1) != NULL) {
+          yyerror("id de função");
+        }
+        stack_scope * duplicate = scope_duplicate(stackScope);
+        char * typeId = verificaEscopos(duplicate, $1);
+        if(typeId == NULL){
+          yyerror("id inexistente");
+        }
+        if(typeId != $3->opt1){
+          yyerror("tipos incompativeis");
+        }
          char *s = cat($1, " = ", $3->code, ";", "", "");
          free($1);
          freeRecord($3);
          $$ = createRecord(s, "");
          free(s);
+         free(typeId);
+         scope_free(duplicate);
       }
-    | ID INCREMENT ';' { 
+    | ID INCREMENT ';' {
+        if(function_table_get(functionTable, $1) != NULL) {
+          yyerror("id de função");
+        }
+        stack_scope * duplicate = scope_duplicate(stackScope);
+        char * typeId = verificaEscopos(duplicate, $1);
+        if(typeId == NULL){
+          yyerror("id inexistente");
+        }
+        if(!(strcmp(typeId, "int") == 0 || strcmp(typeId, "float") == 0 || strcmp(typeId, "double") == 0)){
+          yyerror("operação restrita a tipos numericos");
+        }
          char *s = cat($1, "++", ";", "", "", "");
          free($1);
          $$ = createRecord(s, "");
          free(s);
+         free(typeId);
+         scope_free(duplicate);
       }
     | ID DECREMENT ';' { 
+      if(function_table_get(functionTable, $1) != NULL) {
+          yyerror("id de função");
+        }
+        stack_scope * duplicate = scope_duplicate(stackScope);
+        char * typeId = verificaEscopos(duplicate, $1);
+        if(typeId == NULL){
+          yyerror("id inexistente");
+        }
+        if(!(typeId == "int" || typeId == "float" || typeId == "double")){
+          yyerror("operação restrita a tipos numericos");
+        }
          char *s = cat($1, "--", ";", "", "", "");
          free($1);
          $$ = createRecord(s, "");
          free(s);
+         free(typeId);
+         scope_free(duplicate);
       }
     | INCREMENT ID ';' { 
+      if(function_table_get(functionTable, $2) != NULL) {
+          yyerror("id de função");
+        }
+        stack_scope * duplicate = scope_duplicate(stackScope);
+        char * typeId = verificaEscopos(duplicate, $2);
+        if(typeId == NULL){
+          yyerror("id inexistente");
+        }
+        if(!(typeId == "int" || typeId == "float" || typeId == "double")){
+          yyerror("operação restrita a tipos numericos");
+        }
          char *s = cat("++", $2, ";", "", "", "");
          free($2);
          $$ = createRecord(s, "");
          free(s);
+         free(typeId);
+         scope_free(duplicate);
       }
     | DECREMENT ID ';' { 
+      if(function_table_get(functionTable, $2) != NULL) {
+          yyerror("id de função");
+        }
+        stack_scope * duplicate = scope_duplicate(stackScope);
+        char * typeId = verificaEscopos(duplicate, $2);
+        if(typeId == NULL){
+          yyerror("id inexistente");
+        }
+        if(!(typeId == "int" || typeId == "float" || typeId == "double")){
+          yyerror("operação restrita a tipos numericos");
+        }
          char *s = cat("--", $2, ";", "", "", "");
          free($2);
          $$ = createRecord(s, "");
          free(s);
+         free(typeId);
+         scope_free(duplicate);
       }
     | ID INCREMENT_ASSIGN exp ';' { 
+      if(function_table_get(functionTable, $1) != NULL) {
+          yyerror("id de função");
+        }
+        stack_scope * duplicate = scope_duplicate(stackScope);
+        char * typeId = verificaEscopos(duplicate, $1);
+        if(typeId == NULL){
+          yyerror("id inexistente");
+        }
+        if(typeId != $3->opt1){
+          yyerror("tipos incompativeis");
+        }
          char *s = cat($1, " += ", $3->code, ";", "", "");
          free($1);
          freeRecord($3);
          $$ = createRecord(s, "");
          free(s);
+         free(typeId);
+         scope_free(duplicate);
+
       }
     | ID DECREMENT_ASSIGN exp ';' { 
+      if(function_table_get(functionTable, $1) != NULL) {
+          yyerror("id de função");
+        }
+        stack_scope * duplicate = scope_duplicate(stackScope);
+        char * typeId = verificaEscopos(duplicate, $1);
+        if(typeId == NULL){
+          yyerror("id inexistente");
+        }
+        if(typeId != $3->opt1){
+          yyerror("tipos incompativeis");
+        }
          char *s = cat($1, " -= ", $3->code, ";", "", "");
          free($1);
          freeRecord($3);
          $$ = createRecord(s, "");
          free(s);
+         free(typeId);
+         scope_free(duplicate);
       }
     ;          
   
   cond : IF exp THEN cmds END_IF
       {
+        scope_push(stackScope, generateLabel());
         // Incrementa o contador global
         int currentLabelIf = labelCounterIf++;
         
@@ -249,9 +392,11 @@
         freeRecord($4);
         $$ = createRecord(s, "");
         free(s);
+        scope_pop(stackScope);
       }
       | IF exp THEN cmds ELSE cmds END_IF
       {
+        scope_push(stackScope, generateLabel());
         // Incrementa o contador global
         int currentLabelIfElse = labelCounterIfElse++;
         
@@ -284,6 +429,7 @@
         freeRecord($6);
         $$ = createRecord(s, "");
         free(s);
+        scope_pop(stackScope);
       }
       ;
   
@@ -309,6 +455,7 @@
         ;
   iteration : WHILE '(' exp ')' cmds END_WHILE
     {
+      scope_push(stackScope, generateLabel());
         // Incrementar o contador de rótulos para gerar identificadores únicos
         int currentLabelWhile = labelCounterWhile++;
         char labelStart[30], labelEnd[30], labelBody[30];
@@ -332,9 +479,13 @@
         freeRecord($5);
         $$ = createRecord(s, "");
         free(s);
+        scope_pop(stackScope);
     }
     | FOR '(' ID ';' exp ';' for_incr ')' cmds END_FOR
     {
+      scope_push(stackScope, generateLabel());
+      char * key = generateKey($3, scope_get(stackScope));
+      hashtable_set(symbol_table, key, "int");
         // Gerar rótulos únicos para o laço
         int currentLabelFor = labelCounterFor++;
         char labelStart[30], labelEnd[30], labelBody[30];
@@ -371,9 +522,17 @@
         freeRecord($9);
         $$ = createRecord(s, "");
         free(s);
+        free(key);
+        scope_pop(stackScope);
     }
     | FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
     {
+      scope_push(stackScope, generateLabel());
+      if($5->opt1 != "int"){
+        yyerror("o id do for tem que receber int");
+      }
+      char * key = generateKey($3, scope_get(stackScope));
+      hashtable_set(symbol_table, key, "int");
         // Gerar rótulos únicos para o laço
         int currentLabelFor = labelCounterFor++;
         char labelStart[30], labelEnd[30], labelBody[30];
@@ -411,9 +570,20 @@
         freeRecord($11);
         $$ = createRecord(s, "");
         free(s);
+        free(key);
+        scope_pop(stackScope);
     }
     | FOR '(' TYPE ID ASSIGN exp ';' exp ';' for_incr ')' cmds END_FOR
     {
+        if(type_table_get(typeTable, $3) == NULL){
+          yyerror("tipo inexistente");
+        }
+        if($3 != $6->opt1){
+          yyerror("tipos incompativeis");
+        }
+        scope_push(stackScope, generateLabel());
+        char * key = generateKey($4, scope_get(stackScope));
+        hashtable_set(symbol_table, key, $3);
         // Gerar rótulos únicos para o laço
         int currentLabelFor = labelCounterFor++;
         char labelStart[30], labelEnd[30], labelBody[30];
@@ -452,9 +622,22 @@
         freeRecord($12);
         $$ = createRecord(s, "");
         free(s);
+        free(key);
+        scope_pop(stackScope);
     }
     | FOR '(' TYPE ID ':' ID ')' cmds END_FOR
     {
+      if(type_table_get(typeTable, $3) == NULL){
+        yyerror("tipo inexistente");
+      }
+      stack_scope * duplicate = scope_duplicate(stackScope);
+      char *typeId = verificaEscopos(duplicate, $6);
+      if(typeId == NULL){
+        yyerror("id inexistente todos os escopos");
+      }
+      scope_push(stackScope, generateLabel());
+      char * key = generateKey($4, scope_get(stackScope));
+      hashtable_set(symbol_table, key, $3);
         // Incrementa o contador global de rótulos
         int currentLabelFor = labelCounterFor++;
         char labelStart[30], labelBody[30], labelEnd[30];
@@ -504,36 +687,92 @@
   
         $$ = createRecord(s, "");
         free(s);
+        free(key);
+        free(typeId);
+        scope_free(duplicate);
+        scope_pop(stackScope);
     }
     ;
   
   for_incr : ID INCREMENT
     {
+      if(function_table_get(functionTable, $1) != NULL) {
+          yyerror("id de função");
+        }
+        char * key = generateKey($1, scope_get(stackScope));
+        char * value = hashtable_get(symbol_table, key);
+        if(value == NULL){
+          yyerror("id inexistente incremento for");
+        }
+        if(!(value == "int" || value == "float" || value == "double")){
+          yyerror("operação restrita a tipos numericos");
+        }
         char *s = cat($1, "++", "", "", "", "");
         free($1);
         $$ = createRecord(s, "");
         free(s);
+        free(key);
+        free(value);
     }
     | ID DECREMENT
     {
+      if(function_table_get(functionTable, $1) != NULL) {
+          yyerror("id de função");
+        }
+        char * key = generateKey($1, scope_get(stackScope));
+        char * value = hashtable_get(symbol_table, key);
+        if(value == NULL){
+          yyerror("id inexistente incremento for");
+        }
+        if(!(value == "int" || value == "float" || value == "double")){
+          yyerror("operação restrita a tipos numericos");
+        }
         char *s = cat($1, "--", "", "", "", "");
         free($1);
         $$ = createRecord(s, "");
         free(s);
+        free(key);
+        free(value);
     }
     | INCREMENT ID
     {
+      if(function_table_get(functionTable, $2) != NULL) {
+          yyerror("id de função");
+        }
+        char * key = generateKey($2, scope_get(stackScope));
+        char * value = hashtable_get(symbol_table, key);
+        if(value == NULL){
+          yyerror("id inexistente incremento for");
+        }
+        if(!(value == "int" || value == "float" || value == "double")){
+          yyerror("operação restrita a tipos numericos");
+        }
         char *s = cat("++", $2, "", "", "", "");
         free($2);
         $$ = createRecord(s, "");
         free(s);
+        free(key);
+        free(value);
     }
     | DECREMENT ID
     {
+      if(function_table_get(functionTable, $2) != NULL) {
+          yyerror("id de função");
+        }
+        char * key = generateKey($2, scope_get(stackScope));
+        char * value = hashtable_get(symbol_table, key);
+        if(value == NULL){
+          yyerror("id inexistente incremento for");
+        }
+        if(!(value == "int" || value == "float" || value == "double")){
+          yyerror("operação restrita a tipos numericos");
+        }
         char *s = cat("--", $2, "", "", "", "");
         free($2);
         $$ = createRecord(s, "");
         free(s);
+        free(key);
+        free(value);
     }
     | exp
     {
@@ -680,13 +919,13 @@
   
   factor : ID          {$$ = createRecord($1, "");
                       free($1);}
-       |INT          {$$ = createRecord($1, "");
+       |INT          {$$ = createRecord($1, "int");
                       free($1);}
-       | FLOAT       {$$ = createRecord($1, "");
+       | FLOAT       {$$ = createRecord($1, "float");
                       free($1);}
-       | STRING       {$$ = createRecord($1, "");
+       | STRING       {$$ = createRecord($1, "string");
                       free($1);}
-       | DOUBLE      {$$ = createRecord($1, "");
+       | DOUBLE      {$$ = createRecord($1, "double");
                       free($1);}
        | BOOL_LIT    {$$ = createRecord($1, "");
                       free($1);}
@@ -728,6 +967,16 @@
        exit(0);
     }
     
+  symbol_table = hashtable_create();
+    stackScope = scope_create();
+    functionTable = function_table_create();
+    typeTable = type_table_create();
+    scope_push(stackScope, "root");
+    type_table_set(typeTable, "int", "integer" );
+    type_table_set(typeTable, "float", "float" );
+    type_table_set(typeTable, "double",  "double");
+    type_table_set(typeTable, "bool", "boolean" );
+
     yyin = fopen(argv[1], "r");
     yyout = fopen(argv[2], "w");
   
@@ -735,6 +984,11 @@
   
     fclose(yyin);
     fclose(yyout);
+
+    hashtable_free(symbol_table);
+    function_table_free(functionTable);
+    type_table_free(typeTable);
+    scope_free(stackScope);
   
     return codigo;
   }
@@ -759,4 +1013,37 @@
   sprintf(output, "%s%s%s%s%s%s", s1, s2, s3, s4, s5, s6);
   
   return output;
+}
+
+char * generateKey(char * key, char * scope){
+     int tam = strlen(key) + strlen(scope) + 1;
+     char * output = (char *) malloc(sizeof(char) * tam);
+     if (!output){
+          printf("Allocation problem. Closing application...\n");
+          exit(0);
+     }
+     sprintf(output, "%s#%s", key, scope);
+     return output;
+}
+
+char * verificaEscopos(stack_scope * stack , char * id) {
+    char * current = scope_get(stack);
+    char * key;
+    char * retorno;
+    while(stack->top != NULL){
+        key = generateKey(id, current);
+        retorno = hashtable_get(symbol_table, key);
+        if(retorno != NULL){
+            free(key);
+            free(current);
+            return retorno;
+        }
+        free(key);
+        free(current);
+
+        scope_pop(stack);
+        current = scope_get(stack);
+    }
+    free(current);
+    return NULL;
 }
