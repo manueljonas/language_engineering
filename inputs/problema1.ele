@@ -1,6 +1,7 @@
 main
     // Declaração e inicialização dos valores
-    float x, y;
+    float x = 2.2;
+    float y = 3.1;
     x = 4.5; // Valor de x (racional)
     y = 2.3; // Valor de y (racional)
     int c = 7;    // Valor de c (inteiro)

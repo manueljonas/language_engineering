@@ -236,7 +236,7 @@ type_table *typeTable;
         if(typeId == NULL){
           yyerror("id inexistente");
         }
-        if(typeId != $3->opt1){
+        if(strcmp(typeId, $3->opt1) != 0){
           yyerror("tipos incompativeis");
         }
          char *s = cat($1, " = ", $3->code, ";", "", "");
@@ -275,7 +275,7 @@ type_table *typeTable;
         if(typeId == NULL){
           yyerror("id inexistente");
         }
-        if(!(typeId == "int" || typeId == "float" || typeId == "double")){
+        if(!(strcmp(typeId, "int") == 0 || strcmp(typeId, "float") == 0 || strcmp(typeId, "double") == 0)){
           yyerror("operação restrita a tipos numericos");
         }
          char *s = cat($1, "--", ";", "", "", "");
@@ -294,7 +294,7 @@ type_table *typeTable;
         if(typeId == NULL){
           yyerror("id inexistente");
         }
-        if(!(typeId == "int" || typeId == "float" || typeId == "double")){
+        if(!(strcmp(typeId, "int") == 0 || strcmp(typeId, "float") == 0 || strcmp(typeId, "double") == 0)){
           yyerror("operação restrita a tipos numericos");
         }
          char *s = cat("++", $2, ";", "", "", "");
@@ -313,7 +313,7 @@ type_table *typeTable;
         if(typeId == NULL){
           yyerror("id inexistente");
         }
-        if(!(typeId == "int" || typeId == "float" || typeId == "double")){
+        if(!(strcmp(typeId, "int") == 0 || strcmp(typeId, "float") == 0 || strcmp(typeId, "double") == 0)){
           yyerror("operação restrita a tipos numericos");
         }
          char *s = cat("--", $2, ";", "", "", "");
@@ -332,7 +332,7 @@ type_table *typeTable;
         if(typeId == NULL){
           yyerror("id inexistente");
         }
-        if(typeId != $3->opt1){
+        if(strcmp(typeId, $3->opt1) != 0){
           yyerror("tipos incompativeis");
         }
          char *s = cat($1, " += ", $3->code, ";", "", "");
@@ -353,7 +353,7 @@ type_table *typeTable;
         if(typeId == NULL){
           yyerror("id inexistente");
         }
-        if(typeId != $3->opt1){
+        if(strcmp(typeId, $3->opt1) != 0){
           yyerror("tipos incompativeis");
         }
          char *s = cat($1, " -= ", $3->code, ";", "", "");
@@ -525,7 +525,7 @@ type_table *typeTable;
     }
     | FOR '(' ID ASSIGN exp ';' exp ';' for_incr ')' {scope_push(stackScope, generateLabel());} cmds END_FOR
     {
-      if($5->opt1 != "int"){
+      if(strcmp($5->opt1, "int") != 0){
         yyerror("o id do for tem que receber int");
       }
       char * key = generateKey($3, scope_get(stackScope));
@@ -575,7 +575,7 @@ type_table *typeTable;
         if(type_table_get(typeTable, $3) == NULL){
           yyerror("tipo inexistente");
         }
-        if($3 != $6->opt1){
+        if(strcmp($3, $6->opt1) != 0){
           yyerror("tipos incompativeis");
         }
         char * key = generateKey($4, scope_get(stackScope));
@@ -699,7 +699,7 @@ type_table *typeTable;
         if(value == NULL){
           yyerror("id inexistente incremento for");
         }
-        if(!(value == "int" || value == "float" || value == "double")){
+        if(!(strcmp(value, "int") == 0 || strcmp(value, "float") == 0 || strcmp(value, "double") == 0)){
           yyerror("operação restrita a tipos numericos");
         }
         char *s = cat($1, "++", "", "", "", "");
@@ -719,7 +719,7 @@ type_table *typeTable;
         if(value == NULL){
           yyerror("id inexistente incremento for");
         }
-        if(!(value == "int" || value == "float" || value == "double")){
+        if(!(strcmp(value, "int") == 0 || strcmp(value, "float") == 0 || strcmp(value, "double") == 0)){
           yyerror("operação restrita a tipos numericos");
         }
         char *s = cat($1, "--", "", "", "", "");
@@ -739,7 +739,7 @@ type_table *typeTable;
         if(value == NULL){
           yyerror("id inexistente incremento for");
         }
-        if(!(value == "int" || value == "float" || value == "double")){
+        if(!(strcmp(value, "int") == 0 || strcmp(value, "float") == 0 || strcmp(value, "double") == 0)){
           yyerror("operação restrita a tipos numericos");
         }
         char *s = cat("++", $2, "", "", "", "");
@@ -759,7 +759,7 @@ type_table *typeTable;
         if(value == NULL){
           yyerror("id inexistente incremento for");
         }
-        if(!(value == "int" || value == "float" || value == "double")){
+        if(!(strcmp(value, "int") == 0 || strcmp(value, "float") == 0 || strcmp(value, "double") == 0)){
           yyerror("operação restrita a tipos numericos");
         }
         char *s = cat("--", $2, "", "", "", "");
