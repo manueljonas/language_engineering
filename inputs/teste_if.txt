@@ -1,0 +1,54 @@
+main
+int i = 11;
+
+    // Verificar if
+    if (i > 10) then    
+    	print("Teste Linha if 1.\n");
+    	print("Teste Linha if 2.\n");
+    	print("Teste Linha if 3.\n");
+    	print("Teste Linha if 4.\n");
+    	print("Teste Linha if 5.\n");
+    	print("Teste Linha if 6.\n");
+    	print("Teste Linha if 7.\n");
+    	print("Teste Linha if 8.\n");
+    	print("Teste Linha if 9.\n");
+    	print("Teste Linha if 10.\n");
+    else
+    	print("Teste Linha if 11.\n");
+    	print("Teste Linha if 12.\n");
+    	print("Teste Linha if 13.\n");
+    	print("Teste Linha if 14.\n");
+    	print("Teste Linha if 15.\n");
+    	print("Teste Linha if 16.\n");
+    	print("Teste Linha if 17.\n");
+    	print("Teste Linha if 18.\n");
+    	print("Teste Linha if 19.\n");
+    	print("Teste Linha if 20.\n");
+    end_if
+
+    if (i > 10) then    
+    	print("Teste Linha if 1.\n");
+    	print("Teste Linha if 2.\n");
+    	print("Teste Linha if 3.\n");
+    	print("Teste Linha if 4.\n");
+    	print("Teste Linha if 5.\n");
+    	print("Teste Linha if 6.\n");
+    	print("Teste Linha if 7.\n");
+    	print("Teste Linha if 8.\n");
+    	print("Teste Linha if 9.\n");
+    	print("Teste Linha if 10.\n");
+    else
+    	print("Teste Linha if 11.\n");
+    	print("Teste Linha if 12.\n");
+    	print("Teste Linha if 13.\n");
+    	print("Teste Linha if 14.\n");
+    	print("Teste Linha if 15.\n");
+    	print("Teste Linha if 16.\n");
+    	print("Teste Linha if 17.\n");
+    	print("Teste Linha if 18.\n");
+    	print("Teste Linha if 19.\n");
+    	print("Teste Linha if 20.\n");
+    end_if
+
+end_main
+ 

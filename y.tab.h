@@ -84,18 +84,20 @@ extern int yydebug;
     STRING_LIT = 285,              /* STRING_LIT  */
     BOOL_LIT = 286,                /* BOOL_LIT  */
     ID = 287,                      /* ID  */
-    INT = 288,                     /* INT  */
-    FLOAT = 289,                   /* FLOAT  */
-    DOUBLE = 290,                  /* DOUBLE  */
-    INCREMENT = 291,               /* INCREMENT  */
-    DECREMENT = 292,               /* DECREMENT  */
-    INCREMENT_ASSIGN = 293,        /* INCREMENT_ASSIGN  */
-    DECREMENT_ASSIGN = 294,        /* DECREMENT_ASSIGN  */
-    PLUS = 295,                    /* PLUS  */
-    MINUS = 296,                   /* MINUS  */
-    MULT = 297,                    /* MULT  */
-    DIVISION = 298,                /* DIVISION  */
-    EXPOENT = 299                  /* EXPOENT  */
+    VOID = 288,                    /* VOID  */
+    INT = 289,                     /* INT  */
+    FLOAT = 290,                   /* FLOAT  */
+    DOUBLE = 291,                  /* DOUBLE  */
+    STRING = 292,                  /* STRING  */
+    INCREMENT = 293,               /* INCREMENT  */
+    DECREMENT = 294,               /* DECREMENT  */
+    INCREMENT_ASSIGN = 295,        /* INCREMENT_ASSIGN  */
+    DECREMENT_ASSIGN = 296,        /* DECREMENT_ASSIGN  */
+    PLUS = 297,                    /* PLUS  */
+    MINUS = 298,                   /* MINUS  */
+    MULT = 299,                    /* MULT  */
+    DIVISION = 300,                /* DIVISION  */
+    EXPOENT = 301                  /* EXPOENT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -110,7 +112,7 @@ union YYSTYPE
     struct record * rec;
   
 
-#line 114 "y.tab.h"
+#line 116 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

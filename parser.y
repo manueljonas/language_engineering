@@ -29,8 +29,8 @@
   %token PRINT SCAN RETURN
   %token EQUALS DIFF LESS GREATER LESSEQUALS GREATEREQUALS
   %token AND OR XOR NOT
-  %token <sValue> TYPE STRING_LIT BOOL_LIT ID
-  %token <sValue> INT FLOAT DOUBLE
+  %token <sValue> TYPE STRING_LIT BOOL_LIT ID VOID
+  %token <sValue> INT FLOAT DOUBLE STRING
   %token <sValue> INCREMENT DECREMENT INCREMENT_ASSIGN DECREMENT_ASSIGN
   %token <sValue> PLUS MINUS MULT DIVISION EXPOENT 
   
@@ -42,7 +42,7 @@
   %left AND
   %left OR XOR
   %left EQUALS DIFF LESS GREATER LESSEQUALS GREATEREQUALS
-  %right ASSIGN
+  %right ASSIGN INCREMENT_ASSIGN DECREMENT_ASSIGN
   %right EXPOENT
   %right NOT
   %left '[' ']'
@@ -77,6 +77,29 @@
             free($3);
             freeRecord($5);
             freeRecord($7);
+            $$ = createRecord(s2, "");
+            free(s2);
+           }
+           | TYPE '[' ']' '[' ']' FUNCTION ID '(' args_op ')' cmds END_FUNCTION 
+           {char * s1 = cat($1, " ", $7, "(", $9->code, "");
+            char * s2 = cat(s1, ")\n", "{\n", $11->code, "}", "");
+            free(s1);
+            free($1);
+            free($7);
+            freeRecord($9);
+            freeRecord($11);
+            $$ = createRecord(s2, "");
+            free(s2);
+           }
+           | '(' TYPE ',' TYPE ')' FUNCTION ID '(' args_op ')' cmds END_FUNCTION 
+           {char * s1 = cat("(", $2, ", ", $4, ") ", $7);
+            char * s2 = cat(s1, "(", $9->code, ")\n{\n", $11->code, "}");
+            free(s1);
+            free($2);
+            free($4);
+            free($7);
+            freeRecord($9);
+            freeRecord($11);
             $$ = createRecord(s2, "");
             free(s2);
            }
@@ -607,6 +630,14 @@
                   freeRecord($3);
                   $$ = createRecord(s, "");
                   free(s);}
+    | ID '[' exps ']' '[' exps ']'
+                 {char *sAux = cat($1, "[", $3->code, "]", "[", $6->code);
+                  char *s =    cat(sAux, "]", "", "", "", "");
+                  free($1);
+                  freeRecord($3);
+                  freeRecord($6);
+                  $$ = createRecord(s, "");
+                  free(s);}
     | '{' exps '}' {char * s = cat("{", $2->code, "}", "", "", "");
                    freeRecord($2);
                    $$ = createRecord(s, "");
@@ -618,6 +649,33 @@
                       $$ = createRecord(s, "");
                       free(s);
     }
+    | ID '[' exps ']' '[' exps ']' ASSIGN exp  {char *sAux = cat($1, "[", $3->code, "]", "[", $6->code);
+                                                char *s =    cat(sAux, "] = ", $9->code, "", "", "");
+                                                free($1);
+                                                freeRecord($3);
+                                                freeRecord($6);
+                                                freeRecord($9);
+                                                $$ = createRecord(s, "");
+                                                free(s);
+    }
+    | ID '[' exps ']' '[' exps ']' INCREMENT_ASSIGN exp  {char *sAux = cat($1, "[", $3->code, "]", "[", $6->code);
+                                                            char *s =    cat(sAux, "] = ", $9->code, "", "", "");
+                                                            free($1);
+                                                            freeRecord($3);
+                                                            freeRecord($6);
+                                                            freeRecord($9);
+                                                            $$ = createRecord(s, "");
+                                                            free(s);
+    }
+    | ID '[' exps ']' '[' exps ']' DECREMENT_ASSIGN exp  {char *sAux = cat($1, "[", $3->code, "]", "[", $6->code);
+                                                            char *s =    cat(sAux, "] = ", $9->code, "", "", "");
+                                                            free($1);
+                                                            freeRecord($3);
+                                                            freeRecord($6);
+                                                            freeRecord($9);
+                                                            $$ = createRecord(s, "");
+                                                            free(s);
+    }
     ;
   
   factor : ID          {$$ = createRecord($1, "");
@@ -626,11 +684,15 @@
                       free($1);}
        | FLOAT       {$$ = createRecord($1, "");
                       free($1);}
+       | STRING       {$$ = createRecord($1, "");
+                      free($1);}
        | DOUBLE      {$$ = createRecord($1, "");
                       free($1);}
        | BOOL_LIT    {$$ = createRecord($1, "");
                       free($1);}
        | STRING_LIT  {$$ = createRecord($1, "");
+                      free($1);}
+       | VOID         {$$ = createRecord($1, "");
                       free($1);}
   
        ;

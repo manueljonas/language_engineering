@@ -320,7 +320,7 @@ main
 
 	int cont = 0;
 	while ( cont < 100 )
-		z += 1;
+		z += 1 * 2;
 		cont++;
 	end_while
 	print("O valor de z é: %d. \n", z);

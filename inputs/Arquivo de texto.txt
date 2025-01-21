@@ -1,0 +1,13 @@
+main
+    // Declaração e inicialização dos valores
+    float x, y;
+    x = 4.5; // Valor de x (racional)
+    y = 2.3; // Valor de y (racional)
+    int c = 7;    // Valor de c (inteiro)
+
+    // Cálculo da expressão x² - y + c
+    float resultado = x^2 - y + c;
+
+    // Impressão do resultado na tela
+    print("O resultado da expressão x² - y + c é: %f \n", resultado);
+end_main

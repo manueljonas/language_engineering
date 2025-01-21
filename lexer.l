@@ -63,11 +63,17 @@
 ";"                     {return yytext[0];}
 "int"                   {yylval.sValue = strdup("int"); 
                          return TYPE;}
+"int&"                  {yylval.sValue = strdup("float"); 
+                         return TYPE;}
 "float"                 {yylval.sValue = strdup("float"); 
                          return TYPE;}
 "double"                {yylval.sValue = strdup("double"); 
                          return TYPE;}
 "bool"                  {yylval.sValue = strdup("bool"); 
+                         return TYPE;}
+"string"                 {yylval.sValue = strdup("float"); 
+                         return TYPE;}
+"void"                 {yylval.sValue = strdup("float"); 
                          return TYPE;}
 "true"                  {yylval.sValue = strdup("true"); 
                          return BOOL_LIT;}                       
@@ -75,7 +81,7 @@
                          return BOOL_LIT;}
 \"(\\.|[^\"])*\"        {yylval.sValue = strdup(yytext); 
                          return STRING_LIT;}                       
-&?[a-zA-Z_][a-zA-Z0-9_]*    {yylval.sValue = strdup(yytext); 
+&?[a-zA-Z_][a-zA-Z0-9_]*&?    {yylval.sValue = strdup(yytext); 
                          return ID;}
 \/\/.*                  {}
 \/\*([^*]|\*+[^\/])*\*+\/ {}
