@@ -1,0 +1,47 @@
+// Subprograma mdc: Calcula o Máximo Divisor Comum (MDC) recursivamente
+int def mdc(int n, int m)
+   int resto;
+
+   // Verifica se n é divisor de m
+   if (m - (m / n) * n == 0) then
+      return n;
+   end_if
+   
+   // Verifica se m é divisor de n
+   if (n - (n / m) * m == 0) then
+      return m;
+   end_if
+   
+   // Caso recursivo: m > n
+   if (m > n) then
+      resto = m - (m / n) * n; 
+      return mdc(n, resto);
+   end_if
+
+   // Caso recursivo: n > m
+   if (n > m) then
+      resto = n - (n / m) * m; 
+      return mdc(m, resto);
+   end_if
+end_def
+
+// Programa principal
+main
+   int n, m, resultado;
+
+   // Solicita os números naturais do usuário
+   print("Digite dois números naturais estritamente positivos:\n");
+   print("n: ");
+   scan("%d", &n);
+   print("m: ");
+   scan("%d", &m);
+
+   // Validação de entrada
+   if (n <= 0 or m <= 0) then
+      print("Erro: Os números devem ser estritamente positivos.\n");
+   else
+      // Calcula o MDC e exibe o resultado
+      resultado = mdc(n, m);
+      print("O maior divisor comum de n (%d) e m (%d) é: %d.\n", n, m, resultado);
+   end_if
+end_main

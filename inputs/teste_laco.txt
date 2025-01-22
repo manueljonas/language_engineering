@@ -1,0 +1,139 @@
+main
+
+int i = 0;
+while(i < 5)
+        int xx = 1;
+        xx += i;
+        i++;
+        print("while 1.1: O valor de xx é: %d.\n", xx);
+end_while
+
+i = 0;
+while(i < 5)
+        int xx = 1;
+        xx += i;
+        i++;
+        print("while 1.2: O valor de xx é: %d.\n", xx);
+end_while
+
+
+i = 99999; // Teste de isolação do "i" no laço for
+int xx = 100;
+for (int i = 1; i < 5; i++)
+	      // int xx = 1;
+	      xx += i;
+	      print("for 1.1: O valor de xx é: %d.\n", xx);
+end_for
+
+for (int i = 1; i < 5; i++)
+	      // int xx = 1;
+	      xx += i;
+	      print("for 1.2: O valor de xx é: %d.\n", xx);
+end_for
+
+
+for (i = 1; i < 5; i++)
+	      // int xx = 1;
+	      xx += i;
+	      print("for 2.1: O valor de xx é: %d.\n", xx);
+end_for
+
+for (i = 1; i < 5; i++)
+	      // int xx = 1;
+	      xx += i;
+	      print("for 2.2: O valor de xx é: %d.\n", xx);
+end_for
+
+
+i = 1;
+for (i ; i < 5; i++)
+	      // int xx = 1;
+	      xx += i;
+	      print("for 3.1: O valor de xx é: %d.\n", xx);
+end_for
+
+i = 1;
+for (i ; i < 5; i++)
+	      // int xx = 1;
+	      xx += i;
+	      print("for 3.2: O valor de xx é: %d.\n", xx);
+end_for
+
+float arr[5] = {1.1, 2.5, 3, 4, 5};
+	float somaWhile = 0;
+	float somaFor = 0;
+
+	arr[2] = 2 * arr[2];
+	arr[3] = 30 + 70;
+	arr[4] = 50;
+
+	// Testa também se a inserção de vários while daria problema
+	i = 0;
+
+	while ( i < 5 )
+		somaWhile += arr[i];
+		print("while: arr[%d] = %f\n", i, arr[i]);
+		i++;
+	end_while
+		print("somaWhile = %f\n", somaWhile);
+
+	i = 0;
+	while ( i < 5 )
+		somaWhile += arr[i];
+		print("while: arr[%d] = %f\n", i, arr[i]);
+		i++;
+	end_while
+		print("somaWhile = %f\n", somaWhile);
+
+	// Testa também se a inserção de vários for daria problema
+	for (int ix : arr)
+			somaFor += arr[ix];
+	    print("for: arr[%d] = %f\n", ix, arr[ix]);	    
+	end_for
+			print("somaFor = %f\n", somaFor);
+
+	for (int ix : arr)
+			somaFor += arr[ix];
+	    print("for: arr[%d] = %f\n", ix, arr[ix]);	    
+	end_for
+			print("somaFor = %f\n", somaFor);
+
+	// Teste de laços aninhados
+
+int ai = 0;
+int aj = 0;
+
+int arr_i[5] = {1, 2, 3, 4, 5};
+int arr_j[5] = {1, 2, 3, 4, 5};
+
+while(ai < 5)
+	while(aj < 5)
+		print("while aninhado 1.1: O valor dos elementos da matriz são: [%d][%d].\n", ai, aj);
+		aj++;
+	end_while
+	aj = 0;
+	ai++;
+end_while
+
+for (int ai = 0; ai < 5; ai++)
+	for (int aj = 0; aj < 5; aj++)
+		print("for aninhado 2.1: O valor dos elementos da matriz são: [%d][%d].\n", ai, aj);
+	end_for
+end_for
+
+for (ai = 0; ai < 5; ai++)
+	for (aj = 0; aj < 5; aj++)
+		print("for aninhado 2.2: O valor dos elementos da matriz são: [%d][%d].\n", ai, aj);
+	end_for
+end_for
+
+ai = 0;
+aj = 0;
+for (ai; ai < 5; ai++)
+	for (aj; aj < 5; aj++)
+		print("for aninhado 2.3: O valor dos elementos da matriz são: [%d][%d].\n", ai, aj);
+	end_for
+	aj = 0;
+end_for
+
+end_main

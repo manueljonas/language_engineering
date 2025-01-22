@@ -1,0 +1,64 @@
+main
+    int m1, n1, m2, n2;
+    int matriz1[10000], matriz2[10000], soma[10000], produto[10000];
+
+    // Leitura das dimensões e matrizes
+    print("Digite as dimensões da primeira matriz (linhas e colunas): ");
+    scan("%d %d", &m1, &n1);
+    print("Digite os elementos da primeira matriz:\n");
+    for (int i = 0; i < m1; i++) 
+        for (int j = 0; j < n1; j++) 
+            scan("%d", &matriz1[i * n1 + j]);  // Acesso via fórmula de índice
+        end_for
+    end_for
+
+    print("Digite as dimensões da segunda matriz (linhas e colunas): ");
+    scan("%d %d", &m2, &n2);
+    print("Digite os elementos da segunda matriz:\n");
+    for (int i = 0; i < m2; i++) 
+        for (int j = 0; j < n2; j++) 
+            scan("%d", &matriz2[i * n2 + j]);  // Acesso via fórmula de índice
+        end_for
+    end_for
+
+    // Verificação de compatibilidade para soma
+    if (m1 == m2 and n1 == n2) then
+        // Soma das matrizes
+        for (int i = 0; i < m1; i++) 
+            for (int j = 0; j < n1; j++) 
+                soma[i * n1 + j] = matriz1[i * n1 + j] + matriz2[i * n2 + j];  // Soma explícita
+            end_for
+        end_for
+        print("Soma das matrizes:\n");
+        for (int i = 0; i < m1; i++) 
+            for (int j = 0; j < n1; j++) 
+                print("%d ", soma[i * n1 + j]);
+            end_for
+            print("\n");
+        end_for
+    else
+        print("As matrizes não podem ser somadas, pois as dimensões são incompatíveis.\n");
+    end_if
+
+    // Verificação de compatibilidade para multiplicação
+    if (n1 == m2) then
+        // Multiplicação das matrizes
+        for (int i = 0; i < m1; i++) 
+            for (int j = 0; j < n2; j++) 
+                produto[i * n2 + j] = 0;  // Inicialização com 0
+                for (int k = 0; k < n1; k++) 
+                    produto[i * n2 + j] = produto[i * n2 + j] + matriz1[i * n1 + k] * matriz2[k * n2 + j];  // Soma explícita
+                end_for
+            end_for
+        end_for
+        print("Produto das matrizes:\n");
+        for (int i = 0; i < m1; i++) 
+            for (int j = 0; j < n2; j++) 
+                print("%d ", produto[i * n2 + j]);
+            end_for
+            print("\n");
+        end_for
+    else
+        print("As matrizes não podem ser multiplicadas, pois o número de colunas da primeira matriz não é igual ao número de linhas da segunda matriz.\n");
+    end_if
+end_main

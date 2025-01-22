@@ -1,0 +1,147 @@
+// Função auxiliar para calcular o Máximo Divisor Comum (MDC)
+int def mdc(int a, int b)
+   a = abs(a);
+   b = abs(b);
+
+   while (b != 0)
+      if (a > b) then
+         a = a - b;
+      else
+         b = b - a;
+      end_if
+   end_while
+
+   return a;
+end_def
+
+// Função para simplificar um número racional
+rational_t def simplificar(rational_t r)
+   int divisor = mdc(r.numerador, r.denominador);
+
+   r.numerador = r.numerador / divisor;
+   r.denominador = r.denominador / divisor;
+
+   if (r.denominador < 0) then
+      r.numerador = -r.numerador;
+      r.denominador = -r.denominador;
+   end_if
+
+   return r;
+end_def
+
+// Subprograma A: Criação de um racional a partir de dois inteiros
+rational_t def criarRacional(int a, int b)
+   rational_t resultado;
+
+   if (b == 0) then
+      print("Erro: Denominador não pode ser zero.\n");
+      resultado.numerador = 0;
+      resultado.denominador = 1;
+   else
+      resultado.numerador = a;
+      resultado.denominador = b;
+   end_if
+
+   return simplificar(resultado);
+end_def
+
+// Subprograma B: Verificação de igualdade entre dois racionais
+bool def saoIguais(rational_t r1, rational_t r2)
+   if (r1.numerador * r2.denominador == r2.numerador * r1.denominador) then
+      return true;
+   else
+      return false;
+   end_if
+end_def
+
+// Subprogramas C: Operações com números racionais
+
+rational_t def somarRacionais(rational_t r1, rational_t r2)
+   rational_t resultado;
+
+   resultado.numerador = r1.numerador * r2.denominador + r2.numerador * r1.denominador;
+   resultado.denominador = r1.denominador * r2.denominador;
+
+   return simplificar(resultado);
+end_def
+
+rational_t def negarRacional(rational_t r)
+   rational_t resultado;
+
+   resultado.numerador = -r.numerador;
+   resultado.denominador = r.denominador;
+
+   return simplificar(resultado);
+end_def
+
+rational_t def subtrairRacionais(rational_t r1, rational_t r2)
+   return somarRacionais(r1, negarRacional(r2));
+end_def
+
+rational_t def multiplicarRacionais(rational_t r1, rational_t r2)
+   rational_t resultado;
+
+   resultado.numerador = r1.numerador * r2.numerador;
+   resultado.denominador = r1.denominador * r2.denominador;
+
+   return simplificar(resultado);
+end_def
+
+rational_t def inverterRacional(rational_t r)
+   rational_t resultado;
+
+   if (r.numerador == 0) then
+      print("Erro: Não é possível inverter um número racional com numerador zero.\n");
+      resultado.numerador = 0;
+      resultado.denominador = 1;
+   else
+      resultado.numerador = r.denominador;
+      resultado.denominador = r.numerador;
+   end_if
+
+   return simplificar(resultado);
+end_def
+
+rational_t def dividirRacionais(rational_t r1, rational_t r2)
+   return multiplicarRacionais(r1, inverterRacional(r2));
+end_def
+
+// Programa principal
+main
+   rational_t r1, r2, resultado;
+
+   // Criação de dois números racionais
+   r1 = criarRacional(3, 4); // 3/4
+   r2 = criarRacional(5, 6); // 5/6
+
+   // Verificação de igualdade
+   if (saoIguais(r1, r2)) then
+      print("Os números racionais são iguais.\n");
+   else
+      print("Os números racionais são diferentes.\n");
+   end_if
+
+   // Soma
+   resultado = somarRacionais(r1, r2);
+   print("Soma: %d/%d\n", resultado.numerador, resultado.denominador);
+
+   // Negação
+   resultado = negarRacional(r1);
+   print("Negação de r1: %d/%d\n", resultado.numerador, resultado.denominador);
+
+   // Subtração
+   resultado = subtrairRacionais(r1, r2);
+   print("Subtração: %d/%d\n", resultado.numerador, resultado.denominador);
+
+   // Multiplicação
+   resultado = multiplicarRacionais(r1, r2);
+   print("Multiplicação: %d/%d\n", resultado.numerador, resultado.denominador);
+
+   // Inverso
+   resultado = inverterRacional(r1);
+   print("Inverso de r1: %d/%d\n", resultado.numerador, resultado.denominador);
+
+   // Divisão
+   resultado = dividirRacionais(r1, r2);
+   print("Divisão: %d/%d\n", resultado.numerador, resultado.denominador);
+end_main

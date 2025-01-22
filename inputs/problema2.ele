@@ -1,0 +1,42 @@
+main
+    // Declaração de variáveis
+    int num;
+    int intervalo1 = 0; // Contagem para [0, 25]
+    int intervalo2 = 0; // Contagem para [26, 50]
+    int intervalo3 = 0; // Contagem para [51, 75]
+    int intervalo4 = 0; // Contagem para [76, 100]
+
+    print("Digite números inteiros (digite um número negativo para terminar a RODADA): \n");
+
+    // Loop para leitura dos números
+    while (true)
+        scan("%d", &num);
+
+        // Verifica se o número é negativo para encerrar
+        if (num >= 0) then    
+            // Classifica o número no intervalo correspondente
+            if (num >= 0 and num <= 25) then
+                intervalo1++;
+            end_if
+            if (num >= 26 and num <= 50) then
+                intervalo2++;
+            end_if
+            if (num >= 51 and num <= 75) then
+                intervalo3++;
+            end_if
+            if (num >= 76 and num <= 100) then
+                intervalo4++;
+            end_if
+        else
+            // Exibe os resultados
+            print("Quantidade de números em cada intervalo:\n");
+            print("[0, 25]: %d\n", intervalo1);
+            print("[26, 50]: %d\n", intervalo2);
+            print("[51, 75]: %d\n", intervalo3);
+            print("[76, 100]: %d\n", intervalo4);
+            return 0;
+        end_if
+    end_while
+
+end_main
+ 

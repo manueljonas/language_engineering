@@ -60,37 +60,47 @@ extern int yydebug;
     THEN = 261,                    /* THEN  */
     ELSE = 262,                    /* ELSE  */
     END_IF = 263,                  /* END_IF  */
-    ASSIGN = 264,                  /* ASSIGN  */
-    MAIN = 265,                    /* MAIN  */
-    END_MAIN = 266,                /* END_MAIN  */
-    PRINT = 267,                   /* PRINT  */
-    RETURN = 268,                  /* RETURN  */
-    EQUALS = 269,                  /* EQUALS  */
-    DIFF = 270,                    /* DIFF  */
-    LESS = 271,                    /* LESS  */
-    GREATER = 272,                 /* GREATER  */
-    LESSEQUALS = 273,              /* LESSEQUALS  */
-    GREATEREQUALS = 274,           /* GREATEREQUALS  */
-    AND = 275,                     /* AND  */
-    OR = 276,                      /* OR  */
-    XOR = 277,                     /* XOR  */
-    NOT = 278,                     /* NOT  */
-    TYPE = 279,                    /* TYPE  */
-    STRING_LIT = 280,              /* STRING_LIT  */
-    BOOL_LIT = 281,                /* BOOL_LIT  */
-    ID = 282,                      /* ID  */
-    INT = 283,                     /* INT  */
-    FLOAT = 284,                   /* FLOAT  */
-    DOUBLE = 285,                  /* DOUBLE  */
-    INCREMENT = 286,               /* INCREMENT  */
-    DECREMENT = 287,               /* DECREMENT  */
-    INCREMENT_ASSIGN = 288,        /* INCREMENT_ASSIGN  */
-    DECREMENT_ASSIGN = 289,        /* DECREMENT_ASSIGN  */
-    PLUS = 290,                    /* PLUS  */
-    MINUS = 291,                   /* MINUS  */
-    MULT = 292,                    /* MULT  */
-    DIVISION = 293,                /* DIVISION  */
-    EXPOENT = 294                  /* EXPOENT  */
+    WHILE = 264,                   /* WHILE  */
+    END_WHILE = 265,               /* END_WHILE  */
+    FOR = 266,                     /* FOR  */
+    END_FOR = 267,                 /* END_FOR  */
+    ASSIGN = 268,                  /* ASSIGN  */
+    MAIN = 269,                    /* MAIN  */
+    END_MAIN = 270,                /* END_MAIN  */
+    PRINT = 271,                   /* PRINT  */
+    SCAN = 272,                    /* SCAN  */
+    RETURN = 273,                  /* RETURN  */
+    EQUALS = 274,                  /* EQUALS  */
+    DIFF = 275,                    /* DIFF  */
+    LESS = 276,                    /* LESS  */
+    GREATER = 277,                 /* GREATER  */
+    LESSEQUALS = 278,              /* LESSEQUALS  */
+    GREATEREQUALS = 279,           /* GREATEREQUALS  */
+    AND = 280,                     /* AND  */
+    OR = 281,                      /* OR  */
+    XOR = 282,                     /* XOR  */
+    NOT = 283,                     /* NOT  */
+    TYPE = 284,                    /* TYPE  */
+    STRING_LIT = 285,              /* STRING_LIT  */
+    BOOL_LIT = 286,                /* BOOL_LIT  */
+    ID = 287,                      /* ID  */
+    VOID = 288,                    /* VOID  */
+    INT = 289,                     /* INT  */
+    FLOAT = 290,                   /* FLOAT  */
+    DOUBLE = 291,                  /* DOUBLE  */
+    STRING = 292,                  /* STRING  */
+    INCREMENT = 293,               /* INCREMENT  */
+    DECREMENT = 294,               /* DECREMENT  */
+    INCREMENT_ASSIGN = 295,        /* INCREMENT_ASSIGN  */
+    DECREMENT_ASSIGN = 296,        /* DECREMENT_ASSIGN  */
+    PLUS = 297,                    /* PLUS  */
+    MINUS = 298,                   /* MINUS  */
+    MULT = 299,                    /* MULT  */
+    DIVISION = 300,                /* DIVISION  */
+    EXPOENT = 301,                 /* EXPOENT  */
+    UMINUS = 302,                  /* UMINUS  */
+    RATIONAL_T = 303,              /* RATIONAL_T  */
+    DOT = 304                      /* DOT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -99,13 +109,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "parser.y"
+#line 21 "parser.y"
 
-	char * sValue;  /* string value */
-	struct record * rec;
- 
+    char * sValue;         // string value
+    struct record * rec;
+  
 
-#line 109 "y.tab.h"
+#line 119 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
