@@ -5,7 +5,7 @@ Desenvolvimento de Linguagem de Programação
 Comando: make clean, e depois o Comando: make
 
 ## Para executar teste:
-./compiler ./inputs/teste.txt ./outputs/teste_output.txt
+./compiler ./inputs/input.ele ./outputs/output.ele
 
 ## Para testar o código gerado (compilado) da linguagem desenvolvida para C, poderemos utilizar este compilador C on-line:
 https://www.onlinegdb.com/online_c_compiler
